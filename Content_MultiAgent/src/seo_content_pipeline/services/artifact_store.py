@@ -3,7 +3,7 @@
 import json
 import os
 import tempfile
-from pathlib import Path
+from pathlib import Path, PurePath
 from typing import Any
 
 from pydantic import BaseModel
@@ -19,6 +19,7 @@ class ArtifactStore:
 
     def job_dir(self, job_id: str) -> Path:
         """Return the directory for a job's artifacts."""
+        self._validate_job_id(job_id)
         return self.artifact_root / job_id
 
     def artifact_path(self, job_id: str, key: ArtifactKey) -> Path:
@@ -65,3 +66,9 @@ class ArtifactStore:
         if isinstance(payload, BaseModel):
             return payload.model_dump(mode="json")
         return payload
+
+    @staticmethod
+    def _validate_job_id(job_id: str) -> None:
+        path = PurePath(job_id)
+        if not job_id or path.is_absolute() or ".." in path.parts or len(path.parts) != 1:
+            raise ValueError("job_id must be a single safe path segment")

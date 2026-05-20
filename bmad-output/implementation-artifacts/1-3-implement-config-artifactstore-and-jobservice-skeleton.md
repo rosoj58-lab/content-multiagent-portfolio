@@ -1,6 +1,6 @@
 # Story 1.3: Implement Config, ArtifactStore, and JobService Skeleton
 
-Status: review
+Status: done
 
 ## Story
 
@@ -53,6 +53,11 @@ so that the local demo has a durable source of truth before real agent stages ar
   - [x] Do not read/write artifacts directly outside `ArtifactStore`.
   - [x] Run full `pytest` and `ruff check .`.
   - [x] Update this story's Dev Agent Record and File List when complete.
+
+### Review Findings
+
+- [x] [Review][Patch] Guard `ArtifactStore` against unsafe job IDs [Content_MultiAgent/src/seo_content_pipeline/services/artifact_store.py:20] — resolved by rejecting empty IDs, absolute paths, `..`, and multi-segment job IDs before constructing artifact paths.
+- [x] [Review][Patch] Let settings validation handle invalid numeric env values [Content_MultiAgent/src/seo_content_pipeline/config.py:47] — resolved by passing the raw env value into `AppSettings` so Pydantic raises a typed validation error.
 
 ## Dev Notes
 
@@ -117,6 +122,9 @@ GPT-5.2
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_config.py tests/test_artifact_store.py tests/test_job_service.py` passed: 8 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 17 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
+- Post-review patch verification: `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_config.py tests/test_artifact_store.py` passed: 11 tests.
+- Post-review patch verification: `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 22 tests.
+- Post-review patch verification: `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 
 ### Completion Notes List
 
@@ -124,6 +132,7 @@ GPT-5.2
 - Implemented registry-backed `ArtifactStore` with JSON read/write, Pydantic serialization and temp-file replacement.
 - Implemented `JobService.create_job()` with whitespace input rejection, filesystem-safe job IDs and persisted `metadata.json`, `input.json`, and `state.json`.
 - Added focused tests for config defaults/overrides, env-reading boundary, artifact persistence and job shell creation.
+- Resolved code review findings by adding unsafe job ID rejection and centralized settings validation for invalid numeric env values.
 
 ### File List
 
@@ -137,3 +146,4 @@ GPT-5.2
 ## Change Log
 
 - 2026-05-20: Implemented Story 1.3 config, artifact store and job service skeleton; status moved to review.
+- 2026-05-20: Resolved Story 1.3 code review findings; status moved to done.

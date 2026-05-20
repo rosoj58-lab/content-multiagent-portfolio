@@ -3,6 +3,9 @@
 import ast
 from pathlib import Path
 
+import pytest
+from pydantic import ValidationError
+
 from seo_content_pipeline.config import AppSettings, get_settings
 
 
@@ -44,6 +47,13 @@ def test_settings_read_environment_overrides(monkeypatch, tmp_path) -> None:
         uniqueness_provider="mock",
         openai_api_key="test-openai",
     )
+
+
+def test_invalid_numeric_environment_value_uses_settings_validation(monkeypatch) -> None:
+    monkeypatch.setenv("MAX_REVISION_ATTEMPTS", "bad")
+
+    with pytest.raises(ValidationError):
+        get_settings(load_env_file=False)
 
 
 def test_config_module_is_only_source_file_that_reads_environment() -> None:

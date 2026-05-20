@@ -2,6 +2,8 @@
 
 from pathlib import Path
 
+import pytest
+
 from seo_content_pipeline.models import (
     ARTIFACT_REGISTRY,
     ArtifactKey,
@@ -40,3 +42,11 @@ def test_artifact_store_replaces_existing_json_atomically(tmp_path) -> None:
 
     assert store.read_json("job-123", ArtifactKey.INPUT) == {"value": "second"}
     assert not list(Path(tmp_path / "job-123").glob("*.tmp"))
+
+
+@pytest.mark.parametrize("unsafe_job_id", ["", "../outside", "nested/job", "/tmp/job"])
+def test_artifact_store_rejects_unsafe_job_ids(tmp_path, unsafe_job_id) -> None:
+    store = ArtifactStore(artifact_root=tmp_path)
+
+    with pytest.raises(ValueError, match="job_id"):
+        store.artifact_path(unsafe_job_id, ArtifactKey.INPUT)
