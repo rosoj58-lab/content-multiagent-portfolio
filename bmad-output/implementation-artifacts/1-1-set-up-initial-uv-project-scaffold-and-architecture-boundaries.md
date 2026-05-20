@@ -1,6 +1,6 @@
 # Story 1.1: Set Up Initial uv Project Scaffold and Architecture Boundaries
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -25,43 +25,43 @@ so that future stories can be implemented in stable, reviewable locations.
 
 ## Tasks / Subtasks
 
-- [ ] Initialize uv project metadata in `Content_MultiAgent` (AC: 1, 4)
-  - [ ] Run or reproduce the architecture-approved scaffold intent: `uv init --app --package --python 3.12 --name seo-content-pipeline --vcs none .`
-  - [ ] Ensure `pyproject.toml`, `.python-version`, `uv.lock`, `README.md` and package metadata are created in `Content_MultiAgent`.
-  - [ ] If `uv init` creates `main.py`, replace it with the required `app.py` entrypoint instead of keeping duplicate entrypoints.
-  - [ ] Add runtime dependencies: `streamlit`, `langgraph`, `langchain`, `langchain-openai`, `pydantic`, `python-dotenv`.
-  - [ ] Add dev dependencies: `pytest`, `ruff`, `mypy`.
+- [x] Initialize uv project metadata in `Content_MultiAgent` (AC: 1, 4)
+  - [x] Run or reproduce the architecture-approved scaffold intent: `uv init --app --package --python 3.12 --name seo-content-pipeline --vcs none .`
+  - [x] Ensure `pyproject.toml`, `.python-version`, `uv.lock`, `README.md` and package metadata are created in `Content_MultiAgent`.
+  - [x] If `uv init` creates `main.py`, replace it with the required `app.py` entrypoint instead of keeping duplicate entrypoints.
+  - [x] Add runtime dependencies: `streamlit`, `langgraph`, `langchain`, `langchain-openai`, `pydantic`, `python-dotenv`.
+  - [x] Add dev dependencies: `pytest`, `ruff`, `mypy`.
 
-- [ ] Create the approved source tree skeleton (AC: 1, 2)
-  - [ ] Create `src/seo_content_pipeline/` with `__init__.py`.
-  - [ ] Create subpackages with `__init__.py`: `models/`, `graph/`, `graph/nodes/`, `services/`, `validators/`, `providers/`, `prompts/`, `ui/`.
-  - [ ] Create placeholder modules from the architecture tree: `config.py`, model modules, graph modules, service modules, validator modules, provider modules, prompt modules and UI modules.
-  - [ ] Keep placeholder modules minimal: docstring or explicit `TODO` comment only, no fake business logic.
+- [x] Create the approved source tree skeleton (AC: 1, 2)
+  - [x] Create `src/seo_content_pipeline/` with `__init__.py`.
+  - [x] Create subpackages with `__init__.py`: `models/`, `graph/`, `graph/nodes/`, `services/`, `validators/`, `providers/`, `prompts/`, `ui/`.
+  - [x] Create placeholder modules from the architecture tree: `config.py`, model modules, graph modules, service modules, validator modules, provider modules, prompt modules and UI modules.
+  - [x] Keep placeholder modules minimal: docstring or explicit `TODO` comment only, no fake business logic.
 
-- [ ] Create required app, docs, examples and artifact folders (AC: 1, 3)
-  - [ ] Create `app.py` as a minimal Streamlit entrypoint that can import and render without touching graph nodes, prompts, validators or provider implementations.
-  - [ ] Create `tests/` with `__init__.py`, `conftest.py`, `test_architecture_boundaries.py` and a scaffold/test-discovery smoke test.
-  - [ ] Preserve existing `docs/docker.md`; add missing docs placeholders required by architecture: `architecture-summary.md`, `artifact-map.md`, `demo-script.md`, `demo-setup.md`, `project-structure.md`.
-  - [ ] Create `examples/briefs/`, `examples/inputs/`, `examples/outputs/` with `.gitkeep` or placeholder README files only.
-  - [ ] Create `artifacts/demo/.gitkeep` and `artifacts/jobs/.gitkeep`.
+- [x] Create required app, docs, examples and artifact folders (AC: 1, 3)
+  - [x] Create `app.py` as a minimal Streamlit entrypoint that can import and render without touching graph nodes, prompts, validators or provider implementations.
+  - [x] Create `tests/` with `__init__.py`, `conftest.py`, `test_architecture_boundaries.py` and a scaffold/test-discovery smoke test.
+  - [x] Preserve existing `docs/docker.md`; add missing docs placeholders required by architecture: `architecture-summary.md`, `artifact-map.md`, `demo-script.md`, `demo-setup.md`, `project-structure.md`.
+  - [x] Create `examples/briefs/`, `examples/inputs/`, `examples/outputs/` with `.gitkeep` or placeholder README files only.
+  - [x] Create `artifacts/demo/.gitkeep` and `artifacts/jobs/.gitkeep`.
 
-- [ ] Add environment and ignore-file guardrails (AC: 1, 3)
-  - [ ] Create `Content_MultiAgent/.env.example` with documented empty placeholders for `OPENAI_API_KEY`, `COPYLEAKS_EMAIL`, `COPYLEAKS_API_KEY`, `APP_MODE`, `UNIQUENESS_PROVIDER`, `MAX_REVISION_ATTEMPTS` and artifact root settings.
-  - [ ] Add or update `Content_MultiAgent/.gitignore` so `.env`, `.env.*`, virtualenvs, Python caches and generated `artifacts/jobs/*` / `artifacts/demo/*` are ignored while `.gitkeep` files remain tracked.
-  - [ ] Confirm parent `/Users/irinawork/bmad_projects/.gitignore` still protects secrets and generated artifacts.
+- [x] Add environment and ignore-file guardrails (AC: 1, 3)
+  - [x] Create `Content_MultiAgent/.env.example` with documented empty placeholders for `OPENAI_API_KEY`, `COPYLEAKS_EMAIL`, `COPYLEAKS_API_KEY`, `APP_MODE`, `UNIQUENESS_PROVIDER`, `MAX_REVISION_ATTEMPTS` and artifact root settings.
+  - [x] Add or update `Content_MultiAgent/.gitignore` so `.env`, `.env.*`, virtualenvs, Python caches and generated `artifacts/jobs/*` / `artifacts/demo/*` are ignored while `.gitkeep` files remain tracked.
+  - [x] Confirm parent `/Users/irinawork/bmad_projects/.gitignore` still protects secrets and generated artifacts.
 
-- [ ] Add architecture-boundary tests and test discovery (AC: 2, 4)
-  - [ ] `test_architecture_boundaries.py` must parse `app.py` and fail if it imports `seo_content_pipeline.graph.nodes`, `seo_content_pipeline.prompts`, `seo_content_pipeline.validators` or provider implementation modules directly.
-  - [ ] Add a scaffold smoke test that verifies required directories/files exist and package dirs have `__init__.py`.
-  - [ ] Ensure `uv run pytest` discovers and runs tests successfully.
-  - [ ] If host `uv` is unavailable, run the same verification through Docker: `docker compose run --rm app uv run pytest`.
+- [x] Add architecture-boundary tests and test discovery (AC: 2, 4)
+  - [x] `test_architecture_boundaries.py` must parse `app.py` and fail if it imports `seo_content_pipeline.graph.nodes`, `seo_content_pipeline.prompts`, `seo_content_pipeline.validators` or provider implementation modules directly.
+  - [x] Add a scaffold smoke test that verifies required directories/files exist and package dirs have `__init__.py`.
+  - [x] Ensure `uv run pytest` discovers and runs tests successfully.
+  - [x] If host `uv` is unavailable, run the same verification through Docker: `docker compose run --rm app uv run pytest`.
 
-- [ ] Verify developer commands and Docker compatibility (AC: 4)
-  - [ ] Run `uv run pytest`.
-  - [ ] Run `uv run ruff check .`.
-  - [ ] Run `docker compose build` from `/Users/irinawork/bmad_projects`.
-  - [ ] Run `docker compose run --rm app uv run pytest` from `/Users/irinawork/bmad_projects`.
-  - [ ] Do not leave long-running containers active after verification; use `docker compose down` if needed.
+- [x] Verify developer commands and Docker compatibility (AC: 4)
+  - [x] Run `uv run pytest`.
+  - [x] Run `uv run ruff check .`.
+  - [x] Run `docker compose build` from `/Users/irinawork/bmad_projects`.
+  - [x] Run `docker compose run --rm app uv run pytest` from `/Users/irinawork/bmad_projects`.
+  - [x] Do not leave long-running containers active after verification; use `docker compose down` if needed.
 
 ## Dev Notes
 
@@ -232,14 +232,103 @@ tests/
 
 ### Agent Model Used
 
-TBD by dev-story workflow.
+GPT-5.2
 
 ### Debug Log References
 
+- `docker compose run --rm app uv lock` resolved 87 packages and created `uv.lock`.
+- `docker compose run --rm app uv run pytest` passed: 3 tests collected, 3 passed.
+- `docker compose run --rm app uv run ruff check .` passed after excluding BMad service folders via `tool.ruff.extend-exclude`.
+- `docker compose build` passed using Docker Compose classic builder with a temporary Docker config because Docker Desktop credential helper hung during public image metadata lookup.
+- `docker compose run --rm app uv run pytest` passed again after Docker build.
+
 ### Completion Notes List
 
+- Created the Python 3.12 uv scaffold in `Content_MultiAgent` with `pyproject.toml`, `.python-version`, `uv.lock`, `README.md`, `.env.example`, `.gitignore` and `app.py`.
+- Added the approved package tree under `src/seo_content_pipeline` with minimal placeholder modules and `__init__.py` files for every package directory.
+- Added docs, examples and artifact placeholder folders while preserving existing Docker documentation.
+- Added scaffold and architecture-boundary tests; `app.py` stays thin and avoids forbidden implementation-layer imports.
+- Adjusted Docker development setup by adding `UV_LINK_MODE=copy` in Compose and removing build-time `uv sync` from Dockerfile so the dev image builds reliably while runtime `uv sync` still handles dependencies.
+
 ### File List
+
+- Content_MultiAgent/.env.example
+- Content_MultiAgent/.gitignore
+- Content_MultiAgent/.python-version
+- Content_MultiAgent/Dockerfile
+- Content_MultiAgent/README.md
+- Content_MultiAgent/app.py
+- Content_MultiAgent/artifacts/demo/.gitkeep
+- Content_MultiAgent/artifacts/jobs/.gitkeep
+- Content_MultiAgent/docs/architecture-summary.md
+- Content_MultiAgent/docs/artifact-map.md
+- Content_MultiAgent/docs/demo-script.md
+- Content_MultiAgent/docs/demo-setup.md
+- Content_MultiAgent/docs/project-structure.md
+- Content_MultiAgent/examples/briefs/.gitkeep
+- Content_MultiAgent/examples/inputs/.gitkeep
+- Content_MultiAgent/examples/outputs/README.md
+- Content_MultiAgent/pyproject.toml
+- Content_MultiAgent/src/seo_content_pipeline/__init__.py
+- Content_MultiAgent/src/seo_content_pipeline/config.py
+- Content_MultiAgent/src/seo_content_pipeline/graph/__init__.py
+- Content_MultiAgent/src/seo_content_pipeline/graph/builder.py
+- Content_MultiAgent/src/seo_content_pipeline/graph/nodes/__init__.py
+- Content_MultiAgent/src/seo_content_pipeline/graph/nodes/brief_node.py
+- Content_MultiAgent/src/seo_content_pipeline/graph/nodes/final_qa_node.py
+- Content_MultiAgent/src/seo_content_pipeline/graph/nodes/localization_node.py
+- Content_MultiAgent/src/seo_content_pipeline/graph/nodes/seo_node.py
+- Content_MultiAgent/src/seo_content_pipeline/graph/nodes/uniqueness_node.py
+- Content_MultiAgent/src/seo_content_pipeline/graph/nodes/writer_node.py
+- Content_MultiAgent/src/seo_content_pipeline/graph/routing.py
+- Content_MultiAgent/src/seo_content_pipeline/graph/state.py
+- Content_MultiAgent/src/seo_content_pipeline/models/__init__.py
+- Content_MultiAgent/src/seo_content_pipeline/models/artifacts.py
+- Content_MultiAgent/src/seo_content_pipeline/models/content.py
+- Content_MultiAgent/src/seo_content_pipeline/models/errors.py
+- Content_MultiAgent/src/seo_content_pipeline/models/job.py
+- Content_MultiAgent/src/seo_content_pipeline/models/qa_result.py
+- Content_MultiAgent/src/seo_content_pipeline/models/stage.py
+- Content_MultiAgent/src/seo_content_pipeline/models/uniqueness.py
+- Content_MultiAgent/src/seo_content_pipeline/models/validation.py
+- Content_MultiAgent/src/seo_content_pipeline/prompts/__init__.py
+- Content_MultiAgent/src/seo_content_pipeline/prompts/brief.py
+- Content_MultiAgent/src/seo_content_pipeline/prompts/localization.py
+- Content_MultiAgent/src/seo_content_pipeline/prompts/qa_prompt.py
+- Content_MultiAgent/src/seo_content_pipeline/prompts/writer.py
+- Content_MultiAgent/src/seo_content_pipeline/providers/__init__.py
+- Content_MultiAgent/src/seo_content_pipeline/providers/base.py
+- Content_MultiAgent/src/seo_content_pipeline/providers/copyleaks_uniqueness.py
+- Content_MultiAgent/src/seo_content_pipeline/providers/manual_uniqueness.py
+- Content_MultiAgent/src/seo_content_pipeline/providers/mock_uniqueness.py
+- Content_MultiAgent/src/seo_content_pipeline/services/__init__.py
+- Content_MultiAgent/src/seo_content_pipeline/services/artifact_store.py
+- Content_MultiAgent/src/seo_content_pipeline/services/exporters.py
+- Content_MultiAgent/src/seo_content_pipeline/services/job_service.py
+- Content_MultiAgent/src/seo_content_pipeline/services/llm_client.py
+- Content_MultiAgent/src/seo_content_pipeline/services/llm_runner.py
+- Content_MultiAgent/src/seo_content_pipeline/services/stage_view_builder.py
+- Content_MultiAgent/src/seo_content_pipeline/ui/__init__.py
+- Content_MultiAgent/src/seo_content_pipeline/ui/artifact_panel.py
+- Content_MultiAgent/src/seo_content_pipeline/ui/components.py
+- Content_MultiAgent/src/seo_content_pipeline/ui/empty_states.py
+- Content_MultiAgent/src/seo_content_pipeline/ui/error_presenter.py
+- Content_MultiAgent/src/seo_content_pipeline/ui/progress_timeline.py
+- Content_MultiAgent/src/seo_content_pipeline/ui/renderers.py
+- Content_MultiAgent/src/seo_content_pipeline/validators/__init__.py
+- Content_MultiAgent/src/seo_content_pipeline/validators/artifact_validators.py
+- Content_MultiAgent/src/seo_content_pipeline/validators/revision_validators.py
+- Content_MultiAgent/src/seo_content_pipeline/validators/seo_validators.py
+- Content_MultiAgent/tests/__init__.py
+- Content_MultiAgent/tests/conftest.py
+- Content_MultiAgent/tests/test_architecture_boundaries.py
+- Content_MultiAgent/tests/test_scaffold_structure.py
+- Content_MultiAgent/uv.lock
+- bmad-output/implementation-artifacts/1-1-set-up-initial-uv-project-scaffold-and-architecture-boundaries.md
+- bmad-output/implementation-artifacts/sprint-status.yaml
+- compose.yaml
 
 ### Change Log
 
 - 2026-05-20: Story created by BMad create-story workflow.
+- 2026-05-20: Implemented scaffold, tests, Docker compatibility adjustments and moved story to review.

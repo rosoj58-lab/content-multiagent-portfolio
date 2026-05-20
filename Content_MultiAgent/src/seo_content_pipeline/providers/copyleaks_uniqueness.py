@@ -1,0 +1,1 @@
+"""Optional Copyleaks provider placeholder."""

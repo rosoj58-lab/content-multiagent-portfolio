@@ -1,0 +1,1 @@
+"""QA result model placeholders."""

@@ -17,6 +17,7 @@ services:
     environment:
       BMAD_OUTPUT_DIR: /bmad-output
       PYTHONUNBUFFERED: "1"
+      UV_LINK_MODE: copy
     command: >
       sh -lc '
         if [ -f pyproject.toml ]; then

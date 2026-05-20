@@ -1,0 +1,1 @@
+"""SEO node placeholder."""

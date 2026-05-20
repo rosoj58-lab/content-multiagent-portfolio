@@ -1,0 +1,37 @@
+[project]
+name = "seo-content-pipeline"
+version = "0.1.0"
+description = "Local multi-agent SEO content pipeline portfolio app."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "langchain",
+    "langchain-openai",
+    "langgraph",
+    "pydantic",
+    "python-dotenv",
+    "streamlit",
+]
+
+[dependency-groups]
+dev = [
+    "mypy",
+    "pytest",
+    "ruff",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = [
+    ".agents",
+    "_bmad",
+    "Users",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

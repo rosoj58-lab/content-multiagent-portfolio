@@ -1,0 +1,1 @@
+"""Brief node placeholder."""
