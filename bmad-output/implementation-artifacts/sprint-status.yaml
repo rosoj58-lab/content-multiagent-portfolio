@@ -43,7 +43,7 @@ story_location: /Users/irinawork/bmad_projects/bmad-output/implementation-artifa
 
 development_status:
   epic-1: in-progress
-  1-1-set-up-initial-uv-project-scaffold-and-architecture-boundaries: review
+  1-1-set-up-initial-uv-project-scaffold-and-architecture-boundaries: done
   1-2-define-core-models-stage-status-and-artifact-registry: backlog
   1-3-implement-config-artifactstore-and-jobservice-skeleton: backlog
   1-4-build-minimal-streamlit-shell-and-status-timeline: backlog

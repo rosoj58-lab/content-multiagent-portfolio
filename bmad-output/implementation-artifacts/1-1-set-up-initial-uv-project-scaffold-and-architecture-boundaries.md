@@ -1,6 +1,6 @@
 # Story 1.1: Set Up Initial uv Project Scaffold and Architecture Boundaries
 
-Status: review
+Status: done
 
 ## Story
 
