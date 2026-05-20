@@ -1,0 +1,84 @@
+# generated: 2026-05-20
+# last_updated: 2026-05-20
+# project: Content Multi-Agent
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: /Users/irinawork/bmad_projects/bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog -> in-progress: Automatically when first story is created (via create-story)
+#   - in-progress -> done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-05-20
+last_updated: 2026-05-20
+project: Content Multi-Agent
+project_key: NOKEY
+tracking_system: file-system
+story_location: /Users/irinawork/bmad_projects/bmad-output/implementation-artifacts
+
+development_status:
+  epic-1: backlog
+  1-1-set-up-initial-uv-project-scaffold-and-architecture-boundaries: backlog
+  1-2-define-core-models-stage-status-and-artifact-registry: backlog
+  1-3-implement-config-artifactstore-and-jobservice-skeleton: backlog
+  1-4-build-minimal-streamlit-shell-and-status-timeline: backlog
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-submit-dry-input-and-select-article-type: backlog
+  2-2-generate-seo-brief-from-dry-input: backlog
+  2-3-validate-brief-completeness: backlog
+  2-4-approve-or-request-revision-for-seo-brief: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-generate-english-original-from-approved-brief: backlog
+  3-2-run-deterministic-article-validators: backlog
+  3-3-run-editorial-qa: backlog
+  3-4-run-seo-qa-and-route-failures: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-select-manual-or-mock-uniqueness-provider: backlog
+  4-2-enter-and-validate-manual-uniqueness-score: backlog
+  4-3-gate-workflow-by-90-percent-threshold: backlog
+  4-4-stub-optional-copyleaks-provider-safely: backlog
+  epic-4-retrospective: optional
+
+  epic-5: backlog
+  5-1-generate-spanish-localization: backlog
+  5-2-generate-italian-and-french-localizations: backlog
+  5-3-assemble-markdown-and-json-final-package: backlog
+  5-4-produce-final-qa-report-and-status: backlog
+  epic-5-retrospective: optional
+
+  epic-6: backlog
+  6-1-add-stable-bp-lp-and-gp-demo-inputs: backlog
+  6-2-implement-demo-observability-views: backlog
+  6-3-document-interview-walkthrough-and-artifact-map: backlog
+  epic-6-retrospective: optional
