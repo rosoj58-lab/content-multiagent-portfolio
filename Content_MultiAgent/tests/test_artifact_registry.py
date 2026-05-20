@@ -23,6 +23,12 @@ def test_artifact_registry_covers_every_artifact_key() -> None:
     assert set(ARTIFACT_REGISTRY) == set(ArtifactKey)
 
 
+def test_artifact_registry_includes_job_shell_artifacts_for_job_service() -> None:
+    assert ARTIFACT_REGISTRY[ArtifactKey.METADATA].filename == "metadata.json"
+    assert ARTIFACT_REGISTRY[ArtifactKey.INPUT].filename == "input.json"
+    assert ARTIFACT_REGISTRY[ArtifactKey.STATE].filename == "state.json"
+
+
 def test_artifact_registry_has_unique_filenames_and_required_metadata() -> None:
     filenames = [spec.filename for spec in ARTIFACT_REGISTRY.values()]
 

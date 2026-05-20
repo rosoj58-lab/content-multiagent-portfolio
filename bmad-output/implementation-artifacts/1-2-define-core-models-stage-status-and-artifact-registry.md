@@ -1,6 +1,6 @@
 # Story 1.2: Define Core Models, Stage/Status, and Artifact Registry
 
-Status: review
+Status: done
 
 ## Story
 
@@ -52,6 +52,10 @@ so that graph nodes, services and UI share the same vocabulary.
   - [x] Add or extend tests to verify stage/status separation, registry completeness, unique filenames and content-type/extension consistency.
   - [x] Verify model defaults do not share mutable state between instances.
   - [x] Ensure `uv run pytest` and `uv run ruff check .` pass, using Docker if host `uv` is unavailable.
+
+### Review Findings
+
+- [x] [Review][Patch] Add metadata artifact key to registry before Story 1.3 [Content_MultiAgent/src/seo_content_pipeline/models/artifacts.py:8] — resolved by adding `ArtifactKey.METADATA`, a `metadata.json` registry entry and a focused test for job shell artifacts.
 
 ## Dev Notes
 
@@ -166,10 +170,13 @@ GPT-5.2
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 8 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - Docker Compose still returned a Docker Desktop API 500 for the networks route; verification was completed with local `uv` and Python 3.12 instead.
+- Post-review patch verification: `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 9 tests.
+- Post-review patch verification: `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 
 ### Completion Notes List
 
 - Implemented centralized `ArtifactKey` and `ARTIFACT_REGISTRY` with stable filenames, content types, UI labels and descriptions.
+- Added `ArtifactKey.METADATA` and `metadata.json` registry support during code review so Story 1.3 can write all job shell artifacts through the registry.
 - Implemented `WorkflowStage`, `WorkflowStatus`, `StageView`, `ValidationCheck`, `QAReport`, `WorkflowError`, `JobMetadata`, `StatusHistoryEntry`, `PipelineState` and `ArticleType`.
 - Exported stable model contracts from `seo_content_pipeline.models`.
 - Added registry/model tests covering stage/status separation, registry completeness, filename conventions and mutable default isolation.
@@ -188,3 +195,4 @@ GPT-5.2
 ## Change Log
 
 - 2026-05-20: Implemented Story 1.2 core model contracts and artifact registry; status moved to review.
+- 2026-05-20: Resolved code review finding for `metadata.json` artifact registry coverage; status moved to done.

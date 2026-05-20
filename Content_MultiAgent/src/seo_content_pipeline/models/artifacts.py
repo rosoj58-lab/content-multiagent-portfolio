@@ -8,6 +8,7 @@ from pydantic import BaseModel
 class ArtifactKey(str, Enum):
     """Stable keys for every persisted pipeline artifact."""
 
+    METADATA = "metadata"
     INPUT = "input"
     STATE = "state"
     BRIEF = "brief"
@@ -33,6 +34,13 @@ class ArtifactSpec(BaseModel):
 
 
 ARTIFACT_REGISTRY: dict[ArtifactKey, ArtifactSpec] = {
+    ArtifactKey.METADATA: ArtifactSpec(
+        key=ArtifactKey.METADATA,
+        filename="metadata.json",
+        content_type="application/json",
+        ui_label="Job Metadata",
+        description="Persisted job identity, status and history metadata.",
+    ),
     ArtifactKey.INPUT: ArtifactSpec(
         key=ArtifactKey.INPUT,
         filename="input.json",
