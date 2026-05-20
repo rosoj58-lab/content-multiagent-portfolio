@@ -1,6 +1,6 @@
 # Story 1.4: Build Minimal Streamlit Shell and Status Timeline
 
-Status: review
+Status: done
 
 ## Story
 
@@ -52,6 +52,10 @@ so that the project is demonstrably runnable before content generation exists.
   - [x] Start Streamlit with local `uv` after implementation.
   - [x] Confirm the server starts and provide the local URL.
   - [x] Stop the server before finalizing unless the user explicitly wants it left running.
+
+### Review Findings
+
+- [x] [Review][Patch] Keep `stage_view_builder` behind a UI helper instead of importing it in `app.py` [Content_MultiAgent/app.py:6] — resolved by moving the builder call behind `render_initial_progress_timeline()` in `ui.progress_timeline` and forbidding direct `app.py` imports from `services.stage_view_builder`.
 
 ## Dev Notes
 
@@ -114,6 +118,9 @@ GPT-5.2
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 24 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - Streamlit smoke-check started at `http://127.0.0.1:8501`; browser verification created a job and displayed artifact paths plus `StageView` timeline.
+- Post-review patch verification: `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_architecture_boundaries.py tests/test_status_presenter.py` passed: 3 tests.
+- Post-review patch verification: `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 24 tests.
+- Post-review patch verification: `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 
 ### Completion Notes List
 
@@ -121,6 +128,7 @@ GPT-5.2
 - Implemented Streamlit UI helpers for dry input, article type, demo/full mode, job summary and progress timeline.
 - Updated `app.py` to create a job through `JobService`, store UI result state and render a basic timeline without importing lower-level implementation layers.
 - Strengthened architecture boundary tests and added status presenter tests.
+- Resolved code review finding by keeping `stage_view_builder` behind a UI rendering helper.
 
 ### File List
 
@@ -134,3 +142,4 @@ GPT-5.2
 ## Change Log
 
 - 2026-05-20: Implemented Story 1.4 minimal Streamlit shell and status timeline; status moved to review.
+- 2026-05-20: Resolved Story 1.4 code review finding; status moved to done.

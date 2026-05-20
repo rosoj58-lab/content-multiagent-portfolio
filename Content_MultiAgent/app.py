@@ -3,9 +3,8 @@
 import streamlit as st
 
 from seo_content_pipeline.services.job_service import JobService
-from seo_content_pipeline.services.stage_view_builder import build_initial_stage_views
 from seo_content_pipeline.ui.components import render_job_creation_form, render_job_summary
-from seo_content_pipeline.ui.progress_timeline import render_progress_timeline
+from seo_content_pipeline.ui.progress_timeline import render_initial_progress_timeline
 
 
 def main() -> None:
@@ -32,7 +31,7 @@ def main() -> None:
 
     artifact_paths = {key.value: path for key, path in result.artifact_paths.items()}
     render_job_summary(result.metadata.job_id, artifact_paths, st.session_state.get("demo_mode", "demo"))
-    render_progress_timeline(build_initial_stage_views(result.metadata))
+    render_initial_progress_timeline(result.metadata)
 
 
 if __name__ == "__main__":
