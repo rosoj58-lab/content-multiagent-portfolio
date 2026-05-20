@@ -5,6 +5,8 @@ from pathlib import Path
 
 
 FORBIDDEN_IMPORT_PREFIXES = (
+    "seo_content_pipeline.config",
+    "seo_content_pipeline.services.artifact_store",
     "seo_content_pipeline.graph.nodes",
     "seo_content_pipeline.prompts",
     "seo_content_pipeline.validators",
