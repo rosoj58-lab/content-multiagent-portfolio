@@ -1,0 +1,30 @@
+.DS_Store
+
+# Local secrets and environment
+.env
+.env.*
+!.env.example
+*.key
+*secret*
+*token*
+
+# Python/build tooling
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+dist/
+build/
+*.egg-info/
+
+# Generated application artifacts
+**/artifacts/jobs/*
+!**/artifacts/jobs/.gitkeep
+**/artifacts/demo/*
+!**/artifacts/demo/.gitkeep
+
+# Mis-resolved empty output path from earlier installer config
+Content_MultiAgent/Users/
