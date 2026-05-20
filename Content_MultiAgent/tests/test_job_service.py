@@ -30,6 +30,28 @@ def test_job_service_create_job_persists_job_shell(tmp_path) -> None:
     assert input_artifact["stage"] == "input_received"
     assert state["job_id"] == result.metadata.job_id
     assert state["current_stage"] == "input_received"
+    assert state["status_history"][0]["stage"] == "input_received"
+
+
+@pytest.mark.parametrize("article_type", list(ArticleType))
+def test_job_service_persists_selected_article_type_for_intake(tmp_path, article_type) -> None:
+    settings = AppSettings(artifact_root=tmp_path)
+    store = ArtifactStore(settings.artifact_root)
+    service = JobService(settings=settings, artifact_store=store)
+
+    result = service.create_job("  Source notes for the content team.  ", article_type)
+
+    metadata = store.read_json(result.metadata.job_id, ArtifactKey.METADATA)
+    input_artifact = store.read_json(result.metadata.job_id, ArtifactKey.INPUT)
+    state = store.read_json(result.metadata.job_id, ArtifactKey.STATE)
+
+    assert input_artifact["dry_input"] == "Source notes for the content team."
+    assert input_artifact["article_type"] == article_type.value
+    assert metadata["article_type"] == article_type.value
+    assert state["article_type"] == article_type.value
+    assert state["current_stage"] == "input_received"
+    assert state["status_history"][0]["stage"] == "input_received"
+    assert state["status_history"][0]["status"] == "running"
 
 
 def test_job_service_rejects_empty_dry_input(tmp_path) -> None:

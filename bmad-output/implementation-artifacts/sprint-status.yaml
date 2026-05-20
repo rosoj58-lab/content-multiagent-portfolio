@@ -42,15 +42,15 @@ tracking_system: file-system
 story_location: /Users/irinawork/bmad_projects/bmad-output/implementation-artifacts
 
 development_status:
-  epic-1: in-progress
+  epic-1: done
   1-1-set-up-initial-uv-project-scaffold-and-architecture-boundaries: done
   1-2-define-core-models-stage-status-and-artifact-registry: done
   1-3-implement-config-artifactstore-and-jobservice-skeleton: done
   1-4-build-minimal-streamlit-shell-and-status-timeline: done
   epic-1-retrospective: optional
 
-  epic-2: backlog
-  2-1-submit-dry-input-and-select-article-type: backlog
+  epic-2: in-progress
+  2-1-submit-dry-input-and-select-article-type: review
   2-2-generate-seo-brief-from-dry-input: backlog
   2-3-validate-brief-completeness: backlog
   2-4-approve-or-request-revision-for-seo-brief: backlog
