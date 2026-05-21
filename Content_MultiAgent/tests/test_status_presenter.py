@@ -13,6 +13,7 @@ from seo_content_pipeline.services.stage_view_builder import (
     build_brief_manual_gate_stage_view,
     build_brief_qa_stage_view,
     build_initial_stage_views,
+    build_uniqueness_gate_stage_view,
     build_uniqueness_provider_stage_view,
 )
 
@@ -139,3 +140,35 @@ def test_build_uniqueness_provider_stage_view_exposes_available_provider_actions
     assert ArtifactKey.SEO_QA in view.artifact_links
     assert view.available_actions == ["Select manual provider", "Select mock provider"]
     assert view.blocking_reason == "Select a uniqueness provider before entering a score."
+
+
+def test_build_uniqueness_gate_stage_view_shows_pass_details() -> None:
+    view = build_uniqueness_gate_stage_view(
+        score=90,
+        source="manual",
+        threshold=90,
+        passed=True,
+        routing_reason="Uniqueness score meets the 90 percent threshold.",
+    )
+
+    assert view.stage is WorkflowStage.UNIQUENESS_CHECK
+    assert view.status is WorkflowStatus.RUNNING
+    assert ArtifactKey.UNIQUENESS in view.artifact_links
+    assert view.available_actions == ["Continue to localization"]
+    assert "90" in view.description
+    assert "manual" in view.description
+    assert view.blocking_reason is None
+
+
+def test_build_uniqueness_gate_stage_view_shows_revision_details() -> None:
+    view = build_uniqueness_gate_stage_view(
+        score=72.5,
+        source="manual",
+        threshold=90,
+        passed=False,
+        routing_reason="Uniqueness score is below 90; revise the English Original.",
+    )
+
+    assert view.status is WorkflowStatus.NEEDS_REVISION
+    assert view.available_actions == ["Revise English Original"]
+    assert view.blocking_reason == "Uniqueness score is below 90; revise the English Original."

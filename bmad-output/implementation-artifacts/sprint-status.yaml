@@ -66,7 +66,7 @@ development_status:
   epic-4: in-progress
   4-1-select-manual-or-mock-uniqueness-provider: done
   4-2-enter-and-validate-manual-uniqueness-score: done
-  4-3-gate-workflow-by-90-percent-threshold: ready-for-dev
+  4-3-gate-workflow-by-90-percent-threshold: review
   4-4-stub-optional-copyleaks-provider-safely: backlog
   epic-4-retrospective: optional
 

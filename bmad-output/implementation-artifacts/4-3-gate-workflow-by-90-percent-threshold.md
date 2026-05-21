@@ -1,6 +1,6 @@
 # Story 4.3: Gate Workflow by 90 Percent Threshold
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -24,33 +24,33 @@ so that localization uses an approved English Original.
 
 ## Tasks / Subtasks
 
-- [ ] Implement uniqueness threshold validation and routing (AC: 1, 2, 4)
-  - [ ] Add deterministic threshold validation for `UniquenessResult`.
-  - [ ] Treat score `90` as passing.
-  - [ ] Route passing scores to `WorkflowStage.LOCALIZATION`.
-  - [ ] Route failing scores to `WorkflowStatus.NEEDS_REVISION` with writing/revision target.
-  - [ ] Keep routing pure where possible.
+- [x] Implement uniqueness threshold validation and routing (AC: 1, 2, 4)
+  - [x] Add deterministic threshold validation for `UniquenessResult`.
+  - [x] Treat score `90` as passing.
+  - [x] Route passing scores to `WorkflowStage.LOCALIZATION`.
+  - [x] Route failing scores to `WorkflowStatus.NEEDS_REVISION` with writing/revision target.
+  - [x] Keep routing pure where possible.
 
-- [ ] Implement threshold gate orchestration (AC: 1, 2, 4)
-  - [ ] Add service method to read `uniqueness.json` and apply the 90 percent gate.
-  - [ ] Update `state.json` and `metadata.json`.
-  - [ ] Preserve `ArtifactKey.UNIQUENESS` path.
-  - [ ] For pass: set current stage to localization and status running.
-  - [ ] For fail: set current stage to uniqueness check and status needs_revision.
-  - [ ] Store routing reason and QA flag for later final report/demo.
+- [x] Implement threshold gate orchestration (AC: 1, 2, 4)
+  - [x] Add service method to read `uniqueness.json` and apply the 90 percent gate.
+  - [x] Update `state.json` and `metadata.json`.
+  - [x] Preserve `ArtifactKey.UNIQUENESS` path.
+  - [x] For pass: set current stage to localization and status running.
+  - [x] For fail: set current stage to uniqueness check and status needs_revision.
+  - [x] Store routing reason and QA flag for later final report/demo.
 
-- [ ] Add UI/status support (AC: 3)
-  - [ ] Add stage view helper that shows score, source, threshold and routing reason.
-  - [ ] Include relevant artifact links.
-  - [ ] Expose revision action for below-threshold scores.
+- [x] Add UI/status support (AC: 3)
+  - [x] Add stage view helper that shows score, source, threshold and routing reason.
+  - [x] Include relevant artifact links.
+  - [x] Expose revision action for below-threshold scores.
 
-- [ ] Add focused tests (AC: 1-4)
-  - [ ] Test score `90` passes and routes to localization.
-  - [ ] Test score `100` passes and routes to localization.
-  - [ ] Test score below `90` routes to needs_revision.
-  - [ ] Test stage view includes score, source, threshold and routing reason.
-  - [ ] Test missing uniqueness artifact is rejected with controlled error.
-  - [ ] Run full `pytest` and `ruff check .`.
+- [x] Add focused tests (AC: 1-4)
+  - [x] Test score `90` passes and routes to localization.
+  - [x] Test score `100` passes and routes to localization.
+  - [x] Test score below `90` routes to needs_revision.
+  - [x] Test stage view includes score, source, threshold and routing reason.
+  - [x] Test missing uniqueness artifact is rejected with controlled error.
+  - [x] Run full `pytest` and `ruff check .`.
 
 ## Dev Notes
 
@@ -99,15 +99,30 @@ GPT-5.5
 ### Debug Log References
 
 - Story context created from Epic 4, architecture routing notes, and Story 4.2 implementation.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_uniqueness_gate_service.py tests/test_status_presenter.py` red phase failed as expected before implementation.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_uniqueness_gate_service.py tests/test_status_presenter.py` passed: 12 tests.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 103 tests.
 
 ### Completion Notes List
 
-- Pending implementation.
+- Added pure `route_after_uniqueness_gate()` with `UNIQUENESS_THRESHOLD = 90.0`.
+- Added `UniquenessGateService.apply_threshold_gate()` to consume `uniqueness.json` and route pass/fail states.
+- Added typed uniqueness gate state fields for score, threshold, source and routing reason.
+- Added UI-ready uniqueness gate stage view with score/source/threshold/reason.
+- Added tests for pass boundary, below-threshold revision routing and missing artifact error.
 
 ### File List
 
-- Pending implementation.
+- Content_MultiAgent/src/seo_content_pipeline/graph/routing.py
+- Content_MultiAgent/src/seo_content_pipeline/models/job.py
+- Content_MultiAgent/src/seo_content_pipeline/services/stage_view_builder.py
+- Content_MultiAgent/src/seo_content_pipeline/services/uniqueness_gate_service.py
+- Content_MultiAgent/tests/test_status_presenter.py
+- Content_MultiAgent/tests/test_uniqueness_gate_service.py
 
 ## Change Log
 
 - 2026-05-21: Created story and moved status to ready-for-dev.
+- 2026-05-21: Started implementation; status moved to in-progress.
+- 2026-05-21: Implemented uniqueness threshold gate; status moved to review.

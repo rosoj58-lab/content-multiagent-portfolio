@@ -107,6 +107,30 @@ def build_uniqueness_provider_stage_view(
     )
 
 
+def build_uniqueness_gate_stage_view(
+    *,
+    score: float,
+    source: str,
+    threshold: float,
+    passed: bool,
+    routing_reason: str,
+) -> StageView:
+    """Build UI-ready state for the uniqueness threshold gate."""
+    status = WorkflowStatus.RUNNING if passed else WorkflowStatus.NEEDS_REVISION
+    return StageView(
+        stage=WorkflowStage.UNIQUENESS_CHECK,
+        status=status,
+        label="Uniqueness gate",
+        description=(
+            f"Score: {score:g}. Source: {source}. Threshold: {threshold:g}. "
+            f"{routing_reason}"
+        ),
+        artifact_links=[ArtifactKey.UNIQUENESS, ArtifactKey.ENGLISH_ORIGINAL],
+        available_actions=["Continue to localization"] if passed else ["Revise English Original"],
+        blocking_reason=None if passed else routing_reason,
+    )
+
+
 def _failed_fields(report: QAReport) -> list[str]:
     fields: list[str] = []
     for check in report.checks:

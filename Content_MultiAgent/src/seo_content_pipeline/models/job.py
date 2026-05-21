@@ -55,3 +55,7 @@ class PipelineState(BaseModel):
     errors: list[WorkflowError] = Field(default_factory=list)
     manual_gate_required: bool = False
     selected_uniqueness_provider: UniquenessProviderName | None = None
+    uniqueness_score: float | None = None
+    uniqueness_threshold: float | None = None
+    uniqueness_source: UniquenessProviderName | None = None
+    uniqueness_routing_reason: str | None = None
