@@ -1,6 +1,6 @@
 # Story 4.2: Enter and Validate Manual Uniqueness Score
 
-Status: review
+Status: done
 
 ## Story
 
@@ -104,6 +104,7 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_uniqueness_providers.py` passed: 16 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 97 tests.
+- Code review clean: no patch or decision-needed findings; status moved to done.
 
 ### Completion Notes List
 
@@ -112,6 +113,7 @@ GPT-5.5
 - Added `UniquenessScoreService.record_manual_score()` to require manual provider selection, save `uniqueness.json`, update state/metadata and clear the manual gate.
 - Added graph node wrapper for manual score recording.
 - Added tests for valid boundaries, invalid values, artifact persistence and provider precondition.
+- Code review passed without follow-up changes.
 
 ### File List
 
@@ -127,3 +129,4 @@ GPT-5.5
 - 2026-05-21: Created story and moved status to ready-for-dev.
 - 2026-05-21: Started implementation; status moved to in-progress.
 - 2026-05-21: Implemented manual uniqueness score recording; status moved to review.
+- 2026-05-21: Code review passed; status moved to done.
