@@ -59,3 +59,4 @@ class PipelineState(BaseModel):
     uniqueness_threshold: float | None = None
     uniqueness_source: UniquenessProviderName | None = None
     uniqueness_routing_reason: str | None = None
+    localization_geos: dict[str, str] = Field(default_factory=dict)

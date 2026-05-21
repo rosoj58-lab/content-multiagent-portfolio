@@ -1,6 +1,6 @@
 # Story 5.1: Generate Spanish Localization
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -24,31 +24,31 @@ so that the final package includes a localized Spanish version.
 
 ## Tasks / Subtasks
 
-- [ ] Implement Spanish localization prompt support (AC: 2, 3)
-  - [ ] Build prompt from English Original, SEO brief and Spanish geo.
-  - [ ] Instruct the model to return Markdown only.
-  - [ ] Require preservation of heading hierarchy and SEO intent.
-  - [ ] Include default geo `es-US` when none is provided.
+- [x] Implement Spanish localization prompt support (AC: 2, 3)
+  - [x] Build prompt from English Original, SEO brief and Spanish geo.
+  - [x] Instruct the model to return Markdown only.
+  - [x] Require preservation of heading hierarchy and SEO intent.
+  - [x] Include default geo `es-US` when none is provided.
 
-- [ ] Implement localization orchestration (AC: 1, 3, 4)
-  - [ ] Add `LocalizationService.generate_spanish_localization()`.
-  - [ ] Require passed uniqueness gate before localization.
-  - [ ] Load `english_original.md`, `brief.json`, and `state.json`.
-  - [ ] Save `localization_es.md` through `ArtifactStore`.
-  - [ ] Update `state.json` and `metadata.json`.
-  - [ ] Record Spanish geo in typed state.
+- [x] Implement localization orchestration (AC: 1, 3, 4)
+  - [x] Add `LocalizationService.generate_spanish_localization()`.
+  - [x] Require passed uniqueness gate before localization.
+  - [x] Load `english_original.md`, `brief.json`, and `state.json`.
+  - [x] Save `localization_es.md` through `ArtifactStore`.
+  - [x] Update `state.json` and `metadata.json`.
+  - [x] Record Spanish geo in typed state.
 
-- [ ] Add graph support (AC: 1)
-  - [ ] Add localization node wrapper for Spanish localization.
-  - [ ] Keep Streamlit entrypoint thin.
+- [x] Add graph support (AC: 1)
+  - [x] Add localization node wrapper for Spanish localization.
+  - [x] Keep Streamlit entrypoint thin.
 
-- [ ] Add focused tests (AC: 1-4)
-  - [ ] Test Spanish localization artifact is persisted.
-  - [ ] Test localization prompt includes Spanish, geo, headings and SEO intent.
-  - [ ] Test default `es-US` geo is recorded.
-  - [ ] Test explicit geo override is recorded.
-  - [ ] Test localization is rejected before uniqueness gate passes.
-  - [ ] Run full `pytest` and `ruff check .`.
+- [x] Add focused tests (AC: 1-4)
+  - [x] Test Spanish localization artifact is persisted.
+  - [x] Test localization prompt includes Spanish, geo, headings and SEO intent.
+  - [x] Test default `es-US` geo is recorded.
+  - [x] Test explicit geo override is recorded.
+  - [x] Test localization is rejected before uniqueness gate passes.
+  - [x] Run full `pytest` and `ruff check .`.
 
 ## Dev Notes
 
@@ -95,15 +95,29 @@ GPT-5.5
 ### Debug Log References
 
 - Story context created from Epic 5, architecture localization notes, WriterService pattern and Story 4.3 implementation.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_localization_service.py` red phase failed as expected before implementation.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_localization_service.py` passed: 3 tests.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 107 tests.
 
 ### Completion Notes List
 
-- Pending implementation.
+- Added Spanish localization prompt builder with default geo `es-US`.
+- Added `LocalizationService.generate_spanish_localization()` using `LLMRunner.generate_text()`.
+- Added localization state persistence, artifact path tracking and geo recording.
+- Added graph node wrapper for Spanish localization.
+- Added focused localization tests.
 
 ### File List
 
-- Pending implementation.
+- Content_MultiAgent/src/seo_content_pipeline/graph/nodes/localization_node.py
+- Content_MultiAgent/src/seo_content_pipeline/models/job.py
+- Content_MultiAgent/src/seo_content_pipeline/prompts/localization.py
+- Content_MultiAgent/src/seo_content_pipeline/services/localization_service.py
+- Content_MultiAgent/tests/test_localization_service.py
 
 ## Change Log
 
 - 2026-05-21: Created story and moved status to ready-for-dev.
+- 2026-05-21: Started implementation; status moved to in-progress.
+- 2026-05-21: Implemented Spanish localization; status moved to review.
