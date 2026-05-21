@@ -58,7 +58,7 @@ development_status:
 
   epic-3: in-progress
   3-1-generate-english-original-from-approved-brief: done
-  3-2-run-deterministic-article-validators: review
+  3-2-run-deterministic-article-validators: done
   3-3-run-editorial-qa: backlog
   3-4-run-seo-qa-and-route-failures: backlog
   epic-3-retrospective: optional

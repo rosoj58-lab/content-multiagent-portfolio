@@ -1,6 +1,6 @@
 # Story 3.2: Run Deterministic Article Validators
 
-Status: review
+Status: done
 
 ## Story
 
@@ -101,6 +101,7 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_article_validators.py tests/test_article_validation_service.py tests/test_artifact_registry.py` passed: 17 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 69 tests.
+- Code review clean: no decision-needed, patch, or deferred findings.
 
 ### Completion Notes List
 
@@ -122,3 +123,4 @@ GPT-5.5
 
 - 2026-05-21: Created story and moved status to in-progress.
 - 2026-05-21: Implemented deterministic article validators; status moved to review.
+- 2026-05-21: Code review clean; status moved to done.
