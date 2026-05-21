@@ -126,6 +126,25 @@ def validate_required_artifacts(artifact_availability: Mapping[str, bool]) -> li
     return checks
 
 
+def validate_uniqueness_score(score: object) -> list[ValidationCheck]:
+    """Validate a manually entered uniqueness score."""
+    valid_number = isinstance(score, int | float) and not isinstance(score, bool)
+    valid_range = valid_number and 0 <= float(score) <= 100
+    return [
+        ValidationCheck(
+            name="uniqueness_score_range",
+            passed=valid_range,
+            severity="info" if valid_range else "error",
+            message=(
+                f"Uniqueness score is within range: {float(score)}."
+                if valid_range
+                else "Uniqueness score must be a numeric value from 0 to 100."
+            ),
+            metadata={"score": float(score) if valid_number else None, "min": 0, "max": 100},
+        )
+    ]
+
+
 def _validate_main_keyword(value: object) -> ValidationCheck:
     if _blank(value):
         return _failed_check(

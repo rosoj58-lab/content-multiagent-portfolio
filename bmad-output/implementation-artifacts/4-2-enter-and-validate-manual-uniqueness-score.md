@@ -1,6 +1,6 @@
 # Story 4.2: Enter and Validate Manual Uniqueness Score
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -25,31 +25,31 @@ so that the system can gate localization honestly.
 
 ## Tasks / Subtasks
 
-- [ ] Implement uniqueness score model and validator (AC: 1, 2, 3, 5)
-  - [ ] Add a persisted `UniquenessResult` Pydantic model.
-  - [ ] Include `job_id`, stage, score, source, provider metadata and timestamp.
-  - [ ] Add deterministic score validation for numeric values from 0 to 100.
-  - [ ] Reject non-numeric, boolean and out-of-range values.
+- [x] Implement uniqueness score model and validator (AC: 1, 2, 3, 5)
+  - [x] Add a persisted `UniquenessResult` Pydantic model.
+  - [x] Include `job_id`, stage, score, source, provider metadata and timestamp.
+  - [x] Add deterministic score validation for numeric values from 0 to 100.
+  - [x] Reject non-numeric, boolean and out-of-range values.
 
-- [ ] Implement manual score orchestration (AC: 1, 2, 3, 4)
-  - [ ] Add a service method to record manual uniqueness score.
-  - [ ] Require `selected_uniqueness_provider == "manual"` before accepting manual score.
-  - [ ] Save `uniqueness.json` through `ArtifactStore`.
-  - [ ] Update `state.json` with artifact path and score-recorded flag.
-  - [ ] Update `metadata.json` status/history for the uniqueness stage.
-  - [ ] Clear the manual gate after a valid score is recorded.
+- [x] Implement manual score orchestration (AC: 1, 2, 3, 4)
+  - [x] Add a service method to record manual uniqueness score.
+  - [x] Require `selected_uniqueness_provider == "manual"` before accepting manual score.
+  - [x] Save `uniqueness.json` through `ArtifactStore`.
+  - [x] Update `state.json` with artifact path and score-recorded flag.
+  - [x] Update `metadata.json` status/history for the uniqueness stage.
+  - [x] Clear the manual gate after a valid score is recorded.
 
-- [ ] Add graph/UI-facing support (AC: 1, 3)
-  - [ ] Add uniqueness node wrapper for manual score recording.
-  - [ ] Keep Streamlit entrypoint thin; no direct provider/service implementation imports from `app.py`.
-  - [ ] Ensure controlled service errors can be rendered by UI later.
+- [x] Add graph/UI-facing support (AC: 1, 3)
+  - [x] Add uniqueness node wrapper for manual score recording.
+  - [x] Keep Streamlit entrypoint thin; no direct provider/service implementation imports from `app.py`.
+  - [x] Ensure controlled service errors can be rendered by UI later.
 
-- [ ] Add focused tests (AC: 1-5)
-  - [ ] Test valid scores at 0, 90 and 100 are accepted.
-  - [ ] Test invalid scores below 0, above 100, booleans and strings are rejected.
-  - [ ] Test `uniqueness.json` contains score, source `manual`, provider metadata and timestamp.
-  - [ ] Test manual score cannot be recorded unless manual provider is selected.
-  - [ ] Run full `pytest` and `ruff check .`.
+- [x] Add focused tests (AC: 1-5)
+  - [x] Test valid scores at 0, 90 and 100 are accepted.
+  - [x] Test invalid scores below 0, above 100, booleans and strings are rejected.
+  - [x] Test `uniqueness.json` contains score, source `manual`, provider metadata and timestamp.
+  - [x] Test manual score cannot be recorded unless manual provider is selected.
+  - [x] Run full `pytest` and `ruff check .`.
 
 ## Dev Notes
 
@@ -100,15 +100,30 @@ GPT-5.5
 ### Debug Log References
 
 - Story context created from Epic 4, architecture, and Story 4.1 implementation.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_uniqueness_providers.py` red phase failed as expected before implementation.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_uniqueness_providers.py` passed: 16 tests.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 97 tests.
 
 ### Completion Notes List
 
-- Pending implementation.
+- Added `UniquenessResult` with score, source, provider metadata and timestamp.
+- Added deterministic `validate_uniqueness_score()` for numeric 0-100 values.
+- Added `UniquenessScoreService.record_manual_score()` to require manual provider selection, save `uniqueness.json`, update state/metadata and clear the manual gate.
+- Added graph node wrapper for manual score recording.
+- Added tests for valid boundaries, invalid values, artifact persistence and provider precondition.
 
 ### File List
 
-- Pending implementation.
+- Content_MultiAgent/src/seo_content_pipeline/graph/nodes/uniqueness_node.py
+- Content_MultiAgent/src/seo_content_pipeline/models/__init__.py
+- Content_MultiAgent/src/seo_content_pipeline/models/uniqueness.py
+- Content_MultiAgent/src/seo_content_pipeline/services/uniqueness_score_service.py
+- Content_MultiAgent/src/seo_content_pipeline/validators/artifact_validators.py
+- Content_MultiAgent/tests/test_uniqueness_providers.py
 
 ## Change Log
 
 - 2026-05-21: Created story and moved status to ready-for-dev.
+- 2026-05-21: Started implementation; status moved to in-progress.
+- 2026-05-21: Implemented manual uniqueness score recording; status moved to review.
