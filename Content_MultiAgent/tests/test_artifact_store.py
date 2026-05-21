@@ -44,6 +44,26 @@ def test_artifact_store_replaces_existing_json_atomically(tmp_path) -> None:
     assert not list(Path(tmp_path / "job-123").glob("*.tmp"))
 
 
+def test_artifact_store_writes_and_reads_text_artifacts(tmp_path) -> None:
+    store = ArtifactStore(artifact_root=tmp_path)
+
+    path = store.write_text("job-123", ArtifactKey.ENGLISH_ORIGINAL, "  # Title\n\nBody.  ")
+    loaded = store.read_text("job-123", ArtifactKey.ENGLISH_ORIGINAL)
+
+    assert path == tmp_path / "job-123" / "english_original.md"
+    assert loaded == "# Title\n\nBody.\n"
+
+
+def test_artifact_store_rejects_wrong_content_type_helpers(tmp_path) -> None:
+    store = ArtifactStore(artifact_root=tmp_path)
+
+    with pytest.raises(ValueError, match="text artifact"):
+        store.write_text("job-123", ArtifactKey.INPUT, "text")
+
+    with pytest.raises(ValueError, match="JSON artifact"):
+        store.read_json("job-123", ArtifactKey.ENGLISH_ORIGINAL)
+
+
 @pytest.mark.parametrize("unsafe_job_id", ["", "../outside", "nested/job", "/tmp/job"])
 def test_artifact_store_rejects_unsafe_job_ids(tmp_path, unsafe_job_id) -> None:
     store = ArtifactStore(artifact_root=tmp_path)

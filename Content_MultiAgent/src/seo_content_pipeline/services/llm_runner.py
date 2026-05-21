@@ -51,6 +51,13 @@ class LLMRunner:
                 last_error=str(second_error),
             ) from second_error
 
+    def generate_text(self, *, prompt: str) -> str:
+        """Generate raw text output through the configured LLM client."""
+        output = self.client.generate(prompt).strip()
+        if not output:
+            raise ValueError("LLM text output must not be empty")
+        return output
+
     @staticmethod
     def _parse(raw_output: str, model_type: type[ModelT]) -> ModelT:
         return model_type.model_validate_json(raw_output)

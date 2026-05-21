@@ -56,8 +56,8 @@ development_status:
   2-4-approve-or-request-revision-for-seo-brief: done
   epic-2-retrospective: optional
 
-  epic-3: backlog
-  3-1-generate-english-original-from-approved-brief: backlog
+  epic-3: in-progress
+  3-1-generate-english-original-from-approved-brief: review
   3-2-run-deterministic-article-validators: backlog
   3-3-run-editorial-qa: backlog
   3-4-run-seo-qa-and-route-failures: backlog

@@ -88,3 +88,21 @@ def test_llm_runner_raises_after_one_failed_repair_attempt() -> None:
 
     assert exc_info.value.attempts == 2
     assert len(client.prompts) == 2
+
+
+def test_llm_runner_generates_non_empty_text() -> None:
+    client = FakeLLMClient(["  # Article\n\nBody.  "])
+    runner = LLMRunner(client)
+
+    output = runner.generate_text(prompt="Write article.")
+
+    assert output == "# Article\n\nBody."
+    assert client.prompts == ["Write article."]
+
+
+def test_llm_runner_rejects_empty_text_output() -> None:
+    client = FakeLLMClient(["   "])
+    runner = LLMRunner(client)
+
+    with pytest.raises(ValueError, match="must not be empty"):
+        runner.generate_text(prompt="Write article.")
