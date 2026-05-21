@@ -44,8 +44,7 @@ class BriefApprovalService:
         self._ensure_brief_exists(job_id)
         self._ensure_qa_passed(job_id)
         state = self._load_state(job_id)
-        if not state.manual_gate_required or state.status is not WorkflowStatus.WAITING_FOR_HUMAN:
-            raise ValueError("brief approval requires an active manual gate")
+        self._ensure_active_manual_gate(state)
 
         metadata = self._load_metadata(job_id)
         history_entry = StatusHistoryEntry(
@@ -82,6 +81,7 @@ class BriefApprovalService:
             raise ValueError("revision notes must not be empty")
 
         state = self._load_state(job_id)
+        self._ensure_active_manual_gate(state)
         metadata = self._load_metadata(job_id)
         previous_attempts = state.revision_attempts.get(WorkflowStage.BRIEF_DRAFTED, 0)
         if previous_attempts >= self.settings.max_revision_attempts:
@@ -169,6 +169,11 @@ class BriefApprovalService:
         report = self._ensure_qa_exists(job_id)
         if not report.passed:
             raise ValueError("brief approval requires a passed brief QA report")
+
+    @staticmethod
+    def _ensure_active_manual_gate(state: PipelineState) -> None:
+        if not state.manual_gate_required or state.status != WorkflowStatus.WAITING_FOR_HUMAN:
+            raise ValueError("brief action requires an active manual gate")
 
     def _load_state(self, job_id: str) -> PipelineState:
         return PipelineState.model_validate(self.artifact_store.read_json(job_id, ArtifactKey.STATE))

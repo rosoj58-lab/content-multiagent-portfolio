@@ -113,11 +113,20 @@ def test_request_revision_rejects_empty_notes(tmp_path) -> None:
 
 
 def test_request_revision_routes_to_human_review_when_revision_limit_is_reached(tmp_path) -> None:
-    job_id, approval_service, store = _create_job_waiting_for_brief_approval(
+    job_service, qa_service, approval_service, store = _service_setup(
         tmp_path,
         max_revision_attempts=1,
     )
+    job = job_service.create_job("Create content about SEO automation.", ArticleType.LP)
+    store.write_json(
+        job.metadata.job_id,
+        ArtifactKey.BRIEF,
+        _valid_brief_artifact(job.metadata.job_id, ArticleType.LP),
+    )
+    qa_service.validate_brief(job.metadata.job_id)
+    job_id = job.metadata.job_id
     approval_service.request_revision(job_id, "First revision.")
+    qa_service.validate_brief(job_id)
 
     result = approval_service.request_revision(job_id, "Second revision.")
 
@@ -130,6 +139,14 @@ def test_request_revision_routes_to_human_review_when_revision_limit_is_reached(
     assert state["errors"][0]["code"] == "brief_revision_limit_reached"
     assert state["errors"][0]["details"]["latest_notes"] == "Second revision."
     assert metadata["status"] == "needs_human_review"
+
+
+def test_request_revision_rejects_closed_manual_gate(tmp_path) -> None:
+    job_id, approval_service, _store = _create_job_waiting_for_brief_approval(tmp_path)
+    approval_service.approve_brief(job_id)
+
+    with pytest.raises(ValueError, match="active manual gate"):
+        approval_service.request_revision(job_id, "Change the structure.")
 
 
 def test_approve_brief_rejects_failed_qa_report(tmp_path) -> None:
