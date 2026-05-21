@@ -12,6 +12,7 @@ class ArtifactKey(str, Enum):
     INPUT = "input"
     STATE = "state"
     BRIEF = "brief"
+    BRIEF_QA = "brief_qa"
     ENGLISH_ORIGINAL = "english_original"
     EDITORIAL_QA = "editorial_qa"
     SEO_QA = "seo_qa"
@@ -61,6 +62,13 @@ ARTIFACT_REGISTRY: dict[ArtifactKey, ArtifactSpec] = {
         content_type="application/json",
         ui_label="SEO Brief",
         description="Structured SEO brief used to generate the article.",
+    ),
+    ArtifactKey.BRIEF_QA: ArtifactSpec(
+        key=ArtifactKey.BRIEF_QA,
+        filename="brief_qa.json",
+        content_type="application/json",
+        ui_label="Brief QA",
+        description="Deterministic completeness checks for the SEO brief.",
     ),
     ArtifactKey.ENGLISH_ORIGINAL: ArtifactSpec(
         key=ArtifactKey.ENGLISH_ORIGINAL,

@@ -29,6 +29,11 @@ def test_artifact_registry_includes_job_shell_artifacts_for_job_service() -> Non
     assert ARTIFACT_REGISTRY[ArtifactKey.STATE].filename == "state.json"
 
 
+def test_artifact_registry_includes_brief_qa_report() -> None:
+    assert ARTIFACT_REGISTRY[ArtifactKey.BRIEF_QA].filename == "brief_qa.json"
+    assert ARTIFACT_REGISTRY[ArtifactKey.BRIEF_QA].content_type == "application/json"
+
+
 def test_artifact_registry_has_unique_filenames_and_required_metadata() -> None:
     filenames = [spec.filename for spec in ARTIFACT_REGISTRY.values()]
 
