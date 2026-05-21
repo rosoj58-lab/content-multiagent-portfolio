@@ -1,6 +1,6 @@
 # Story 3.3: Run Editorial QA
 
-Status: review
+Status: done
 
 ## Story
 
@@ -98,6 +98,7 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_editorial_qa_prompt.py tests/test_editorial_qa_service.py` passed: 4 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 73 tests.
+- Code review clean: no decision-needed, patch, or deferred findings.
 
 ### Completion Notes List
 
@@ -117,3 +118,4 @@ GPT-5.5
 
 - 2026-05-21: Created story and moved status to in-progress.
 - 2026-05-21: Implemented editorial QA; status moved to review.
+- 2026-05-21: Code review clean; status moved to done.
