@@ -1,6 +1,6 @@
 # Story 4.1: Select Manual or Mock Uniqueness Provider
 
-Status: review
+Status: done
 
 ## Story
 
@@ -110,6 +110,7 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 87 tests.
 - Code review finding patched: provider selection now requires passed SEO QA before moving into the uniqueness stage.
 - Post-review verification passed: targeted uniqueness/status tests 13/13, `ruff check .`, full `pytest` 88/88.
+- Code review clean after precondition patch; status moved to done.
 
 ### Completion Notes List
 
@@ -119,6 +120,7 @@ GPT-5.5
 - Added `UniquenessProviderService` to list options, persist explicit provider selection, reject unavailable providers and update state/metadata history.
 - Added UI-ready uniqueness provider stage view data.
 - Added workflow guard so uniqueness provider selection cannot happen before SEO QA has passed.
+- Code review passed after fixing the SEO QA precondition.
 
 ### File List
 
@@ -141,3 +143,4 @@ GPT-5.5
 - 2026-05-21: Started implementation; status moved to in-progress.
 - 2026-05-21: Implemented uniqueness provider selection; status moved to review.
 - 2026-05-21: Patched code review finding for SEO QA precondition.
+- 2026-05-21: Code review passed; status moved to done.
