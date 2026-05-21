@@ -52,7 +52,7 @@ development_status:
   epic-2: in-progress
   2-1-submit-dry-input-and-select-article-type: done
   2-2-generate-seo-brief-from-dry-input: done
-  2-3-validate-brief-completeness: review
+  2-3-validate-brief-completeness: done
   2-4-approve-or-request-revision-for-seo-brief: backlog
   epic-2-retrospective: optional
 

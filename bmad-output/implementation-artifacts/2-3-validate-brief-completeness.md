@@ -1,6 +1,6 @@
 # Story 2.3: Validate Brief Completeness
 
-Status: review
+Status: done
 
 ## Story
 
@@ -109,6 +109,7 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_brief_validators.py tests/test_brief_qa_service.py tests/test_status_presenter.py tests/test_artifact_registry.py` passed: 18 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 44 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
+- Code review clean: no decision-needed, patch, or deferred findings.
 
 ### Completion Notes List
 
@@ -133,3 +134,4 @@ GPT-5.5
 
 - 2026-05-21: Created story and moved status to in-progress.
 - 2026-05-21: Implemented deterministic brief QA; status moved to review.
+- 2026-05-21: Code review clean; status moved to done.
