@@ -1,6 +1,6 @@
 # Story 3.1: Generate English Original From Approved Brief
 
-Status: review
+Status: done
 
 ## Story
 
@@ -106,6 +106,7 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_artifact_store.py tests/test_llm_runner.py tests/test_writer_service.py` passed: 18 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 59 tests.
+- Code review clean: no decision-needed, patch, or deferred findings.
 
 ### Completion Notes List
 
@@ -131,3 +132,4 @@ GPT-5.5
 
 - 2026-05-21: Created story and moved status to in-progress.
 - 2026-05-21: Implemented English Original writer stage; status moved to review.
+- 2026-05-21: Code review clean; status moved to done.
