@@ -60,7 +60,7 @@ development_status:
   3-1-generate-english-original-from-approved-brief: done
   3-2-run-deterministic-article-validators: done
   3-3-run-editorial-qa: done
-  3-4-run-seo-qa-and-route-failures: backlog
+  3-4-run-seo-qa-and-route-failures: review
   epic-3-retrospective: optional
 
   epic-4: backlog
