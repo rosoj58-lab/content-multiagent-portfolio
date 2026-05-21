@@ -1,6 +1,6 @@
 # Story 5.1: Generate Spanish Localization
 
-Status: review
+Status: done
 
 ## Story
 
@@ -101,6 +101,7 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 107 tests.
 - Code review finding patched: Spanish localization now requires generated English Original plus article validation, editorial QA, SEO QA and uniqueness gate.
 - Post-review verification passed: localization tests 4/4, `ruff check .`, full `pytest` 108/108.
+- Code review clean after QA precondition patch; status moved to done.
 
 ### Completion Notes List
 
@@ -110,6 +111,7 @@ GPT-5.5
 - Added graph node wrapper for Spanish localization.
 - Added focused localization tests.
 - Added review fix for full English QA precondition before localization.
+- Code review passed after QA precondition fix.
 
 ### File List
 
@@ -125,3 +127,4 @@ GPT-5.5
 - 2026-05-21: Started implementation; status moved to in-progress.
 - 2026-05-21: Implemented Spanish localization; status moved to review.
 - 2026-05-21: Patched code review finding for English QA precondition.
+- 2026-05-21: Code review passed; status moved to done.
