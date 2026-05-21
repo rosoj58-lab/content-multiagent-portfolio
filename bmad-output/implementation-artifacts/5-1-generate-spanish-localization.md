@@ -99,6 +99,8 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_localization_service.py` passed: 3 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 107 tests.
+- Code review finding patched: Spanish localization now requires generated English Original plus article validation, editorial QA, SEO QA and uniqueness gate.
+- Post-review verification passed: localization tests 4/4, `ruff check .`, full `pytest` 108/108.
 
 ### Completion Notes List
 
@@ -107,6 +109,7 @@ GPT-5.5
 - Added localization state persistence, artifact path tracking and geo recording.
 - Added graph node wrapper for Spanish localization.
 - Added focused localization tests.
+- Added review fix for full English QA precondition before localization.
 
 ### File List
 
@@ -121,3 +124,4 @@ GPT-5.5
 - 2026-05-21: Created story and moved status to ready-for-dev.
 - 2026-05-21: Started implementation; status moved to in-progress.
 - 2026-05-21: Implemented Spanish localization; status moved to review.
+- 2026-05-21: Patched code review finding for English QA precondition.

@@ -86,6 +86,9 @@ def _prepare_localizable_job(
     state.current_stage = WorkflowStage.LOCALIZATION
     state.status = WorkflowStatus.RUNNING
     state.qa_flags["english_original_generated"] = True
+    state.qa_flags["article_validation_passed"] = True
+    state.qa_flags["editorial_qa_passed"] = True
+    state.qa_flags["seo_qa_passed"] = True
     state.qa_flags["uniqueness_gate_passed"] = True
     store.write_json(job.metadata.job_id, ArtifactKey.STATE, state)
     return (
@@ -146,4 +149,17 @@ def test_localization_service_rejects_before_uniqueness_gate_passes(tmp_path) ->
     store.write_json(job_id, ArtifactKey.STATE, state)
 
     with pytest.raises(ValueError, match="uniqueness gate"):
+        service.generate_spanish_localization(job_id)
+
+
+def test_localization_service_rejects_before_english_qa_passes(tmp_path) -> None:
+    job_id, service, store, _client = _prepare_localizable_job(
+        tmp_path,
+        responses=[SPANISH_LOCALIZATION],
+    )
+    state = PipelineState.model_validate(store.read_json(job_id, ArtifactKey.STATE))
+    state.qa_flags["seo_qa_passed"] = False
+    store.write_json(job_id, ArtifactKey.STATE, state)
+
+    with pytest.raises(ValueError, match="English QA"):
         service.generate_spanish_localization(job_id)

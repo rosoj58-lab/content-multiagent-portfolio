@@ -84,9 +84,13 @@ class LocalizationService:
         if (
             state.current_stage is not WorkflowStage.LOCALIZATION
             or state.status is not WorkflowStatus.RUNNING
+            or not state.qa_flags.get("english_original_generated", False)
+            or not state.qa_flags.get("article_validation_passed", False)
+            or not state.qa_flags.get("editorial_qa_passed", False)
+            or not state.qa_flags.get("seo_qa_passed", False)
             or not state.qa_flags.get("uniqueness_gate_passed", False)
         ):
-            raise ValueError("Spanish localization requires a passed uniqueness gate")
+            raise ValueError("Spanish localization requires passed English QA and uniqueness gate")
 
     def _persist_localization_state(self, job_id: str, localization_path: str, geo: str) -> None:
         state = self._load_state(job_id)
