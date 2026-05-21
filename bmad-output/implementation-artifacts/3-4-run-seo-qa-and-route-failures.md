@@ -1,6 +1,6 @@
 # Story 3.4: Run SEO QA and Route Failures
 
-Status: review
+Status: done
 
 ## Story
 
@@ -102,6 +102,8 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_seo_validators.py tests/test_seo_qa_service.py` passed: 7 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 80 tests.
+- Code review finding patched: SEO QA reports no longer keep `routing_target=writing` after the revision limit routes the job to human review.
+- Post-review verification passed: targeted SEO tests 7/7, `ruff check .`, full `pytest` 80/80.
 
 ### Completion Notes List
 
@@ -110,6 +112,7 @@ GPT-5.5
 - Added SEO revision attempt tracking under `WorkflowStage.SEO_QA`.
 - Added human-review route when SEO revision attempts exceed `MAX_REVISION_ATTEMPTS`.
 - Added SEO graph node wrapper and focused tests.
+- Code review passed after fixing human-review routing consistency.
 
 ### File List
 
@@ -123,3 +126,4 @@ GPT-5.5
 
 - 2026-05-21: Created story and moved status to in-progress.
 - 2026-05-21: Implemented SEO QA and failure routing; status moved to review.
+- 2026-05-21: Patched code review finding and moved status to done.
