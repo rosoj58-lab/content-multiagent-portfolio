@@ -135,9 +135,11 @@ def test_seo_qa_service_routes_to_human_review_when_revision_limit_is_reached(tm
 
     result = service.run_seo_qa(job_id)
 
+    report = store.read_json(job_id, ArtifactKey.SEO_QA)
     state = store.read_json(job_id, ArtifactKey.STATE)
 
     assert result.status.value == "needs_human_review"
+    assert report["routing_target"] is None
     assert state["status"] == "needs_human_review"
     assert state["errors"][0]["code"] == "seo_revision_limit_reached"
 

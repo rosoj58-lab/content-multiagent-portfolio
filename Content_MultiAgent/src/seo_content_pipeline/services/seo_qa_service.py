@@ -15,6 +15,7 @@ from seo_content_pipeline.models import (
     WorkflowError,
     WorkflowStage,
     WorkflowStatus,
+    ValidationCheck,
 )
 from seo_content_pipeline.services.artifact_store import ArtifactStore
 from seo_content_pipeline.validators.seo_validators import validate_seo_article
@@ -56,8 +57,9 @@ class SEOQAService:
             article_validation_report=article_validation,
         )
         report = self._build_report(job_id, checks)
-        report_path = self.artifact_store.write_json(job_id, ArtifactKey.SEO_QA, report)
         status = self._status_for_report(job_id, report)
+        self._apply_routing(report, status)
+        report_path = self.artifact_store.write_json(job_id, ArtifactKey.SEO_QA, report)
         self._persist_state(job_id, status, str(report_path), report)
         return SEOQAResult(job_id=job_id, report=report, status=status)
 
@@ -67,7 +69,7 @@ class SEOQAService:
             raise ValueError("SEO QA requires a passed editorial QA report")
 
     @staticmethod
-    def _build_report(job_id: str, checks: list) -> QAReport:
+    def _build_report(job_id: str, checks: list[ValidationCheck]) -> QAReport:
         passed = all(check.passed for check in checks)
         issues = [check for check in checks if not check.passed or check.severity == "warning"]
         summary = (
@@ -85,6 +87,11 @@ class SEOQAService:
             recommendations=[check.message for check in issues],
             routing_target=None if passed else WorkflowStage.WRITING,
         )
+
+    @staticmethod
+    def _apply_routing(report: QAReport, status: WorkflowStatus) -> None:
+        if status is WorkflowStatus.NEEDS_HUMAN_REVIEW:
+            report.routing_target = None
 
     def _status_for_report(self, job_id: str, report: QAReport) -> WorkflowStatus:
         if report.passed:
