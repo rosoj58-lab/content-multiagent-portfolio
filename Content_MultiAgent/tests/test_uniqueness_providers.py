@@ -3,7 +3,7 @@
 import pytest
 
 from seo_content_pipeline.config import AppSettings, get_settings
-from seo_content_pipeline.models import ArtifactKey, WorkflowStage, WorkflowStatus
+from seo_content_pipeline.models import ArtifactKey, PipelineState, WorkflowStage, WorkflowStatus
 from seo_content_pipeline.services.artifact_store import ArtifactStore
 from seo_content_pipeline.services.job_service import JobService
 from seo_content_pipeline.services.uniqueness_provider_service import UniquenessProviderService
@@ -20,6 +20,14 @@ def _service_setup(tmp_path, *, settings: AppSettings | None = None) -> tuple[st
         UniquenessProviderService(settings=settings, artifact_store=store),
         store,
     )
+
+
+def _mark_seo_qa_passed(job_id: str, store: ArtifactStore) -> None:
+    state = PipelineState.model_validate(store.read_json(job_id, ArtifactKey.STATE))
+    state.current_stage = WorkflowStage.SEO_QA
+    state.status = WorkflowStatus.RUNNING
+    state.qa_flags["seo_qa_passed"] = True
+    store.write_json(job_id, ArtifactKey.STATE, state)
 
 
 def test_manual_and_mock_providers_are_available_without_external_credentials(tmp_path) -> None:
@@ -69,6 +77,7 @@ def test_missing_copyleaks_config_does_not_fail_settings_startup(monkeypatch) ->
 
 def test_provider_selection_persists_selected_provider_in_job_state(tmp_path) -> None:
     job_id, service, store = _service_setup(tmp_path)
+    _mark_seo_qa_passed(job_id, store)
 
     result = service.select_provider(job_id, "mock")
 
@@ -88,9 +97,22 @@ def test_provider_selection_persists_selected_provider_in_job_state(tmp_path) ->
 
 def test_unavailable_provider_selection_is_rejected_without_state_mutation(tmp_path) -> None:
     job_id, service, store = _service_setup(tmp_path)
+    _mark_seo_qa_passed(job_id, store)
 
     with pytest.raises(ValueError, match="not available"):
         service.select_provider(job_id, "copyleaks")
+
+    state = store.read_json(job_id, ArtifactKey.STATE)
+
+    assert state["current_stage"] == WorkflowStage.SEO_QA.value
+    assert state.get("selected_uniqueness_provider") is None
+
+
+def test_provider_selection_requires_passed_seo_qa(tmp_path) -> None:
+    job_id, service, store = _service_setup(tmp_path)
+
+    with pytest.raises(ValueError, match="SEO QA"):
+        service.select_provider(job_id, "manual")
 
     state = store.read_json(job_id, ArtifactKey.STATE)
 

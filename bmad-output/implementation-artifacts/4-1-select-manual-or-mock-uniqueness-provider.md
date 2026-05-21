@@ -108,6 +108,8 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_uniqueness_providers.py tests/test_status_presenter.py` passed: 12 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 87 tests.
+- Code review finding patched: provider selection now requires passed SEO QA before moving into the uniqueness stage.
+- Post-review verification passed: targeted uniqueness/status tests 13/13, `ruff check .`, full `pytest` 88/88.
 
 ### Completion Notes List
 
@@ -116,6 +118,7 @@ GPT-5.5
 - Added Copyleaks availability detection without SDK imports, network calls or startup credential requirements.
 - Added `UniquenessProviderService` to list options, persist explicit provider selection, reject unavailable providers and update state/metadata history.
 - Added UI-ready uniqueness provider stage view data.
+- Added workflow guard so uniqueness provider selection cannot happen before SEO QA has passed.
 
 ### File List
 
@@ -137,3 +140,4 @@ GPT-5.5
 - 2026-05-21: Created story and moved status to ready-for-dev.
 - 2026-05-21: Started implementation; status moved to in-progress.
 - 2026-05-21: Implemented uniqueness provider selection; status moved to review.
+- 2026-05-21: Patched code review finding for SEO QA precondition.

@@ -66,6 +66,7 @@ class UniquenessProviderService:
             reason = selected_option.reason or "provider is not configured"
             raise ValueError(f"Uniqueness provider {provider_name!r} is not available: {reason}")
 
+        self._ensure_seo_qa_passed(job_id)
         status = WorkflowStatus.WAITING_FOR_HUMAN
         self._persist_selection(job_id, provider_name, status)
         return UniquenessProviderSelectionResult(
@@ -81,6 +82,11 @@ class UniquenessProviderService:
         provider_name: UniquenessProviderName,
     ) -> UniquenessProviderOption | None:
         return next((option for option in provider_options if option.name == provider_name), None)
+
+    def _ensure_seo_qa_passed(self, job_id: str) -> None:
+        state = PipelineState.model_validate(self.artifact_store.read_json(job_id, ArtifactKey.STATE))
+        if not state.qa_flags.get("seo_qa_passed", False):
+            raise ValueError("Uniqueness provider selection requires passed SEO QA")
 
     def _persist_selection(
         self,
