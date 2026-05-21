@@ -1,6 +1,6 @@
 # Story 4.1: Select Manual or Mock Uniqueness Provider
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -26,33 +26,33 @@ so that the pipeline can run reliably without external plagiarism checker creden
 
 ## Tasks / Subtasks
 
-- [ ] Implement uniqueness provider contracts and availability (AC: 1, 2, 3, 5)
-  - [ ] Define a Pydantic uniqueness provider option/status model.
-  - [ ] Define a provider protocol/interface with provider name and availability.
-  - [ ] Implement manual provider as always available.
-  - [ ] Implement mock provider as available for demo/test use.
-  - [ ] Implement Copyleaks provider as optional/unavailable without credentials.
-  - [ ] Avoid required Copyleaks SDK imports, network access or credential reads outside config.
+- [x] Implement uniqueness provider contracts and availability (AC: 1, 2, 3, 5)
+  - [x] Define a Pydantic uniqueness provider option/status model.
+  - [x] Define a provider protocol/interface with provider name and availability.
+  - [x] Implement manual provider as always available.
+  - [x] Implement mock provider as available for demo/test use.
+  - [x] Implement Copyleaks provider as optional/unavailable without credentials.
+  - [x] Avoid required Copyleaks SDK imports, network access or credential reads outside config.
 
-- [ ] Implement provider selection orchestration (AC: 1, 4)
-  - [ ] Add a service that lists provider options for the uniqueness stage.
-  - [ ] Add selection handling for `manual` and `mock`.
-  - [ ] Reject unavailable providers with actionable errors.
-  - [ ] Persist selected provider into `state.json`.
-  - [ ] Update `metadata.json` status/history for the uniqueness stage.
-  - [ ] Set a manual gate flag for the uniqueness stage.
+- [x] Implement provider selection orchestration (AC: 1, 4)
+  - [x] Add a service that lists provider options for the uniqueness stage.
+  - [x] Add selection handling for `manual` and `mock`.
+  - [x] Reject unavailable providers with actionable errors.
+  - [x] Persist selected provider into `state.json`.
+  - [x] Update `metadata.json` status/history for the uniqueness stage.
+  - [x] Set a manual gate flag for the uniqueness stage.
 
-- [ ] Add UI-facing status support (AC: 1, 2, 4)
-  - [ ] Ensure stage view/manual gate data can represent the uniqueness provider-selection stop.
-  - [ ] Expose provider options without importing implementation providers directly from `app.py`.
+- [x] Add UI-facing status support (AC: 1, 2, 4)
+  - [x] Ensure stage view/manual gate data can represent the uniqueness provider-selection stop.
+  - [x] Expose provider options without importing implementation providers directly from `app.py`.
 
-- [ ] Add focused tests (AC: 1-5)
-  - [ ] Test manual and mock availability.
-  - [ ] Test Copyleaks unavailable when credentials are missing.
-  - [ ] Test app/settings startup with missing Copyleaks credentials.
-  - [ ] Test provider selection persists selected provider in job state.
-  - [ ] Test unavailable provider selection is rejected.
-  - [ ] Run full `pytest` and `ruff check .`.
+- [x] Add focused tests (AC: 1-5)
+  - [x] Test manual and mock availability.
+  - [x] Test Copyleaks unavailable when credentials are missing.
+  - [x] Test app/settings startup with missing Copyleaks credentials.
+  - [x] Test provider selection persists selected provider in job state.
+  - [x] Test unavailable provider selection is rejected.
+  - [x] Run full `pytest` and `ruff check .`.
 
 ## Dev Notes
 
@@ -104,15 +104,36 @@ GPT-5.5
 ### Debug Log References
 
 - Story context created from Epic 4 and uniqueness-provider architecture.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_uniqueness_providers.py tests/test_status_presenter.py` red phase failed as expected before implementation.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_uniqueness_providers.py tests/test_status_presenter.py` passed: 12 tests.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 87 tests.
 
 ### Completion Notes List
 
-- Pending implementation.
+- Added `UniquenessProviderOption` and provider interface metadata for manual, mock and Copyleaks.
+- Added manual/mock provider availability without external credentials.
+- Added Copyleaks availability detection without SDK imports, network calls or startup credential requirements.
+- Added `UniquenessProviderService` to list options, persist explicit provider selection, reject unavailable providers and update state/metadata history.
+- Added UI-ready uniqueness provider stage view data.
 
 ### File List
 
-- Pending implementation.
+- Content_MultiAgent/src/seo_content_pipeline/graph/nodes/uniqueness_node.py
+- Content_MultiAgent/src/seo_content_pipeline/models/__init__.py
+- Content_MultiAgent/src/seo_content_pipeline/models/job.py
+- Content_MultiAgent/src/seo_content_pipeline/models/uniqueness.py
+- Content_MultiAgent/src/seo_content_pipeline/providers/base.py
+- Content_MultiAgent/src/seo_content_pipeline/providers/copyleaks_uniqueness.py
+- Content_MultiAgent/src/seo_content_pipeline/providers/manual_uniqueness.py
+- Content_MultiAgent/src/seo_content_pipeline/providers/mock_uniqueness.py
+- Content_MultiAgent/src/seo_content_pipeline/services/stage_view_builder.py
+- Content_MultiAgent/src/seo_content_pipeline/services/uniqueness_provider_service.py
+- Content_MultiAgent/tests/test_status_presenter.py
+- Content_MultiAgent/tests/test_uniqueness_providers.py
 
 ## Change Log
 
 - 2026-05-21: Created story and moved status to ready-for-dev.
+- 2026-05-21: Started implementation; status moved to in-progress.
+- 2026-05-21: Implemented uniqueness provider selection; status moved to review.

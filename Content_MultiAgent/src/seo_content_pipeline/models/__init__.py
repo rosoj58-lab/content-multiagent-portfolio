@@ -16,6 +16,7 @@ from seo_content_pipeline.models.job import (
 )
 from seo_content_pipeline.models.qa_result import QAReport
 from seo_content_pipeline.models.stage import StageView, WorkflowStage, WorkflowStatus
+from seo_content_pipeline.models.uniqueness import UniquenessProviderOption
 from seo_content_pipeline.models.validation import ValidationCheck, ValidationSeverity
 
 __all__ = [
@@ -32,6 +33,7 @@ __all__ = [
     "SEOBriefArtifact",
     "StageView",
     "StatusHistoryEntry",
+    "UniquenessProviderOption",
     "ValidationCheck",
     "ValidationSeverity",
     "WorkflowError",

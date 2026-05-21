@@ -13,6 +13,7 @@ from seo_content_pipeline.services.stage_view_builder import (
     build_brief_manual_gate_stage_view,
     build_brief_qa_stage_view,
     build_initial_stage_views,
+    build_uniqueness_provider_stage_view,
 )
 
 
@@ -125,3 +126,16 @@ def test_build_brief_manual_gate_stage_view_exposes_gate_details() -> None:
     assert view.revision_attempt == 1
     assert view.max_revision_attempts == 2
     assert "enable writing" in view.description
+
+
+def test_build_uniqueness_provider_stage_view_exposes_available_provider_actions() -> None:
+    view = build_uniqueness_provider_stage_view(
+        available_provider_names=["manual", "mock"],
+        has_copyleaks_config=False,
+    )
+
+    assert view.stage is WorkflowStage.UNIQUENESS_CHECK
+    assert view.status is WorkflowStatus.WAITING_FOR_HUMAN
+    assert ArtifactKey.SEO_QA in view.artifact_links
+    assert view.available_actions == ["Select manual provider", "Select mock provider"]
+    assert view.blocking_reason == "Select a uniqueness provider before entering a score."

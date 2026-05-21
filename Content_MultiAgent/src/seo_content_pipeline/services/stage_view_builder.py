@@ -81,6 +81,32 @@ def build_brief_manual_gate_stage_view(
     )
 
 
+def build_uniqueness_provider_stage_view(
+    *,
+    available_provider_names: list[str],
+    has_copyleaks_config: bool,
+) -> StageView:
+    """Build UI-ready state for uniqueness provider selection."""
+    actions = [
+        f"Select {provider_name} provider"
+        for provider_name in available_provider_names
+        if provider_name in {"manual", "mock", "copyleaks"}
+    ]
+    description = "Choose how the English Original uniqueness score will be supplied."
+    if not has_copyleaks_config:
+        description += " Copyleaks is optional and currently unavailable."
+
+    return StageView(
+        stage=WorkflowStage.UNIQUENESS_CHECK,
+        status=WorkflowStatus.WAITING_FOR_HUMAN,
+        label="Uniqueness provider",
+        description=description,
+        artifact_links=[ArtifactKey.ENGLISH_ORIGINAL, ArtifactKey.SEO_QA, ArtifactKey.STATE],
+        available_actions=actions,
+        blocking_reason="Select a uniqueness provider before entering a score.",
+    )
+
+
 def _failed_fields(report: QAReport) -> list[str]:
     fields: list[str] = []
     for check in report.checks:

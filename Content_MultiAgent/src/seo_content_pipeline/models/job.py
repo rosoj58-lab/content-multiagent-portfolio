@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 from seo_content_pipeline.models.artifacts import ArtifactKey
 from seo_content_pipeline.models.errors import WorkflowError
 from seo_content_pipeline.models.stage import WorkflowStage, WorkflowStatus
+from seo_content_pipeline.config import UniquenessProviderName
 
 
 class ArticleType(str, Enum):
@@ -53,3 +54,4 @@ class PipelineState(BaseModel):
     qa_flags: dict[str, bool] = Field(default_factory=dict)
     errors: list[WorkflowError] = Field(default_factory=list)
     manual_gate_required: bool = False
+    selected_uniqueness_provider: UniquenessProviderName | None = None
