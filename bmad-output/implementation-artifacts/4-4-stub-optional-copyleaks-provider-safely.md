@@ -1,6 +1,6 @@
 # Story 4.4: Stub Optional Copyleaks Provider Safely
 
-Status: review
+Status: done
 
 ## Story
 
@@ -96,6 +96,7 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_uniqueness_providers.py` passed: 17 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 104 tests.
+- Code review clean: no patch or decision-needed findings; status moved to done.
 
 ### Completion Notes List
 
@@ -104,6 +105,7 @@ GPT-5.5
 - Marked configured Copyleaks production submission as `deferred` for MVP instead of pretending FR10 is fully implemented.
 - Added import-safety test that fails if the Copyleaks SDK is imported by the stub provider.
 - Confirmed manual/mock provider tests remain green.
+- Code review passed without follow-up changes.
 
 ### File List
 
@@ -116,3 +118,4 @@ GPT-5.5
 - 2026-05-21: Created story and moved status to ready-for-dev.
 - 2026-05-21: Started implementation; status moved to in-progress.
 - 2026-05-21: Implemented safe Copyleaks stub metadata; status moved to review.
+- 2026-05-21: Code review passed; status moved to done.

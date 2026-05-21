@@ -63,11 +63,11 @@ development_status:
   3-4-run-seo-qa-and-route-failures: done
   epic-3-retrospective: optional
 
-  epic-4: in-progress
+  epic-4: done
   4-1-select-manual-or-mock-uniqueness-provider: done
   4-2-enter-and-validate-manual-uniqueness-score: done
   4-3-gate-workflow-by-90-percent-threshold: done
-  4-4-stub-optional-copyleaks-provider-safely: review
+  4-4-stub-optional-copyleaks-provider-safely: done
   epic-4-retrospective: optional
 
   epic-5: backlog
