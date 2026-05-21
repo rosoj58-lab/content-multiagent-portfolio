@@ -103,6 +103,8 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_uniqueness_gate_service.py tests/test_status_presenter.py` passed: 12 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 103 tests.
+- Code review finding patched: threshold gate now preserves the `uniqueness.json` artifact path in `state.json`.
+- Post-review verification passed: targeted uniqueness/status tests 12/12, `ruff check .`, full `pytest` 103/103.
 
 ### Completion Notes List
 
@@ -111,6 +113,7 @@ GPT-5.5
 - Added typed uniqueness gate state fields for score, threshold, source and routing reason.
 - Added UI-ready uniqueness gate stage view with score/source/threshold/reason.
 - Added tests for pass boundary, below-threshold revision routing and missing artifact error.
+- Added review fix to preserve `ArtifactKey.UNIQUENESS` in state during threshold gating.
 
 ### File List
 
@@ -126,3 +129,4 @@ GPT-5.5
 - 2026-05-21: Created story and moved status to ready-for-dev.
 - 2026-05-21: Started implementation; status moved to in-progress.
 - 2026-05-21: Implemented uniqueness threshold gate; status moved to review.
+- 2026-05-21: Patched code review finding for uniqueness artifact path preservation.

@@ -48,6 +48,7 @@ def test_uniqueness_gate_routes_passing_scores_to_localization(tmp_path, score) 
     assert result.status is WorkflowStatus.RUNNING
     assert state["current_stage"] == WorkflowStage.LOCALIZATION.value
     assert state["status"] == WorkflowStatus.RUNNING.value
+    assert state["artifact_paths"]["uniqueness"].endswith("uniqueness.json")
     assert state["qa_flags"]["uniqueness_gate_passed"] is True
     assert state["uniqueness_threshold"] == 90.0
     assert state["uniqueness_score"] == float(score)

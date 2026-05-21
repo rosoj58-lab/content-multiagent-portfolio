@@ -93,6 +93,9 @@ class UniquenessGateService:
 
         state.current_stage = next_stage
         state.status = result.status
+        state.artifact_paths[ArtifactKey.UNIQUENESS] = str(
+            self.artifact_store.artifact_path(job_id, ArtifactKey.UNIQUENESS)
+        )
         state.qa_flags["uniqueness_gate_passed"] = result.passed
         state.uniqueness_score = result.uniqueness.score
         state.uniqueness_threshold = result.threshold
