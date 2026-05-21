@@ -14,6 +14,7 @@ class ArtifactKey(str, Enum):
     BRIEF = "brief"
     BRIEF_QA = "brief_qa"
     ENGLISH_ORIGINAL = "english_original"
+    ARTICLE_VALIDATION = "article_validation"
     EDITORIAL_QA = "editorial_qa"
     SEO_QA = "seo_qa"
     UNIQUENESS = "uniqueness"
@@ -76,6 +77,13 @@ ARTIFACT_REGISTRY: dict[ArtifactKey, ArtifactSpec] = {
         content_type="text/markdown",
         ui_label="English Original",
         description="Approved English US source article.",
+    ),
+    ArtifactKey.ARTICLE_VALIDATION: ArtifactSpec(
+        key=ArtifactKey.ARTICLE_VALIDATION,
+        filename="article_validation.json",
+        content_type="application/json",
+        ui_label="Article Validation",
+        description="Deterministic checks for English Original structure and length.",
     ),
     ArtifactKey.EDITORIAL_QA: ArtifactSpec(
         key=ArtifactKey.EDITORIAL_QA,

@@ -1,6 +1,7 @@
 """Deterministic artifact validators."""
 
 from collections.abc import Mapping
+import re
 from typing import Any
 
 from seo_content_pipeline.models import SEOBrief, ValidationCheck
@@ -25,6 +26,104 @@ def validate_required_brief_fields(brief: SEOBrief | Mapping[str, Any]) -> list[
         _validate_audience(brief_data.get("audience")),
         _validate_outline(brief_data.get("outline")),
     ]
+
+
+def validate_word_count(
+    text: str,
+    *,
+    min_words: int,
+    max_words: int,
+    warning_tolerance: int = 100,
+) -> list[ValidationCheck]:
+    """Validate article word count against target and warning bands."""
+    word_count = len(re.findall(r"\b[\w'-]+\b", text))
+    metadata = {
+        "word_count": word_count,
+        "min_words": min_words,
+        "max_words": max_words,
+        "warning_tolerance": warning_tolerance,
+    }
+    if min_words <= word_count <= max_words:
+        return [
+            ValidationCheck(
+                name="article_word_count",
+                passed=True,
+                severity="info",
+                message=f"Word count is within target range: {word_count}.",
+                metadata=metadata,
+            )
+        ]
+
+    warning_min = max(0, min_words - warning_tolerance)
+    warning_max = max_words + warning_tolerance
+    if warning_min <= word_count <= warning_max:
+        return [
+            ValidationCheck(
+                name="article_word_count",
+                passed=True,
+                severity="warning",
+                message=f"Word count is near target range: {word_count}.",
+                metadata=metadata,
+            )
+        ]
+
+    return [
+        ValidationCheck(
+            name="article_word_count",
+            passed=False,
+            severity="error",
+            message=f"Word count is outside target range: {word_count}.",
+            metadata=metadata,
+        )
+    ]
+
+
+def validate_heading_structure(text: str) -> list[ValidationCheck]:
+    """Validate basic Markdown H1/H2/H3 structure."""
+    h1_count = len(re.findall(r"^# (?!#).+", text, flags=re.MULTILINE))
+    h2_count = len(re.findall(r"^## (?!#).+", text, flags=re.MULTILINE))
+    h3_count = len(re.findall(r"^### (?!#).+", text, flags=re.MULTILINE))
+    metadata = {"h1_count": h1_count, "h2_count": h2_count, "h3_count": h3_count}
+    if h1_count == 1 and h2_count >= 1 and h3_count >= 1:
+        return [
+            ValidationCheck(
+                name="article_heading_structure",
+                passed=True,
+                severity="info",
+                message="Article includes one H1 plus H2 and H3 headings.",
+                metadata=metadata,
+            )
+        ]
+
+    return [
+        ValidationCheck(
+            name="article_heading_structure",
+            passed=False,
+            severity="error",
+            message="Article must include exactly one H1, at least one H2 and at least one H3.",
+            metadata=metadata,
+        )
+    ]
+
+
+def validate_required_artifacts(artifact_availability: Mapping[str, bool]) -> list[ValidationCheck]:
+    """Validate that required artifacts are available."""
+    checks: list[ValidationCheck] = []
+    for artifact_name, exists in artifact_availability.items():
+        checks.append(
+            ValidationCheck(
+                name=f"required_artifact_{artifact_name}",
+                passed=exists,
+                severity="info" if exists else "error",
+                message=(
+                    f"Required artifact is available: {artifact_name}."
+                    if exists
+                    else f"Required artifact is missing: {artifact_name}."
+                ),
+                metadata={"artifact": artifact_name},
+            )
+        )
+    return checks
 
 
 def _validate_main_keyword(value: object) -> ValidationCheck:
