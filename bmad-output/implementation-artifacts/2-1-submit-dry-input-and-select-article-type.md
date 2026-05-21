@@ -1,6 +1,6 @@
 # Story 2.1: Submit Dry Input and Select Article Type
 
-Status: review
+Status: done
 
 ## Story
 
@@ -101,6 +101,8 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 28 tests.
 - Streamlit smoke-check was not rerun because Story 2.1 changed tests only; UI/app implementation remained unchanged from the Story 1.4 verified shell.
+- Code review verification: `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 28 tests.
+- Code review verification: `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 
 ### Completion Notes List
 
@@ -117,3 +119,4 @@ GPT-5.5
 ## Change Log
 
 - 2026-05-20: Locked down Story 2.1 intake behavior with tests; status moved to review.
+- 2026-05-21: Code review clean; status moved to done.
