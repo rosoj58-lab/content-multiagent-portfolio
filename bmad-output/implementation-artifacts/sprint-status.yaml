@@ -1,5 +1,5 @@
 # generated: 2026-05-20
-# last_updated: 2026-05-20
+# last_updated: 2026-05-21
 # project: Content Multi-Agent
 # project_key: NOKEY
 # tracking_system: file-system
@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-05-20
-last_updated: 2026-05-20
+last_updated: 2026-05-21
 project: Content Multi-Agent
 project_key: NOKEY
 tracking_system: file-system
@@ -51,7 +51,7 @@ development_status:
 
   epic-2: in-progress
   2-1-submit-dry-input-and-select-article-type: done
-  2-2-generate-seo-brief-from-dry-input: review
+  2-2-generate-seo-brief-from-dry-input: done
   2-3-validate-brief-completeness: backlog
   2-4-approve-or-request-revision-for-seo-brief: backlog
   epic-2-retrospective: optional
