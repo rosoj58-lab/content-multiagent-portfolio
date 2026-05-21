@@ -1,6 +1,6 @@
 # Story 2.4: Approve or Request Revision for SEO Brief
 
-Status: review
+Status: done
 
 ## Story
 
@@ -106,6 +106,9 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_brief_approval_service.py tests/test_status_presenter.py tests/test_artifact_registry.py` passed: 17 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 50 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
+- Code review patch: revision requests now require an active manual gate.
+- Post-review `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 51 tests.
+- Post-review `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 
 ### Completion Notes List
 
@@ -115,6 +118,7 @@ GPT-5.5
 - Added revision-limit overflow route to `needs_human_review`.
 - Added manual gate `StageView` builder with reason, actions, artifact links, previous attempts and next action.
 - Added focused tests for approval, revision, empty notes, revision limit and manual gate view data.
+- Added guard coverage to reject revision requests after the manual gate is closed.
 
 ### File List
 
@@ -129,3 +133,4 @@ GPT-5.5
 
 - 2026-05-21: Created story and moved status to in-progress.
 - 2026-05-21: Implemented brief approval and revision gate; status moved to review.
+- 2026-05-21: Code review patch applied; status moved to done.

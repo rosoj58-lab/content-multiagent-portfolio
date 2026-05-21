@@ -49,11 +49,11 @@ development_status:
   1-4-build-minimal-streamlit-shell-and-status-timeline: done
   epic-1-retrospective: optional
 
-  epic-2: in-progress
+  epic-2: done
   2-1-submit-dry-input-and-select-article-type: done
   2-2-generate-seo-brief-from-dry-input: done
   2-3-validate-brief-completeness: done
-  2-4-approve-or-request-revision-for-seo-brief: review
+  2-4-approve-or-request-revision-for-seo-brief: done
   epic-2-retrospective: optional
 
   epic-3: backlog
