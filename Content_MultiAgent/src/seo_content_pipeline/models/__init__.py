@@ -6,6 +6,7 @@ from seo_content_pipeline.models.artifacts import (
     ArtifactSpec,
     get_artifact_spec,
 )
+from seo_content_pipeline.models.content import BriefOutline, BriefOutlineSection, SEOBrief, SEOBriefArtifact
 from seo_content_pipeline.models.errors import WorkflowError
 from seo_content_pipeline.models.job import (
     ArticleType,
@@ -22,9 +23,13 @@ __all__ = [
     "ArticleType",
     "ArtifactKey",
     "ArtifactSpec",
+    "BriefOutline",
+    "BriefOutlineSection",
     "JobMetadata",
     "PipelineState",
     "QAReport",
+    "SEOBrief",
+    "SEOBriefArtifact",
     "StageView",
     "StatusHistoryEntry",
     "ValidationCheck",
