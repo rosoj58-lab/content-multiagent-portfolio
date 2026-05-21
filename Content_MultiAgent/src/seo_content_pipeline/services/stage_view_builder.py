@@ -62,6 +62,25 @@ def build_brief_qa_stage_view(report: QAReport) -> StageView:
     )
 
 
+def build_brief_manual_gate_stage_view(
+    *,
+    revision_attempt: int,
+    max_revision_attempts: int,
+) -> StageView:
+    """Build UI-ready state for the brief approval manual gate."""
+    return StageView(
+        stage=WorkflowStage.BRIEF_DRAFTED,
+        status=WorkflowStatus.WAITING_FOR_HUMAN,
+        label="Brief approval",
+        description="Next action: approve the brief to enable writing, or request a targeted revision.",
+        artifact_links=[ArtifactKey.BRIEF, ArtifactKey.BRIEF_QA],
+        available_actions=["Approve brief", "Request revision"],
+        blocking_reason="Brief QA passed. Human approval is required before writing.",
+        revision_attempt=revision_attempt,
+        max_revision_attempts=max_revision_attempts,
+    )
+
+
 def _failed_fields(report: QAReport) -> list[str]:
     fields: list[str] = []
     for check in report.checks:

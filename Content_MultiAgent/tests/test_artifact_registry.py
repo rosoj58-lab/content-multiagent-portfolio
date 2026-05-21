@@ -4,6 +4,7 @@ from seo_content_pipeline.models import (
     ARTIFACT_REGISTRY,
     ArtifactKey,
     JobMetadata,
+    PipelineState,
     QAReport,
     StageView,
     ValidationCheck,
@@ -99,6 +100,18 @@ def test_model_mutable_defaults_are_not_shared() -> None:
         }
     )
 
+    first_state = PipelineState(
+        job_id="job-1",
+        current_stage=WorkflowStage.BRIEF_DRAFTED,
+        status=WorkflowStatus.NEEDS_REVISION,
+    )
+    second_state = PipelineState(
+        job_id="job-2",
+        current_stage=WorkflowStage.BRIEF_DRAFTED,
+        status=WorkflowStatus.NEEDS_REVISION,
+    )
+    first_state.revision_notes[WorkflowStage.BRIEF_DRAFTED] = ["make audience specific"]
+
     error = WorkflowError(
         code="parse_failed",
         message="Could not parse LLM output.",
@@ -119,4 +132,5 @@ def test_model_mutable_defaults_are_not_shared() -> None:
     assert second_report.recommendations == []
     assert second_view.available_actions == []
     assert second_job.status_history == []
+    assert second_state.revision_notes == {}
     assert second_error.details == {}

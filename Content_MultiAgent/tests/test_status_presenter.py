@@ -10,6 +10,7 @@ from seo_content_pipeline.models import (
     WorkflowStatus,
 )
 from seo_content_pipeline.services.stage_view_builder import (
+    build_brief_manual_gate_stage_view,
     build_brief_qa_stage_view,
     build_initial_stage_views,
 )
@@ -109,3 +110,18 @@ def test_build_brief_qa_stage_view_exposes_manual_gate_actions_on_pass() -> None
     assert view.artifact_links == [ArtifactKey.BRIEF, ArtifactKey.BRIEF_QA]
     assert view.available_actions == ["Approve brief", "Request revision"]
     assert view.blocking_reason is None
+
+
+def test_build_brief_manual_gate_stage_view_exposes_gate_details() -> None:
+    view = build_brief_manual_gate_stage_view(
+        revision_attempt=1,
+        max_revision_attempts=2,
+    )
+
+    assert view.status is WorkflowStatus.WAITING_FOR_HUMAN
+    assert view.artifact_links == [ArtifactKey.BRIEF, ArtifactKey.BRIEF_QA]
+    assert view.available_actions == ["Approve brief", "Request revision"]
+    assert view.blocking_reason == "Brief QA passed. Human approval is required before writing."
+    assert view.revision_attempt == 1
+    assert view.max_revision_attempts == 2
+    assert "enable writing" in view.description

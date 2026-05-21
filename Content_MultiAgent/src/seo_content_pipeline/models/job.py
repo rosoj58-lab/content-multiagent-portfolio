@@ -49,6 +49,7 @@ class PipelineState(BaseModel):
     artifact_paths: dict[ArtifactKey, str] = Field(default_factory=dict)
     status_history: list[StatusHistoryEntry] = Field(default_factory=list)
     revision_attempts: dict[WorkflowStage, int] = Field(default_factory=dict)
+    revision_notes: dict[WorkflowStage, list[str]] = Field(default_factory=dict)
     qa_flags: dict[str, bool] = Field(default_factory=dict)
     errors: list[WorkflowError] = Field(default_factory=list)
     manual_gate_required: bool = False
