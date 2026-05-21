@@ -7,6 +7,9 @@ from seo_content_pipeline.config import AppSettings
 from seo_content_pipeline.models import UniquenessProviderOption
 
 
+COPYLEAKS_DEFERRED_REASON = "FR10 Copyleaks API submission is optional/deferred for the MVP."
+
+
 class CopyleaksUniquenessProvider:
     """Copyleaks provider is selectable only when credentials are configured."""
 
@@ -20,8 +23,11 @@ class CopyleaksUniquenessProvider:
             label="Copyleaks",
             available=configured,
             configured=configured,
+            implementation_status="deferred" if configured else "unconfigured",
+            supports_automated_check=False,
+            deferred_reason=COPYLEAKS_DEFERRED_REASON,
             reason=(
-                "Copyleaks credentials are configured."
+                "Copyleaks credentials are configured, but API submission is deferred for the MVP."
                 if configured
                 else "Copyleaks credentials are missing; manual and mock providers remain available."
             ),

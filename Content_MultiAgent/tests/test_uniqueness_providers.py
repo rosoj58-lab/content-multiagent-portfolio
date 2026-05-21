@@ -1,5 +1,7 @@
 """Uniqueness provider selection tests."""
 
+import importlib
+
 import pytest
 
 from seo_content_pipeline.config import AppSettings, get_settings
@@ -54,6 +56,9 @@ def test_copyleaks_provider_is_unavailable_without_credentials(tmp_path) -> None
 
     assert options["copyleaks"].available is False
     assert options["copyleaks"].configured is False
+    assert options["copyleaks"].implementation_status == "unconfigured"
+    assert options["copyleaks"].supports_automated_check is False
+    assert options["copyleaks"].deferred_reason == "FR10 Copyleaks API submission is optional/deferred for the MVP."
     assert "credentials" in str(options["copyleaks"].reason)
 
 
@@ -69,6 +74,25 @@ def test_copyleaks_provider_is_available_when_credentials_are_configured(tmp_pat
 
     assert options["copyleaks"].available is True
     assert options["copyleaks"].configured is True
+    assert options["copyleaks"].implementation_status == "deferred"
+    assert options["copyleaks"].supports_automated_check is False
+    assert options["copyleaks"].deferred_reason == "FR10 Copyleaks API submission is optional/deferred for the MVP."
+
+
+def test_copyleaks_provider_imports_without_optional_sdk(monkeypatch) -> None:
+    original_import = __import__
+
+    def guarded_import(name, *args, **kwargs):
+        if name.startswith("copyleaks"):
+            raise AssertionError("Copyleaks SDK should not be imported by the stub provider")
+        return original_import(name, *args, **kwargs)
+
+    monkeypatch.setattr("builtins.__import__", guarded_import)
+
+    module = importlib.import_module("seo_content_pipeline.providers.copyleaks_uniqueness")
+    module = importlib.reload(module)
+
+    assert hasattr(module, "CopyleaksUniquenessProvider")
 
 
 def test_missing_copyleaks_config_does_not_fail_settings_startup(monkeypatch) -> None:

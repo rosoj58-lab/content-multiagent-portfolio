@@ -1,6 +1,6 @@
 # Story 4.4: Stub Optional Copyleaks Provider Safely
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -25,24 +25,24 @@ so that the portfolio can show extensibility without making the MVP depend on ex
 
 ## Tasks / Subtasks
 
-- [ ] Strengthen Copyleaks provider stub metadata (AC: 2, 4)
-  - [ ] Add explicit provider implementation/deferred status metadata.
-  - [ ] Report missing credentials as unconfigured/disabled.
-  - [ ] Report FR10 production submission as deferred/optional.
-  - [ ] Preserve existing manual/mock provider behavior.
+- [x] Strengthen Copyleaks provider stub metadata (AC: 2, 4)
+  - [x] Add explicit provider implementation/deferred status metadata.
+  - [x] Report missing credentials as unconfigured/disabled.
+  - [x] Report FR10 production submission as deferred/optional.
+  - [x] Preserve existing manual/mock provider behavior.
 
-- [ ] Verify import and startup safety (AC: 1, 3)
-  - [ ] Ensure provider module imports without Copyleaks SDK installed.
-  - [ ] Ensure provider module does not read environment variables directly.
-  - [ ] Ensure provider option lookup does not perform network calls.
-  - [ ] Keep credentials access centralized in `config.py`.
+- [x] Verify import and startup safety (AC: 1, 3)
+  - [x] Ensure provider module imports without Copyleaks SDK installed.
+  - [x] Ensure provider module does not read environment variables directly.
+  - [x] Ensure provider option lookup does not perform network calls.
+  - [x] Keep credentials access centralized in `config.py`.
 
-- [ ] Add focused tests (AC: 1-4)
-  - [ ] Test Copyleaks provider import safety without SDK.
-  - [ ] Test absent credentials produce disabled/unconfigured status.
-  - [ ] Test configured credentials still mark production submission as deferred/optional.
-  - [ ] Test manual/mock options remain available when Copyleaks is unconfigured.
-  - [ ] Run full `pytest` and `ruff check .`.
+- [x] Add focused tests (AC: 1-4)
+  - [x] Test Copyleaks provider import safety without SDK.
+  - [x] Test absent credentials produce disabled/unconfigured status.
+  - [x] Test configured credentials still mark production submission as deferred/optional.
+  - [x] Test manual/mock options remain available when Copyleaks is unconfigured.
+  - [x] Run full `pytest` and `ruff check .`.
 
 ## Dev Notes
 
@@ -92,15 +92,27 @@ GPT-5.5
 ### Debug Log References
 
 - Story context created from Epic 4, architecture constraints, and existing Copyleaks provider stub.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_uniqueness_providers.py` red phase failed as expected before implementation.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_uniqueness_providers.py` passed: 17 tests.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 104 tests.
 
 ### Completion Notes List
 
-- Pending implementation.
+- Extended `UniquenessProviderOption` with provider implementation status, automated-check support and deferred reason metadata.
+- Marked Copyleaks missing-credentials status as `unconfigured`.
+- Marked configured Copyleaks production submission as `deferred` for MVP instead of pretending FR10 is fully implemented.
+- Added import-safety test that fails if the Copyleaks SDK is imported by the stub provider.
+- Confirmed manual/mock provider tests remain green.
 
 ### File List
 
-- Pending implementation.
+- Content_MultiAgent/src/seo_content_pipeline/models/uniqueness.py
+- Content_MultiAgent/src/seo_content_pipeline/providers/copyleaks_uniqueness.py
+- Content_MultiAgent/tests/test_uniqueness_providers.py
 
 ## Change Log
 
 - 2026-05-21: Created story and moved status to ready-for-dev.
+- 2026-05-21: Started implementation; status moved to in-progress.
+- 2026-05-21: Implemented safe Copyleaks stub metadata; status moved to review.

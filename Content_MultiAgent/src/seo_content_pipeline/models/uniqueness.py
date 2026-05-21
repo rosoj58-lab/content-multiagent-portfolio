@@ -1,13 +1,16 @@
 """Uniqueness provider and result contracts."""
 
 from datetime import UTC, datetime
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel
 from pydantic import Field
 
 from seo_content_pipeline.config import UniquenessProviderName
 from seo_content_pipeline.models.stage import WorkflowStage
+
+
+ProviderImplementationStatus = Literal["available", "unconfigured", "deferred"]
 
 
 class UniquenessProviderOption(BaseModel):
@@ -19,6 +22,9 @@ class UniquenessProviderOption(BaseModel):
     configured: bool
     reason: str | None = None
     requires_manual_score: bool = False
+    implementation_status: ProviderImplementationStatus = "available"
+    supports_automated_check: bool = True
+    deferred_reason: str | None = None
 
 
 class UniquenessResult(BaseModel):

@@ -67,7 +67,7 @@ development_status:
   4-1-select-manual-or-mock-uniqueness-provider: done
   4-2-enter-and-validate-manual-uniqueness-score: done
   4-3-gate-workflow-by-90-percent-threshold: done
-  4-4-stub-optional-copyleaks-provider-safely: ready-for-dev
+  4-4-stub-optional-copyleaks-provider-safely: review
   epic-4-retrospective: optional
 
   epic-5: backlog
