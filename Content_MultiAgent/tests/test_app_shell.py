@@ -20,10 +20,7 @@ def test_app_uses_controlled_error_for_empty_intake_input() -> None:
 
     assert value_error_handlers
     assert any(
-        isinstance(call.func, ast.Attribute)
-        and isinstance(call.func.value, ast.Name)
-        and call.func.value.id == "st"
-        and call.func.attr == "error"
+        isinstance(call.func, ast.Name) and call.func.id == "render_controlled_error"
         for handler in value_error_handlers
         for call in ast.walk(handler)
         if isinstance(call, ast.Call)

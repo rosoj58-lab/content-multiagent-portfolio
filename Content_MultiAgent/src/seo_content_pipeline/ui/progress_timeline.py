@@ -3,7 +3,10 @@
 import streamlit as st
 
 from seo_content_pipeline.models import JobMetadata, StageView, WorkflowStatus
-from seo_content_pipeline.services.stage_view_builder import build_initial_stage_views
+from seo_content_pipeline.services.stage_view_builder import (
+    build_initial_stage_views,
+    build_pipeline_stage_views,
+)
 
 
 STATUS_ICONS = {
@@ -34,8 +37,17 @@ def render_progress_timeline(stage_views: list[StageView]) -> None:
                 )
             if view.available_actions:
                 st.caption("Next: " + ", ".join(view.available_actions))
+            if view.revision_attempt:
+                st.caption(
+                    f"Revision attempts: {view.revision_attempt}/{view.max_revision_attempts}"
+                )
 
 
 def render_initial_progress_timeline(metadata: JobMetadata) -> None:
     """Build and render the initial job timeline."""
     render_progress_timeline(build_initial_stage_views(metadata))
+
+
+def render_pipeline_progress_timeline(state) -> None:
+    """Build and render the full persisted pipeline timeline."""
+    render_progress_timeline(build_pipeline_stage_views(state))

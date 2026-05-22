@@ -37,6 +37,115 @@ def build_initial_stage_views(metadata: JobMetadata) -> list[StageView]:
     ]
 
 
+def build_pipeline_stage_views(
+    state,
+    *,
+    max_revision_attempts: int = 2,
+) -> list[StageView]:
+    """Build a full pipeline timeline from persisted state."""
+    stage_specs = [
+        (
+            WorkflowStage.INPUT_RECEIVED,
+            "Input received",
+            "Dry input and selected article type are persisted.",
+            [ArtifactKey.METADATA, ArtifactKey.INPUT, ArtifactKey.STATE],
+            ["Create SEO brief"],
+        ),
+        (
+            WorkflowStage.BRIEF_DRAFTED,
+            "SEO brief",
+            "SEO brief is generated, validated and approved before writing.",
+            [ArtifactKey.BRIEF, ArtifactKey.BRIEF_QA],
+            ["Review brief", "Approve brief"],
+        ),
+        (
+            WorkflowStage.WRITING,
+            "English original",
+            "English source article is generated and checked deterministically.",
+            [ArtifactKey.ENGLISH_ORIGINAL, ArtifactKey.ARTICLE_VALIDATION],
+            ["Run editorial QA"],
+        ),
+        (
+            WorkflowStage.EDITORIAL_REVIEW,
+            "Editorial QA",
+            "Editorial review checks structure, claims and revision guidance.",
+            [ArtifactKey.EDITORIAL_QA],
+            ["Run SEO QA"],
+        ),
+        (
+            WorkflowStage.SEO_QA,
+            "SEO QA",
+            "SEO QA checks keyword coverage, heading intent and routing.",
+            [ArtifactKey.SEO_QA],
+            ["Revise English Original", "Continue to uniqueness"],
+        ),
+        (
+            WorkflowStage.UNIQUENESS_CHECK,
+            "Uniqueness",
+            "Uniqueness score gates localization.",
+            [ArtifactKey.UNIQUENESS],
+            ["Enter score", "Continue to localization"],
+        ),
+        (
+            WorkflowStage.LOCALIZATION,
+            "Localization",
+            "Spanish, Italian and French localizations are generated.",
+            [
+                ArtifactKey.LOCALIZATION_ES,
+                ArtifactKey.LOCALIZATION_IT,
+                ArtifactKey.LOCALIZATION_FR,
+            ],
+            ["Assemble final package"],
+        ),
+        (
+            WorkflowStage.FINAL_QA,
+            "Final package and QA",
+            "Final Markdown/JSON package and readiness report are produced.",
+            [
+                ArtifactKey.FINAL_PACKAGE_MD,
+                ArtifactKey.FINAL_PACKAGE_JSON,
+                ArtifactKey.FINAL_QA_REPORT,
+            ],
+            ["Download final package"],
+        ),
+    ]
+    stage_order = {stage: index for index, stage in enumerate(WorkflowStage)}
+    current_index = stage_order[state.current_stage]
+    views: list[StageView] = []
+
+    for stage, label, description, artifact_keys, actions in stage_specs:
+        stage_index = stage_order[stage]
+        if stage is state.current_stage:
+            status = state.status
+        elif stage_index < current_index:
+            status = WorkflowStatus.APPROVED
+        else:
+            status = WorkflowStatus.WAITING_FOR_HUMAN
+
+        artifact_links = [
+            artifact_key for artifact_key in artifact_keys if artifact_key in state.artifact_paths
+        ]
+        revision_attempt = state.revision_attempts.get(stage, 0)
+        revision_notes = state.revision_notes.get(stage, [])
+        blocking_reason = revision_notes[-1] if revision_notes else None
+
+        views.append(
+            StageView(
+                stage=stage,
+                status=status,
+                label=label,
+                description=description,
+                artifact_links=artifact_links,
+                available_actions=[] if status is WorkflowStatus.APPROVED else actions,
+                blocking_reason=blocking_reason,
+                revision_attempt=revision_attempt,
+                max_revision_attempts=max_revision_attempts,
+            )
+        )
+
+    return views
+
+
 def build_brief_qa_stage_view(report: QAReport) -> StageView:
     """Build UI-ready state for brief QA results."""
     if report.passed:
