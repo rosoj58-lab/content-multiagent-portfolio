@@ -77,8 +77,8 @@ development_status:
   5-4-produce-final-qa-report-and-status: done
   epic-5-retrospective: optional
 
-  epic-6: in-progress
+  epic-6: done
   6-1-add-stable-bp-lp-and-gp-demo-inputs: done
   6-2-implement-demo-observability-views: done
-  6-3-document-interview-walkthrough-and-artifact-map: review
+  6-3-document-interview-walkthrough-and-artifact-map: done
   epic-6-retrospective: optional
