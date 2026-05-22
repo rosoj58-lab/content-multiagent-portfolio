@@ -1,6 +1,7 @@
 """Final package export services."""
 
 from datetime import UTC, datetime
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -39,6 +40,44 @@ class FinalPackageResult(BaseModel):
     json_path: str
 
 
+class ArtifactReference(BaseModel):
+    """Traceability reference for one source artifact."""
+
+    filename: str
+    content_type: str
+    ui_label: str
+    path: str
+
+
+class FinalPackageContent(BaseModel):
+    """Article content included in the final package."""
+
+    english_original: str
+    localizations: dict[str, str]
+
+
+class FinalPackageWorkflowStatus(BaseModel):
+    """Workflow status captured when the package is assembled."""
+
+    current_stage: WorkflowStage
+    status: WorkflowStatus
+
+
+class FinalContentPackage(BaseModel):
+    """Machine-readable final content package."""
+
+    job_id: str
+    generated_at: datetime
+    article_type: str | None
+    dry_input: str
+    workflow_status: FinalPackageWorkflowStatus
+    artifact_references: dict[ArtifactKey, ArtifactReference]
+    seo_brief: dict[str, Any]
+    content: FinalPackageContent
+    qa_reports: dict[str, dict[str, Any]]
+    uniqueness_report: dict[str, Any]
+
+
 class FinalPackageExporter:
     """Assemble Markdown and JSON final content packages."""
 
@@ -63,37 +102,38 @@ class FinalPackageExporter:
         state = self._load_state(job_id)
         metadata = self._load_metadata(job_id)
 
-        content = {
-            "english_original": self.artifact_store.read_text(
+        content = FinalPackageContent(
+            english_original=self.artifact_store.read_text(
                 job_id,
                 ArtifactKey.ENGLISH_ORIGINAL,
             ),
-            "localizations": {
+            localizations={
                 "es": self.artifact_store.read_text(job_id, ArtifactKey.LOCALIZATION_ES),
                 "it": self.artifact_store.read_text(job_id, ArtifactKey.LOCALIZATION_IT),
                 "fr": self.artifact_store.read_text(job_id, ArtifactKey.LOCALIZATION_FR),
             },
-        }
+        )
         generated_at = datetime.now(UTC)
-        package = {
-            "job_id": job_id,
-            "generated_at": generated_at.isoformat(),
-            "article_type": input_artifact.get("article_type") or self._article_type_value(state),
-            "dry_input": input_artifact["dry_input"],
-            "workflow_status": {
-                "current_stage": WorkflowStage.FINAL_QA.value,
-                "status": WorkflowStatus.RUNNING.value,
-            },
-            "artifact_references": self._artifact_references(job_id),
-            "seo_brief": brief_artifact,
-            "content": content,
-            "qa_reports": {
+        package = FinalContentPackage(
+            job_id=job_id,
+            generated_at=generated_at,
+            article_type=input_artifact.get("article_type") or self._article_type_value(state),
+            dry_input=input_artifact["dry_input"],
+            workflow_status=FinalPackageWorkflowStatus(
+                current_stage=WorkflowStage.FINAL_QA,
+                status=WorkflowStatus.RUNNING,
+            ),
+            artifact_references=self._artifact_references(job_id),
+            seo_brief=brief_artifact,
+            content=content,
+            qa_reports={
                 "editorial_qa": editorial_qa,
                 "seo_qa": seo_qa,
             },
-            "uniqueness_report": uniqueness,
-        }
-        markdown = self._render_markdown_package(package)
+            uniqueness_report=uniqueness,
+        )
+        package_payload = package.model_dump(mode="json")
+        markdown = self._render_markdown_package(package_payload)
 
         markdown_path = self.artifact_store.write_text(
             job_id,
@@ -103,7 +143,7 @@ class FinalPackageExporter:
         json_path = self.artifact_store.write_json(
             job_id,
             ArtifactKey.FINAL_PACKAGE_JSON,
-            package,
+            package_payload,
         )
         self._persist_final_package_state(
             job_id,
@@ -129,16 +169,16 @@ class FinalPackageExporter:
         if missing:
             raise ValueError(f"Final package requires missing artifacts: {', '.join(missing)}")
 
-    def _artifact_references(self, job_id: str) -> dict[str, dict[str, str]]:
-        references: dict[str, dict[str, str]] = {}
+    def _artifact_references(self, job_id: str) -> dict[ArtifactKey, ArtifactReference]:
+        references: dict[ArtifactKey, ArtifactReference] = {}
         for artifact_key in REQUIRED_PACKAGE_ARTIFACTS:
             spec = ARTIFACT_REGISTRY[artifact_key]
-            references[artifact_key.value] = {
-                "filename": spec.filename,
-                "content_type": spec.content_type,
-                "ui_label": spec.ui_label,
-                "path": str(self.artifact_store.artifact_path(job_id, artifact_key)),
-            }
+            references[artifact_key] = ArtifactReference(
+                filename=spec.filename,
+                content_type=spec.content_type,
+                ui_label=spec.ui_label,
+                path=str(self.artifact_store.artifact_path(job_id, artifact_key)),
+            )
         return references
 
     @staticmethod
