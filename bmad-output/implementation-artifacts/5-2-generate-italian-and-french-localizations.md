@@ -1,6 +1,6 @@
 # Story 5.2: Generate Italian and French Localizations
 
-Status: review
+Status: done
 
 ## Story
 
@@ -110,6 +110,9 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_localization_service.py` passed: 8 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 112 tests.
+- Code review finding patched: shared localization prompt helper now requires an explicit geo instead of inheriting the Spanish default.
+- Post-review verification passed: localization tests 8/8, `ruff check .`, full `pytest` 112/112.
+- Code review clean after prompt helper geo contract patch; status moved to done.
 
 ### Completion Notes List
 
@@ -120,6 +123,8 @@ GPT-5.5
 - Added localization state persistence, artifact path tracking and geo recording for Italian and French.
 - Added graph node wrapper for Italian and French localization.
 - Extended focused localization tests while keeping Spanish tests passing.
+- Added review fix for the shared prompt helper geo contract.
+- Code review passed after geo contract fix.
 
 ### File List
 
@@ -133,3 +138,5 @@ GPT-5.5
 - 2026-05-22: Created story and moved status to ready-for-dev.
 - 2026-05-22: Started implementation; status moved to in-progress.
 - 2026-05-22: Implemented Italian and French localization; status moved to review.
+- 2026-05-22: Patched code review finding for shared prompt helper geo contract.
+- 2026-05-22: Code review passed; status moved to done.
