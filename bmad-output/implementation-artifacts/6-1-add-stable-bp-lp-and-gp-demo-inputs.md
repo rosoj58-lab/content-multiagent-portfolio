@@ -1,6 +1,6 @@
 # Story 6.1: Add Stable BP, LP and GP Demo Inputs
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -24,24 +24,24 @@ so that the portfolio demo can be repeated consistently.
 
 ## Tasks / Subtasks
 
-- [ ] Add stable demo input artifacts (AC: 1, 2)
-  - [ ] Create `examples/inputs/bp-demo.txt`.
-  - [ ] Create `examples/inputs/lp-demo.txt`.
-  - [ ] Create `examples/inputs/gp-demo.txt`.
-  - [ ] Create `examples/inputs/sample-keywords.json`.
-  - [ ] Keep each text input plain enough to paste into the Streamlit dry input form.
+- [x] Add stable demo input artifacts (AC: 1, 2)
+  - [x] Create `examples/inputs/bp-demo.txt`.
+  - [x] Create `examples/inputs/lp-demo.txt`.
+  - [x] Create `examples/inputs/gp-demo.txt`.
+  - [x] Create `examples/inputs/sample-keywords.json`.
+  - [x] Keep each text input plain enough to paste into the Streamlit dry input form.
 
-- [ ] Document demo paths (AC: 3, 4)
-  - [ ] Update demo docs with BP, LP and GP path descriptions.
-  - [ ] Explain the intended demo behavior and article type for each file.
-  - [ ] Keep deeper interview walkthrough content deferred to Story 6.3.
+- [x] Document demo paths (AC: 3, 4)
+  - [x] Update demo docs with BP, LP and GP path descriptions.
+  - [x] Explain the intended demo behavior and article type for each file.
+  - [x] Keep deeper interview walkthrough content deferred to Story 6.3.
 
-- [ ] Add focused validation tests (AC: 1, 2, 3)
-  - [ ] Test all expected demo files exist.
-  - [ ] Test keyword metadata is valid JSON and maps BP/LP/GP to the expected files.
-  - [ ] Test each input can create a job shell with its article type through `JobService`.
-  - [ ] Test docs mention all demo input files and paths.
-  - [ ] Run full `pytest` and `ruff check .`.
+- [x] Add focused validation tests (AC: 1, 2, 3)
+  - [x] Test all expected demo files exist.
+  - [x] Test keyword metadata is valid JSON and maps BP/LP/GP to the expected files.
+  - [x] Test each input can create a job shell with its article type through `JobService`.
+  - [x] Test docs mention all demo input files and paths.
+  - [x] Run full `pytest` and `ruff check .`.
 
 ## Dev Notes
 
@@ -85,15 +85,30 @@ GPT-5.5
 ### Debug Log References
 
 - Story context created from Epic 6, PRD UJ-3/UX-DR6 and current docs/examples state.
+- Started implementation; status moved to in-progress.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_demo_inputs.py` red phase failed as expected before implementation.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_demo_inputs.py` passed: 4 tests.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 123 tests.
 
 ### Completion Notes List
 
-- Pending implementation.
+- Added BP, LP and GP dry input files under `examples/inputs/`.
+- Added `sample-keywords.json` with article type, demo path and keyword metadata for all three demos.
+- Updated `docs/demo-setup.md` with demo path mapping and usage steps.
+- Added focused demo input tests validating files, metadata, docs and `JobService` compatibility.
 
 ### File List
 
-- Pending implementation.
+- Content_MultiAgent/docs/demo-setup.md
+- Content_MultiAgent/examples/inputs/bp-demo.txt
+- Content_MultiAgent/examples/inputs/gp-demo.txt
+- Content_MultiAgent/examples/inputs/lp-demo.txt
+- Content_MultiAgent/examples/inputs/sample-keywords.json
+- Content_MultiAgent/tests/test_demo_inputs.py
 
 ## Change Log
 
 - 2026-05-22: Created story and moved status to ready-for-dev.
+- 2026-05-22: Started implementation; status moved to in-progress.
+- 2026-05-22: Added stable demo inputs and metadata; status moved to review.

@@ -1,0 +1,27 @@
+Demo: LP revision path - commercial landing page
+
+Article type: LP
+Demo path: revision path
+Target audience: agency owners and marketing managers who need a repeatable content production workflow for service pages.
+
+Source context:
+ClearPath SEO Studio sells a managed SEO content operations service for small SaaS teams. The offer combines SEO brief creation, AI-assisted drafting, editorial QA, uniqueness checking, localization, and final package delivery. The service is positioned for teams that want faster content production but still need reviewable artifacts before publishing.
+
+Offer details:
+- Primary offer: monthly SEO content package for SaaS landing pages and blog articles.
+- Main benefit: faster first drafts with documented QA gates.
+- Proof points available for the demo: transparent workflow, reusable briefs, manual approval checkpoints, final Markdown and JSON package.
+- Desired CTA: book a workflow audit.
+
+Intentional revision-path cue:
+The first draft should avoid unsupported performance claims. If a claim such as "cuts content cost by 70 percent" appears without evidence, editorial QA should route the job back for revision.
+
+Key points to include:
+- The landing page should explain who the service is for, what workflow artifacts are delivered, and why manual gates reduce risk.
+- The copy should present the final package as an inspectable handoff for editors, SEO specialists, and developers.
+- Localization should be available after English QA and uniqueness pass.
+
+Constraints:
+- Avoid invented metrics, client names, rankings, or revenue claims.
+- Keep the CTA specific and non-aggressive.
+- Use a commercial but controlled tone.

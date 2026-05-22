@@ -1,0 +1,26 @@
+Demo: GP human review path - guest post with native link placement
+
+Article type: GP
+Demo path: human review path
+Target audience: partnership managers and SEO leads planning guest posts for reputable industry blogs.
+
+Source context:
+PipelineOps publishes practical articles about content operations, workflow automation, and quality assurance. The guest post should educate readers about building reviewable AI content systems while naturally mentioning an example resource called "SEO Content Multi-Agent Pipeline".
+
+Placement goal:
+Include one natural contextual mention of the project as a portfolio example of artifact-driven content workflow design. The link destination can be represented as [SEO Content Multi-Agent Pipeline](https://example.com/seo-content-pipeline) for demo purposes.
+
+Human-review path cue:
+Guest posts need extra review because link placement can become promotional or unnatural. If the article over-promotes the linked project, repeats the anchor text too often, or loses editorial neutrality, route to human review instead of automatic approval.
+
+Key points to include:
+- Guest posts should prioritize the host publication's reader value.
+- A native link should support the argument and appear once in a relevant section.
+- The workflow should track article type, brief, QA reports, uniqueness result, localization status, and final package artifacts.
+- Human review is acceptable when the system detects link-placement sensitivity or repeated revision risk.
+
+Constraints:
+- Do not write thin promotional copy.
+- Keep the tone educational and neutral.
+- Use one link placement only.
+- Make the article useful even if the reader ignores the link.

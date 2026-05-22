@@ -1,0 +1,23 @@
+Demo: BP happy path - informational blog post
+
+Article type: BP
+Demo path: happy path
+Target audience: content leads, SEO specialists, and founders evaluating whether an AI-assisted content workflow can stay controlled enough for production use.
+
+Source context:
+Northstar Content Ops is a small B2B content team that publishes technical articles for SaaS companies. The team wants to reduce first-draft time without losing editorial control, factual discipline, or SEO structure. The current manual process is slow: a strategist writes a brief, a copywriter drafts the article, an editor checks claims, and an SEO specialist verifies headings and keyword coverage.
+
+Key points to include:
+- Multi-agent content workflows should separate brief generation, writing, editorial QA, SEO QA, uniqueness checking, localization, and final packaging.
+- Human approval still matters at gates where business context, factual risk, or brand voice can drift.
+- A reliable demo should show artifacts at every stage so an interviewer can inspect how the system made decisions.
+- Manual or mock uniqueness scoring keeps a local portfolio demo reliable without external API credentials.
+- The final output should be described as an SEO-structured content package, not a promise of search ranking.
+
+Suggested angle:
+Explain how a staged AI workflow can make SEO content production more inspectable than a single chat prompt. Emphasize quality gates, artifact traceability, and revision routing.
+
+Constraints:
+- Do not claim guaranteed ranking improvements.
+- Keep the tone practical and clear.
+- Use examples from the pipeline rather than generic AI hype.

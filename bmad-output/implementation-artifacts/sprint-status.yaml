@@ -78,7 +78,7 @@ development_status:
   epic-5-retrospective: optional
 
   epic-6: in-progress
-  6-1-add-stable-bp-lp-and-gp-demo-inputs: ready-for-dev
+  6-1-add-stable-bp-lp-and-gp-demo-inputs: review
   6-2-implement-demo-observability-views: backlog
   6-3-document-interview-walkthrough-and-artifact-map: backlog
   epic-6-retrospective: optional

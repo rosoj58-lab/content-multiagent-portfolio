@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "demos": {
+    "bp": {
+      "article_type": "BP",
+      "input_file": "bp-demo.txt",
+      "demo_path": "happy_path",
+      "main_keyword": "multi-agent SEO content workflow",
+      "secondary_keywords": [
+        "AI content quality gates",
+        "SEO content automation",
+        "content workflow artifacts"
+      ],
+      "lsi_keywords": [
+        "editorial QA",
+        "uniqueness check",
+        "revision routing",
+        "portfolio demo"
+      ],
+      "notes": "Use this case to show the clean end-to-end path from dry input to final package."
+    },
+    "lp": {
+      "article_type": "LP",
+      "input_file": "lp-demo.txt",
+      "demo_path": "revision_path",
+      "main_keyword": "SEO content operations service",
+      "secondary_keywords": [
+        "managed SEO content workflow",
+        "AI-assisted landing page copy",
+        "content QA process"
+      ],
+      "lsi_keywords": [
+        "workflow audit",
+        "editorial review",
+        "conversion copy",
+        "quality control"
+      ],
+      "notes": "Use this case to demonstrate revision routing for unsupported claims or commercial copy risk."
+    },
+    "gp": {
+      "article_type": "GP",
+      "input_file": "gp-demo.txt",
+      "demo_path": "human_review_path",
+      "main_keyword": "guest post content workflow",
+      "secondary_keywords": [
+        "native link placement",
+        "AI guest post QA",
+        "editorial review workflow"
+      ],
+      "lsi_keywords": [
+        "link building",
+        "human review",
+        "anchor text",
+        "publication fit"
+      ],
+      "notes": "Use this case to explain human-review handling for sensitive link-placement workflows."
+    }
+  }
+}
