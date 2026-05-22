@@ -1,6 +1,16 @@
 # Demo Setup
 
-This project uses stable local inputs so the portfolio demo can be repeated without relying on external research or live APIs.
+This project uses stable local inputs so the portfolio demo can be repeated without live research, hosted infrastructure or external plagiarism credentials.
+
+## Local Run
+
+Use the project Python environment and start Streamlit:
+
+```bash
+uv run streamlit run app.py
+```
+
+The app opens a local form with Dry input, Article type and Mode. Keep Mode set to `demo` for shorter generated articles. The same pipeline can be inspected through artifacts under `artifacts/jobs/<job_id>/`.
 
 ## Demo Inputs
 
@@ -13,11 +23,11 @@ This project uses stable local inputs so the portfolio demo can be repeated with
 
 ## How to Use
 
-1. Start the Streamlit app in demo mode.
-2. Open one of the files from `examples/inputs/`.
-3. Paste the full text into the Dry input field.
-4. Select the matching article type: `BP`, `LP`, or `GP`.
-5. Keep mode set to `demo` for shorter article generation.
-6. Run the pipeline and inspect the generated artifacts under the configured artifact root.
+1. Open one of the files from `examples/inputs/`.
+2. Paste the full text into the Dry input field.
+3. Select the matching article type: `BP`, `LP`, or `GP`.
+4. Create the job and inspect the progress timeline and artifact panel.
+5. Use manual or mock uniqueness for a reliable offline demo.
+6. Open `artifacts/jobs/<job_id>/` to show the persisted source of truth.
 
-The BP case is the main happy path. The LP case is meant to explain revision routing. The GP case is meant to explain why human review remains valuable for sensitive guest-post link placement.
+The BP case is the main happy path. The LP case is meant to explain revision path behavior. The GP case is the human review path and is meant to explain why human review remains valuable for sensitive guest-post link placement.
