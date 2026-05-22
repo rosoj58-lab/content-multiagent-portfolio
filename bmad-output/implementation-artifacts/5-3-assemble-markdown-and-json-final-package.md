@@ -1,6 +1,6 @@
 # Story 5.3: Assemble Markdown and JSON Final Package
 
-Status: review
+Status: done
 
 ## Story
 
@@ -103,16 +103,21 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_exporters.py` passed: 3 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 115 tests.
+- Self-review patch added typed final package models and aligned package workflow status with persisted state.
+- Post-review verification passed: exporter tests 3/3, `ruff check .`, full `pytest` 115/115.
+- Code review clean after typed package model patch; status moved to done.
 
 ### Completion Notes List
 
 - Added `FinalPackageExporter` and `FinalPackageResult`.
+- Added typed final package models for artifact references, content, workflow status and machine-readable package payload.
 - Added deterministic Markdown and JSON package assembly.
 - Added traceability references for source artifacts using the artifact registry.
 - Added required-artifact preflight before writing final package outputs.
 - Updated workflow state and metadata to `FINAL_QA` / `RUNNING` without marking the job approved.
 - Added graph node wrapper for package assembly.
 - Added focused exporter tests.
+- Code review passed after typed package model patch.
 
 ### File List
 
@@ -125,3 +130,5 @@ GPT-5.5
 - 2026-05-22: Created story and moved status to ready-for-dev.
 - 2026-05-22: Started implementation; status moved to in-progress.
 - 2026-05-22: Implemented final Markdown and JSON package assembly; status moved to review.
+- 2026-05-22: Patched typed final package model and workflow status consistency.
+- 2026-05-22: Code review passed; status moved to done.
