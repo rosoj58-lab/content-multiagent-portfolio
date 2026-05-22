@@ -157,7 +157,7 @@ class FinalQAService:
     def _uniqueness_result(self, job_id: str, state: PipelineState) -> FinalQAUniquenessResult:
         threshold = state.uniqueness_threshold or 90.0
         score = state.uniqueness_score
-        source = state.uniqueness_source.value if state.uniqueness_source else None
+        source = state.uniqueness_source
         if self.artifact_store.artifact_path(job_id, ArtifactKey.UNIQUENESS).exists():
             uniqueness = self.artifact_store.read_json(job_id, ArtifactKey.UNIQUENESS)
             score = uniqueness.get("score", score)

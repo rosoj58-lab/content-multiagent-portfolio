@@ -6,7 +6,7 @@ This is a local SEO Content Multi-Agent Pipeline. It turns dry source notes into
 
 ## Happy Path: BP
 
-Use `examples/inputs/bp-demo.txt` with article type `BP`. Explain that this path demonstrates the clean flow: dry input -> brief -> English original -> editorial QA -> SEO QA -> uniqueness gate -> localization -> final package -> final QA. In the UI, point to the progress timeline, artifact previews and download actions. In the filesystem, open `artifacts/jobs/<job_id>/` and show `state.json`, `brief.json`, `english_original.md`, QA JSON files, localizations and final package files.
+Use `examples/inputs/bp-demo.txt` with article type `BP`. Click `Run full demo pipeline` and explain that this path demonstrates the clean flow: dry input -> brief -> English original -> editorial QA -> SEO QA -> uniqueness gate -> localization -> final package -> final QA. In the UI, point to the progress timeline, artifact previews and download actions. In the filesystem, open `artifacts/jobs/<job_id>/` and show `state.json`, `brief.json`, `english_original.md`, QA JSON files, localizations and final package files.
 
 ## Revision Path: LP
 

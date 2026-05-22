@@ -27,7 +27,7 @@ The app opens a local form with Dry input, Article type and Mode. Keep Mode set 
 2. Paste the full text into the Dry input field.
 3. Select the matching article type: `BP`, `LP`, or `GP`.
 4. Create the job and inspect the progress timeline and artifact panel.
-5. Use manual or mock uniqueness for a reliable offline demo.
+5. Click `Run full demo pipeline` to generate the offline brief, article, QA reports, uniqueness result, localizations, final package and final QA report.
 6. Open `artifacts/jobs/<job_id>/` to show the persisted source of truth.
 
 The BP case is the main happy path. The LP case is meant to explain revision path behavior. The GP case is the human review path and is meant to explain why human review remains valuable for sensitive guest-post link placement.

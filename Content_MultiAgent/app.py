@@ -3,6 +3,7 @@
 import streamlit as st
 
 from seo_content_pipeline.models import ArtifactKey, PipelineState
+from seo_content_pipeline.services.demo_pipeline_service import DemoPipelineService
 from seo_content_pipeline.services.job_service import JobService
 from seo_content_pipeline.ui.artifact_panel import render_artifact_panel
 from seo_content_pipeline.ui.components import render_job_creation_form, render_job_summary
@@ -37,6 +38,25 @@ def main() -> None:
 
     artifact_paths = {key.value: path for key, path in result.artifact_paths.items()}
     render_job_summary(result.metadata.job_id, artifact_paths, st.session_state.get("demo_mode", "demo"))
+    if st.button("Run full demo pipeline", type="secondary"):
+        try:
+            demo_result = DemoPipelineService(
+                settings=service.settings,
+                artifact_store=service.artifact_store,
+            ).run_full_demo(
+                result.metadata.job_id,
+                mode=st.session_state.get("demo_mode", "demo"),
+            )
+        except Exception as error:
+            render_controlled_error(
+                build_controlled_error(
+                    error,
+                    action="Recreate the job from a stable demo input and run the demo again.",
+                )
+            )
+        else:
+            st.success(f"Demo pipeline complete: {demo_result.status.value}")
+            st.caption(f"Final package: {demo_result.final_package_path}")
     try:
         state = PipelineState.model_validate(
             service.artifact_store.read_json(result.metadata.job_id, ArtifactKey.STATE)
