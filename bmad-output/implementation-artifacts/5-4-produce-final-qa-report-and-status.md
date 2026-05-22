@@ -1,6 +1,6 @@
 # Story 5.4: Produce Final QA Report and Status
 
-Status: review
+Status: done
 
 ## Story
 
@@ -104,6 +104,9 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_final_qa_service.py` passed: 4 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 119 tests.
+- Code review finding patched: final QA now syncs `final_package.md` and `final_package.json` workflow status to the terminal approved or revision status.
+- Post-review verification passed: final QA tests 4/4, `ruff check .`, full `pytest` 119/119.
+- Code review clean after package status sync patch; status moved to done.
 
 ### Completion Notes List
 
@@ -112,8 +115,10 @@ GPT-5.5
 - Added deterministic `FinalQAService`.
 - Final QA writes approved status only when mandatory artifacts, gates, QA reports and uniqueness threshold pass.
 - Needs Revision reports include failed checks and routing guidance.
+- Final QA syncs final package Markdown and JSON workflow status after terminal status is known.
 - Added final QA graph node wrapper.
 - Added focused final QA service tests.
+- Code review passed after final package status sync patch.
 
 ### File List
 
@@ -129,3 +134,5 @@ GPT-5.5
 - 2026-05-22: Created story and moved status to ready-for-dev.
 - 2026-05-22: Started implementation; status moved to in-progress.
 - 2026-05-22: Implemented final QA report and terminal status; status moved to review.
+- 2026-05-22: Patched final package status sync after final QA.
+- 2026-05-22: Code review passed; status moved to done.

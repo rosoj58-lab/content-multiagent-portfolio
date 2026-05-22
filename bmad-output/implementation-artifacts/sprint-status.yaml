@@ -70,11 +70,11 @@ development_status:
   4-4-stub-optional-copyleaks-provider-safely: done
   epic-4-retrospective: optional
 
-  epic-5: in-progress
+  epic-5: done
   5-1-generate-spanish-localization: done
   5-2-generate-italian-and-french-localizations: done
   5-3-assemble-markdown-and-json-final-package: done
-  5-4-produce-final-qa-report-and-status: review
+  5-4-produce-final-qa-report-and-status: done
   epic-5-retrospective: optional
 
   epic-6: backlog
