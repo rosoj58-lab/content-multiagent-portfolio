@@ -61,6 +61,7 @@ def test_pipeline_stage_views_include_progress_artifacts_and_revision_counters()
     assert seo_view.blocking_reason == "Keyword coverage is weak."
     assert ArtifactKey.SEO_QA in seo_view.artifact_links
     assert final_view.status is WorkflowStatus.WAITING_FOR_HUMAN
+    assert final_view.available_actions == []
 
 
 def test_artifact_previews_handle_json_and_markdown(tmp_path) -> None:
@@ -80,6 +81,7 @@ def test_artifact_previews_handle_json_and_markdown(tmp_path) -> None:
     assert '"dry_input": "Demo input"' in previews[0].preview
     assert previews[1].content_type == "text/markdown"
     assert previews[1].preview.startswith("# Demo Article")
+    assert previews[1].content.strip() == "# Demo Article\n\nBody."
     assert all(preview.download_label.startswith("Download") for preview in previews)
 
 

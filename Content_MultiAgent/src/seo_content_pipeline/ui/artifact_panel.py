@@ -21,6 +21,7 @@ class ArtifactPreview:
     path: str
     content_type: str
     preview: str
+    content: str
     download_label: str
 
 
@@ -50,6 +51,7 @@ def build_artifact_previews(
                 path=str(path),
                 content_type=spec.content_type,
                 preview=_trim_preview(preview),
+                content=preview,
                 download_label=f"Download {spec.ui_label}",
             )
         )
@@ -71,7 +73,7 @@ def render_artifact_panel(job_id: str, artifact_store: ArtifactStore) -> None:
             st.code(preview.preview, language=language)
             st.download_button(
                 preview.download_label,
-                data=preview.preview,
+                data=preview.content,
                 file_name=preview.path.rsplit("/", maxsplit=1)[-1],
                 mime=preview.content_type,
             )
