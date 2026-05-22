@@ -1,6 +1,6 @@
 # Story 5.3: Assemble Markdown and JSON Final Package
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -25,30 +25,30 @@ so that I can inspect and download the complete content package.
 
 ## Tasks / Subtasks
 
-- [ ] Define final package data contract (AC: 1, 3)
-  - [ ] Add typed package models for artifact references and package content.
-  - [ ] Include Dry Input, Article Type, SEO Brief, English Original, all localizations, SEO QA and uniqueness report.
-  - [ ] Include traceability metadata such as job id and generated timestamp.
+- [x] Define final package data contract (AC: 1, 3)
+  - [x] Add typed package models for artifact references and package content.
+  - [x] Include Dry Input, Article Type, SEO Brief, English Original, all localizations, SEO QA and uniqueness report.
+  - [x] Include traceability metadata such as job id and generated timestamp.
 
-- [ ] Implement final package exporter service (AC: 1, 2, 3, 4)
-  - [ ] Add a service method to assemble final package artifacts.
-  - [ ] Require all mandatory source artifacts before writing final outputs.
-  - [ ] Write `final_package.md` through `ArtifactStore`.
-  - [ ] Write `final_package.json` through `ArtifactStore`.
-  - [ ] Update `state.json` and `metadata.json` with final package artifact paths and status history.
-  - [ ] Do not set workflow status to `Approved` in this story.
+- [x] Implement final package exporter service (AC: 1, 2, 3, 4)
+  - [x] Add a service method to assemble final package artifacts.
+  - [x] Require all mandatory source artifacts before writing final outputs.
+  - [x] Write `final_package.md` through `ArtifactStore`.
+  - [x] Write `final_package.json` through `ArtifactStore`.
+  - [x] Update `state.json` and `metadata.json` with final package artifact paths and status history.
+  - [x] Do not set workflow status to `Approved` in this story.
 
-- [ ] Add graph support (AC: 1)
-  - [ ] Add final package node wrapper.
-  - [ ] Keep Streamlit entrypoint thin.
+- [x] Add graph support (AC: 1)
+  - [x] Add final package node wrapper.
+  - [x] Keep Streamlit entrypoint thin.
 
-- [ ] Add focused tests (AC: 1-4)
-  - [ ] Test final Markdown and JSON packages are persisted.
-  - [ ] Test JSON package references Dry Input, Article Type, SEO Brief, SEO QA and uniqueness report.
-  - [ ] Test Markdown package includes all language sections.
-  - [ ] Test missing required artifact raises and does not create final package artifacts.
-  - [ ] Test package assembly does not mark the job approved.
-  - [ ] Run full `pytest` and `ruff check .`.
+- [x] Add focused tests (AC: 1-4)
+  - [x] Test final Markdown and JSON packages are persisted.
+  - [x] Test JSON package references Dry Input, Article Type, SEO Brief, SEO QA and uniqueness report.
+  - [x] Test Markdown package includes all language sections.
+  - [x] Test missing required artifact raises and does not create final package artifacts.
+  - [x] Test package assembly does not mark the job approved.
+  - [x] Run full `pytest` and `ruff check .`.
 
 ## Dev Notes
 
@@ -98,15 +98,30 @@ GPT-5.5
 ### Debug Log References
 
 - Story context created from Epic 5, PRD FR15/NFR3, architecture exporter notes and Story 5.2 implementation learnings.
+- Started implementation; status moved to in-progress.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_exporters.py` red phase failed as expected before implementation.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_exporters.py` passed: 3 tests.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 115 tests.
 
 ### Completion Notes List
 
-- Pending implementation.
+- Added `FinalPackageExporter` and `FinalPackageResult`.
+- Added deterministic Markdown and JSON package assembly.
+- Added traceability references for source artifacts using the artifact registry.
+- Added required-artifact preflight before writing final package outputs.
+- Updated workflow state and metadata to `FINAL_QA` / `RUNNING` without marking the job approved.
+- Added graph node wrapper for package assembly.
+- Added focused exporter tests.
 
 ### File List
 
-- Pending implementation.
+- Content_MultiAgent/src/seo_content_pipeline/graph/nodes/final_qa_node.py
+- Content_MultiAgent/src/seo_content_pipeline/services/exporters.py
+- Content_MultiAgent/tests/test_exporters.py
 
 ## Change Log
 
 - 2026-05-22: Created story and moved status to ready-for-dev.
+- 2026-05-22: Started implementation; status moved to in-progress.
+- 2026-05-22: Implemented final Markdown and JSON package assembly; status moved to review.
