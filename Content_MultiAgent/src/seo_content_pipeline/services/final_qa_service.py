@@ -102,6 +102,7 @@ class FinalQAService:
             routing_guidance=routing_guidance,
         )
         report_path = self.artifact_store.write_json(job_id, ArtifactKey.FINAL_QA_REPORT, report)
+        self._sync_final_package_status(job_id, report.status)
         self._persist_final_status(
             job_id,
             report=report,
@@ -208,6 +209,29 @@ class FinalQAService:
     @staticmethod
     def _routing_guidance(routing_target: WorkflowStage) -> str:
         return f"Route the job to {routing_target.value} for revision before approval."
+
+    def _sync_final_package_status(self, job_id: str, status: WorkflowStatus) -> None:
+        package_json_path = self.artifact_store.artifact_path(job_id, ArtifactKey.FINAL_PACKAGE_JSON)
+        if package_json_path.exists():
+            package = self.artifact_store.read_json(job_id, ArtifactKey.FINAL_PACKAGE_JSON)
+            package["workflow_status"] = {
+                "current_stage": WorkflowStage.FINAL_QA.value,
+                "status": status.value,
+            }
+            self.artifact_store.write_json(job_id, ArtifactKey.FINAL_PACKAGE_JSON, package)
+
+        package_markdown_path = self.artifact_store.artifact_path(job_id, ArtifactKey.FINAL_PACKAGE_MD)
+        if package_markdown_path.exists():
+            markdown = self.artifact_store.read_text(job_id, ArtifactKey.FINAL_PACKAGE_MD)
+            heading = "## Workflow Status\n\n"
+            if heading in markdown:
+                prefix = markdown.split(heading, maxsplit=1)[0]
+                markdown = (
+                    f"{prefix}{heading}"
+                    f"- Stage: `{WorkflowStage.FINAL_QA.value}`\n"
+                    f"- Status: `{status.value}`"
+                )
+                self.artifact_store.write_text(job_id, ArtifactKey.FINAL_PACKAGE_MD, markdown)
 
     def _persist_final_status(
         self,

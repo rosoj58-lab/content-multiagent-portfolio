@@ -120,6 +120,8 @@ def test_final_qa_service_approves_when_all_mandatory_checks_pass(tmp_path) -> N
     result = service.run_final_qa(job_id)
 
     report = store.read_json(job_id, ArtifactKey.FINAL_QA_REPORT)
+    package = store.read_json(job_id, ArtifactKey.FINAL_PACKAGE_JSON)
+    markdown = store.read_text(job_id, ArtifactKey.FINAL_PACKAGE_MD)
     state = store.read_json(job_id, ArtifactKey.STATE)
     metadata = store.read_json(job_id, ArtifactKey.METADATA)
 
@@ -134,6 +136,8 @@ def test_final_qa_service_approves_when_all_mandatory_checks_pass(tmp_path) -> N
     assert state["status"] == WorkflowStatus.APPROVED.value
     assert state["qa_flags"]["final_qa_passed"] is True
     assert state["artifact_paths"]["final_qa_report"].endswith("final_qa_report.json")
+    assert package["workflow_status"]["status"] == WorkflowStatus.APPROVED.value
+    assert "- Status: `approved`" in markdown
     assert metadata["status"] == WorkflowStatus.APPROVED.value
 
 
