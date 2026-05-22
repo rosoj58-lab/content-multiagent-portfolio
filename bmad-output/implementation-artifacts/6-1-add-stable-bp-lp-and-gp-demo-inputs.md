@@ -1,6 +1,6 @@
 # Story 6.1: Add Stable BP, LP and GP Demo Inputs
 
-Status: review
+Status: done
 
 ## Story
 
@@ -90,6 +90,7 @@ GPT-5.5
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_demo_inputs.py` passed: 4 tests.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 123 tests.
+- Code review clean; status moved to done.
 
 ### Completion Notes List
 
@@ -97,6 +98,7 @@ GPT-5.5
 - Added `sample-keywords.json` with article type, demo path and keyword metadata for all three demos.
 - Updated `docs/demo-setup.md` with demo path mapping and usage steps.
 - Added focused demo input tests validating files, metadata, docs and `JobService` compatibility.
+- Code review passed without patch findings.
 
 ### File List
 
@@ -112,3 +114,4 @@ GPT-5.5
 - 2026-05-22: Created story and moved status to ready-for-dev.
 - 2026-05-22: Started implementation; status moved to in-progress.
 - 2026-05-22: Added stable demo inputs and metadata; status moved to review.
+- 2026-05-22: Code review passed; status moved to done.
