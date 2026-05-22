@@ -1,6 +1,6 @@
 # Story 5.2: Generate Italian and French Localizations
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -26,33 +26,33 @@ so that the final package includes all required language versions.
 
 ## Tasks / Subtasks
 
-- [ ] Extend localization prompt support (AC: 2)
-  - [ ] Add Italian and French prompt builders.
-  - [ ] Require Markdown-only output.
-  - [ ] Require preservation of heading hierarchy, meaning and SEO intent.
-  - [ ] Include default geos `it-IT` and `fr-FR` when none are provided.
-  - [ ] Keep Spanish prompt behavior compatible.
+- [x] Extend localization prompt support (AC: 2)
+  - [x] Add Italian and French prompt builders.
+  - [x] Require Markdown-only output.
+  - [x] Require preservation of heading hierarchy, meaning and SEO intent.
+  - [x] Include default geos `it-IT` and `fr-FR` when none are provided.
+  - [x] Keep Spanish prompt behavior compatible.
 
-- [ ] Implement Italian and French localization orchestration (AC: 1, 3, 4)
-  - [ ] Add service method for generating both Italian and French localizations from the approved English Original.
-  - [ ] Require passed English QA and uniqueness gate before localization.
-  - [ ] Load `english_original.md`, `brief.json`, and `state.json`.
-  - [ ] Save `localization_it.md` and `localization_fr.md` through `ArtifactStore`.
-  - [ ] Update `state.json` and `metadata.json`.
-  - [ ] Record Italian and French geos in typed state.
+- [x] Implement Italian and French localization orchestration (AC: 1, 3, 4)
+  - [x] Add service method for generating both Italian and French localizations from the approved English Original.
+  - [x] Require passed English QA and uniqueness gate before localization.
+  - [x] Load `english_original.md`, `brief.json`, and `state.json`.
+  - [x] Save `localization_it.md` and `localization_fr.md` through `ArtifactStore`.
+  - [x] Update `state.json` and `metadata.json`.
+  - [x] Record Italian and French geos in typed state.
 
-- [ ] Add graph support (AC: 1)
-  - [ ] Add localization node wrapper for Italian and French localization.
-  - [ ] Keep Streamlit entrypoint thin.
+- [x] Add graph support (AC: 1)
+  - [x] Add localization node wrapper for Italian and French localization.
+  - [x] Keep Streamlit entrypoint thin.
 
-- [ ] Add focused tests (AC: 1-4)
-  - [ ] Test Italian and French localization artifacts are persisted.
-  - [ ] Test prompts include language, geo, headings and SEO intent.
-  - [ ] Test default geos are recorded.
-  - [ ] Test explicit geo overrides are recorded.
-  - [ ] Test localization is rejected before uniqueness gate passes.
-  - [ ] Test existing Spanish localization behavior still passes.
-  - [ ] Run full `pytest` and `ruff check .`.
+- [x] Add focused tests (AC: 1-4)
+  - [x] Test Italian and French localization artifacts are persisted.
+  - [x] Test prompts include language, geo, headings and SEO intent.
+  - [x] Test default geos are recorded.
+  - [x] Test explicit geo overrides are recorded.
+  - [x] Test localization is rejected before uniqueness gate passes.
+  - [x] Test existing Spanish localization behavior still passes.
+  - [x] Run full `pytest` and `ruff check .`.
 
 ## Dev Notes
 
@@ -105,15 +105,31 @@ GPT-5.5
 ### Debug Log References
 
 - Story context created from Epic 5, PRD FR13/FR14, architecture localization notes and Story 5.1 implementation learnings.
+- Started implementation; status moved to in-progress.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_localization_service.py` red phase failed as expected before implementation.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_localization_service.py` passed: 8 tests.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 112 tests.
 
 ### Completion Notes List
 
-- Pending implementation.
+- Added shared localization prompt builder plus Italian and French prompt builders.
+- Added default Italian geo `it-IT` and default French geo `fr-FR`.
+- Added `LocalizationService.generate_italian_and_french_localizations()` using `LLMRunner.generate_text()`.
+- Generated both language texts before writing artifacts to avoid partial writes if the second generation fails.
+- Added localization state persistence, artifact path tracking and geo recording for Italian and French.
+- Added graph node wrapper for Italian and French localization.
+- Extended focused localization tests while keeping Spanish tests passing.
 
 ### File List
 
-- Pending implementation.
+- Content_MultiAgent/src/seo_content_pipeline/graph/nodes/localization_node.py
+- Content_MultiAgent/src/seo_content_pipeline/prompts/localization.py
+- Content_MultiAgent/src/seo_content_pipeline/services/localization_service.py
+- Content_MultiAgent/tests/test_localization_service.py
 
 ## Change Log
 
 - 2026-05-22: Created story and moved status to ready-for-dev.
+- 2026-05-22: Started implementation; status moved to in-progress.
+- 2026-05-22: Implemented Italian and French localization; status moved to review.
