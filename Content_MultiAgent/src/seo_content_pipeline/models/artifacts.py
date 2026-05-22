@@ -23,6 +23,7 @@ class ArtifactKey(str, Enum):
     LOCALIZATION_FR = "localization_fr"
     FINAL_PACKAGE_MD = "final_package_md"
     FINAL_PACKAGE_JSON = "final_package_json"
+    FINAL_QA_REPORT = "final_qa_report"
 
 
 class ArtifactSpec(BaseModel):
@@ -140,6 +141,13 @@ ARTIFACT_REGISTRY: dict[ArtifactKey, ArtifactSpec] = {
         content_type="application/json",
         ui_label="Final JSON Package",
         description="Machine-readable final content package.",
+    ),
+    ArtifactKey.FINAL_QA_REPORT: ArtifactSpec(
+        key=ArtifactKey.FINAL_QA_REPORT,
+        filename="final_qa_report.json",
+        content_type="application/json",
+        ui_label="Final QA Report",
+        description="Final readiness report and approved or revision status.",
     ),
 }
 

@@ -74,7 +74,7 @@ development_status:
   5-1-generate-spanish-localization: done
   5-2-generate-italian-and-french-localizations: done
   5-3-assemble-markdown-and-json-final-package: done
-  5-4-produce-final-qa-report-and-status: ready-for-dev
+  5-4-produce-final-qa-report-and-status: review
   epic-5-retrospective: optional
 
   epic-6: backlog

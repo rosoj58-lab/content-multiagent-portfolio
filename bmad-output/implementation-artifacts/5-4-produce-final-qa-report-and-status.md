@@ -1,6 +1,6 @@
 # Story 5.4: Produce Final QA Report and Status
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -24,31 +24,31 @@ so that I can understand whether the content package is ready.
 
 ## Tasks / Subtasks
 
-- [ ] Add final QA report contract and artifact registry support (AC: 1)
-  - [ ] Add `ArtifactKey.FINAL_QA_REPORT` mapped to `final_qa_report.json`.
-  - [ ] Add typed final QA report models.
-  - [ ] Export new models through `models/__init__.py`.
+- [x] Add final QA report contract and artifact registry support (AC: 1)
+  - [x] Add `ArtifactKey.FINAL_QA_REPORT` mapped to `final_qa_report.json`.
+  - [x] Add typed final QA report models.
+  - [x] Export new models through `models/__init__.py`.
 
-- [ ] Implement final QA service (AC: 1, 2, 3, 4)
-  - [ ] Read state, metadata, final packages, QA reports, uniqueness report and localization artifacts.
-  - [ ] Determine completed stages from status history and artifact presence.
-  - [ ] List failed checks with clear messages.
-  - [ ] Include uniqueness score/source/threshold/pass status.
-  - [ ] Include Spanish, Italian and French localization status and geos.
-  - [ ] Set status `approved` only when mandatory artifacts and gates pass.
-  - [ ] Set status `needs_revision` with routing guidance when any mandatory check fails.
-  - [ ] Persist `final_qa_report.json`, `state.json` and `metadata.json`.
+- [x] Implement final QA service (AC: 1, 2, 3, 4)
+  - [x] Read state, metadata, final packages, QA reports, uniqueness report and localization artifacts.
+  - [x] Determine completed stages from status history and artifact presence.
+  - [x] List failed checks with clear messages.
+  - [x] Include uniqueness score/source/threshold/pass status.
+  - [x] Include Spanish, Italian and French localization status and geos.
+  - [x] Set status `approved` only when mandatory artifacts and gates pass.
+  - [x] Set status `needs_revision` with routing guidance when any mandatory check fails.
+  - [x] Persist `final_qa_report.json`, `state.json` and `metadata.json`.
 
-- [ ] Add graph support (AC: 1)
-  - [ ] Add final QA node wrapper.
-  - [ ] Keep package assembly node behavior intact.
+- [x] Add graph support (AC: 1)
+  - [x] Add final QA node wrapper.
+  - [x] Keep package assembly node behavior intact.
 
-- [ ] Add focused tests (AC: 1-4)
-  - [ ] Test happy path writes approved final QA report and updates state/metadata.
-  - [ ] Test missing or failed mandatory artifact/gate results in `needs_revision`.
-  - [ ] Test report includes uniqueness result and localization statuses.
-  - [ ] Test routing guidance points to the relevant next stage.
-  - [ ] Run full `pytest` and `ruff check .`.
+- [x] Add focused tests (AC: 1-4)
+  - [x] Test happy path writes approved final QA report and updates state/metadata.
+  - [x] Test missing or failed mandatory artifact/gate results in `needs_revision`.
+  - [x] Test report includes uniqueness result and localization statuses.
+  - [x] Test routing guidance points to the relevant next stage.
+  - [x] Run full `pytest` and `ruff check .`.
 
 ## Dev Notes
 
@@ -99,15 +99,33 @@ GPT-5.5
 ### Debug Log References
 
 - Story context created from Epic 5, PRD FR16/FR17, architecture final QA notes and Story 5.3 implementation learnings.
+- Started implementation; status moved to in-progress.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_final_qa_service.py` red phase failed as expected before implementation.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest tests/test_final_qa_service.py` passed: 4 tests.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
+- `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 119 tests.
 
 ### Completion Notes List
 
-- Pending implementation.
+- Added `final_qa_report.json` artifact registry support.
+- Added typed final QA report models.
+- Added deterministic `FinalQAService`.
+- Final QA writes approved status only when mandatory artifacts, gates, QA reports and uniqueness threshold pass.
+- Needs Revision reports include failed checks and routing guidance.
+- Added final QA graph node wrapper.
+- Added focused final QA service tests.
 
 ### File List
 
-- Pending implementation.
+- Content_MultiAgent/src/seo_content_pipeline/graph/nodes/final_qa_node.py
+- Content_MultiAgent/src/seo_content_pipeline/models/__init__.py
+- Content_MultiAgent/src/seo_content_pipeline/models/artifacts.py
+- Content_MultiAgent/src/seo_content_pipeline/models/final_qa.py
+- Content_MultiAgent/src/seo_content_pipeline/services/final_qa_service.py
+- Content_MultiAgent/tests/test_final_qa_service.py
 
 ## Change Log
 
 - 2026-05-22: Created story and moved status to ready-for-dev.
+- 2026-05-22: Started implementation; status moved to in-progress.
+- 2026-05-22: Implemented final QA report and terminal status; status moved to review.

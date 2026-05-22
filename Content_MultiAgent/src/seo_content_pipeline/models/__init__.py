@@ -8,6 +8,12 @@ from seo_content_pipeline.models.artifacts import (
 )
 from seo_content_pipeline.models.content import BriefOutline, BriefOutlineSection, SEOBrief, SEOBriefArtifact
 from seo_content_pipeline.models.errors import WorkflowError
+from seo_content_pipeline.models.final_qa import (
+    FinalQAFailedCheck,
+    FinalQALocalizationStatus,
+    FinalQAReport,
+    FinalQAUniquenessResult,
+)
 from seo_content_pipeline.models.job import (
     ArticleType,
     JobMetadata,
@@ -26,6 +32,10 @@ __all__ = [
     "ArtifactSpec",
     "BriefOutline",
     "BriefOutlineSection",
+    "FinalQAFailedCheck",
+    "FinalQALocalizationStatus",
+    "FinalQAReport",
+    "FinalQAUniquenessResult",
     "JobMetadata",
     "PipelineState",
     "QAReport",
