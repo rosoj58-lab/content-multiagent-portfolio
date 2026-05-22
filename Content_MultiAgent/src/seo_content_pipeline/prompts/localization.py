@@ -13,7 +13,7 @@ def build_localization_prompt(
     brief: SEOBrief,
     english_original: str,
     language: str,
-    geo: str = DEFAULT_SPANISH_GEO,
+    geo: str,
 ) -> str:
     """Build a prompt for a localized Markdown article."""
     return (
