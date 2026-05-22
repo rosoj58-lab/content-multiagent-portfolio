@@ -1,6 +1,6 @@
 # Story 6.2: Implement Demo Observability Views
 
-Status: review
+Status: done
 
 ## Story
 
@@ -107,6 +107,9 @@ GPT-5.5
 - Architecture and app shell regressions were caught and patched by routing stage view builder access through the UI layer and updating the app shell controlled-error assertion.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run ruff check .` passed.
 - `UV_PROJECT_ENVIRONMENT="$HOME/.cache/uv/seo-content-pipeline-macos" "$HOME/.local/bin/uv" run pytest` passed: 128 tests.
+- Code review findings patched: artifact downloads now use full content instead of truncated previews, and future stages no longer expose premature actions.
+- Post-review verification passed: observability/app/architecture tests 15/15, `ruff check .`, full `pytest` 128/128.
+- Code review clean after observability patch; status moved to done.
 
 ### Completion Notes List
 
@@ -116,6 +119,8 @@ GPT-5.5
 - Added controlled error presenter and no-job empty state.
 - Updated `app.py` to render persisted progress, artifacts and controlled observability errors.
 - Added focused demo observability tests.
+- Added review fix for full artifact downloads and future-stage actions.
+- Code review passed after observability patch.
 
 ### File List
 
@@ -134,3 +139,5 @@ GPT-5.5
 - 2026-05-22: Created story and moved status to ready-for-dev.
 - 2026-05-22: Started implementation; status moved to in-progress.
 - 2026-05-22: Implemented demo observability views; status moved to review.
+- 2026-05-22: Patched code review findings for downloads and future-stage actions.
+- 2026-05-22: Code review passed; status moved to done.
