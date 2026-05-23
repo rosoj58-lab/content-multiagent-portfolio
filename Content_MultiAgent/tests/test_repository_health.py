@@ -55,3 +55,27 @@ def test_empty_placeholder_modules_were_removed() -> None:
     ]
 
     assert [path for path in removed_paths if (PROJECT_ROOT / path).exists()] == []
+
+
+def test_dockerignore_excludes_local_state_and_keeps_env_example() -> None:
+    dockerignore = (PROJECT_ROOT / ".dockerignore").read_text(encoding="utf-8")
+
+    required_patterns = [
+        ".env",
+        ".env.*",
+        "!.env.example",
+        ".venv/",
+        ".pytest_cache/",
+        ".ruff_cache/",
+        ".mypy_cache/",
+        ".coverage",
+        "coverage.xml",
+        "htmlcov/",
+        ".playwright-mcp/",
+        ".streamlit/secrets.toml",
+        "artifacts/jobs/*",
+        "!artifacts/jobs/.gitkeep",
+    ]
+
+    for pattern in required_patterns:
+        assert pattern in dockerignore
