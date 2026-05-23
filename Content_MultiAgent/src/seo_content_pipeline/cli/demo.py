@@ -18,6 +18,7 @@ DEMO_INPUTS = {
     "lp": (ArticleType.LP, Path("examples/inputs/lp-demo.txt")),
     "gp": (ArticleType.GP, Path("examples/inputs/gp-demo.txt")),
 }
+DEMO_CHOICES = [*DEMO_INPUTS, "all"]
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -25,9 +26,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run the offline SEO content pipeline demo.")
     parser.add_argument(
         "--demo",
-        choices=sorted(DEMO_INPUTS),
+        choices=DEMO_CHOICES,
         default="bp",
-        help="Stable demo input to run.",
+        help="Stable demo input to run, or all to run every demo input.",
     )
     parser.add_argument(
         "--mode",
@@ -43,22 +44,32 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    article_type, input_path = DEMO_INPUTS[args.demo]
+    demo_names = list(DEMO_INPUTS) if args.demo == "all" else [args.demo]
+    for index, demo_name in enumerate(demo_names):
+        if index > 0:
+            print()
+        _run_demo(demo_name, mode=args.mode, artifact_root=args.artifact_root)
+
+    return 0
+
+
+def _run_demo(demo_name: str, *, mode: str, artifact_root: Path) -> None:
+    article_type, input_path = DEMO_INPUTS[demo_name]
     dry_input = input_path.read_text(encoding="utf-8")
-    settings = AppSettings(artifact_root=args.artifact_root)
+    settings = AppSettings(artifact_root=artifact_root)
     store = ArtifactStore(settings.artifact_root)
     job = JobService(settings=settings, artifact_store=store).create_job(dry_input, article_type)
     result = DemoPipelineService(settings=settings, artifact_store=store).run_full_demo(
         job.metadata.job_id,
-        mode=args.mode,
+        mode=mode,
     )
 
+    print(f"demo={demo_name}")
     print(f"job_id={result.job_id}")
     print(f"status={result.status.value}")
     print(f"artifact_dir={store.job_dir(result.job_id)}")
     print(f"final_package={result.final_package_path}")
     print(f"final_qa_report={result.final_qa_report_path}")
-    return 0
 
 
 if __name__ == "__main__":

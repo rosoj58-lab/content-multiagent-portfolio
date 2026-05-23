@@ -17,6 +17,8 @@ def test_makefile_exposes_common_project_commands() -> None:
     assert "uv run streamlit run app.py" in makefile
     assert "demo:" in makefile
     assert "uv run seo-demo --demo bp --mode demo" in makefile
+    assert "demo-all:" in makefile
+    assert "uv run seo-demo --demo all --mode demo" in makefile
     assert "ci: lint test" in makefile
 
 
@@ -27,3 +29,4 @@ def test_readme_mentions_make_shortcuts() -> None:
     assert "make test" in readme
     assert "make app" in readme
     assert "make demo" in readme
+    assert "make demo-all" in readme

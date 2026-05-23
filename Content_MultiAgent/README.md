@@ -52,6 +52,12 @@ The same offline path can be smoke-tested from the terminal:
 uv run seo-demo --demo bp --mode demo
 ```
 
+To generate all three stable demo paths at once:
+
+```bash
+uv run seo-demo --demo all --mode demo
+```
+
 Static sample outputs are available in `examples/outputs/` for quick GitHub review.
 
 ## Demo Inputs
@@ -86,6 +92,7 @@ make lint
 make test
 make app
 make demo
+make demo-all
 ```
 
 Run from the Git/Compose root when using Docker:

@@ -1,4 +1,4 @@
-.PHONY: sync lint test app demo ci
+.PHONY: sync lint test app demo demo-all ci
 
 sync:
 	uv sync
@@ -14,5 +14,8 @@ app:
 
 demo:
 	uv run seo-demo --demo bp --mode demo
+
+demo-all:
+	uv run seo-demo --demo all --mode demo
 
 ci: lint test

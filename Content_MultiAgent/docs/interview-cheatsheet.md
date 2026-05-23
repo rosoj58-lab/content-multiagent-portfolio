@@ -20,6 +20,12 @@ For a terminal smoke demo:
 uv run seo-demo --demo bp --mode demo
 ```
 
+To generate BP, LP and GP artifacts in one terminal run:
+
+```bash
+uv run seo-demo --demo all --mode demo
+```
+
 After the run, open `artifacts/jobs/<job_id>/` and show `state.json`, `brief.json`, QA reports, localizations, `final_package.md` and `final_qa_report.json`.
 
 ## What To Emphasize

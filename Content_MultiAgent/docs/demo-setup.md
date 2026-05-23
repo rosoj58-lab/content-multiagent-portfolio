@@ -18,6 +18,12 @@ For a terminal-only smoke demo, run:
 uv run seo-demo --demo bp --mode demo
 ```
 
+To prepare all stable demo paths before an interview, run:
+
+```bash
+uv run seo-demo --demo all --mode demo
+```
+
 ## Demo Inputs
 
 | Path | Article type | Demo path | Purpose |
