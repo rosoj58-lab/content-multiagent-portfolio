@@ -124,3 +124,4 @@ uv run pytest
 - `docs/docker.md` - Docker run commands.
 - `docs/roadmap.md` - current MVP status, next steps and deferred scope.
 - `docs/testing-strategy.md` - quality gate, test coverage areas and known gaps.
+- `docs/troubleshooting.md` - local demo recovery steps and common fixes.
