@@ -1,4 +1,17 @@
-.PHONY: sync lint test app demo demo-list demo-all ci interview-check
+.PHONY: help sync lint test app demo demo-list demo-all ci interview-check
+
+help:
+	@printf '%s\n' \
+		'Available commands:' \
+		'  make sync             Install project dependencies with uv' \
+		'  make lint             Run Ruff' \
+		'  make test             Run pytest' \
+		'  make app              Start Streamlit locally' \
+		'  make demo             Run the BP happy-path CLI demo' \
+		'  make demo-list        List stable demo scenarios' \
+		'  make demo-all         Generate BP, LP and GP demo artifacts' \
+		'  make ci               Run lint and tests' \
+		'  make interview-check  Run CI checks and prepare demo artifacts'
 
 sync:
 	uv sync

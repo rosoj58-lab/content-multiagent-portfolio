@@ -9,6 +9,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 def test_makefile_exposes_common_project_commands() -> None:
     makefile = (PROJECT_ROOT / "Makefile").read_text(encoding="utf-8")
 
+    assert "help:" in makefile
+    assert "Available commands:" in makefile
     assert "lint:" in makefile
     assert "uv run ruff check ." in makefile
     assert "test:" in makefile
@@ -29,6 +31,7 @@ def test_makefile_exposes_common_project_commands() -> None:
 def test_readme_mentions_make_shortcuts() -> None:
     readme = (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
 
+    assert "make help" in readme
     assert "make lint" in readme
     assert "make test" in readme
     assert "make app" in readme

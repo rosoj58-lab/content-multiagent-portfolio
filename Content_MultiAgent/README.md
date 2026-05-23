@@ -100,6 +100,7 @@ The offline demo works without a `.env` file. When testing external integrations
 Or use the local shortcuts:
 
 ```bash
+make help
 make lint
 make test
 make app
