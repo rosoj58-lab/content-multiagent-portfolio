@@ -69,3 +69,15 @@ def test_architecture_docs_reinforce_status_and_routing_requirements() -> None:
     assert "revision routing" in combined
     assert "streamlit" in combined
     assert "artifactstore" in combined
+
+
+def test_architecture_summary_includes_pipeline_diagram() -> None:
+    architecture = _read_doc("architecture_summary").lower()
+
+    assert "```mermaid" in architecture
+    assert "flowchart td" in architecture
+    assert "dry input" in architecture
+    assert "seo brief" in architecture
+    assert "uniqueness gate" in architecture
+    assert "final qa report" in architecture
+    assert "artifactstore artifacts/jobs" in architecture

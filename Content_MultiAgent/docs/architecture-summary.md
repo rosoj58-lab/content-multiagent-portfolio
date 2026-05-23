@@ -13,6 +13,33 @@ The app is a local Streamlit portfolio demo with file-based persistence. Streaml
 | `providers/` | Manual, mock and optional Copyleaks uniqueness providers. |
 | `artifacts/jobs/` | Durable local source of truth for every demo job. |
 
+## Pipeline Diagram
+
+```mermaid
+flowchart TD
+    A[Dry input] --> B[SEO brief]
+    B --> C[Brief QA]
+    C --> D{Human approval}
+    D -->|approved| E[English original]
+    D -->|revision requested| B
+    E --> F[Article validation]
+    F --> G[Editorial QA]
+    G --> H[SEO QA]
+    H --> I[Uniqueness gate]
+    I -->|score >= 90| J[Localization ES IT FR]
+    I -->|score < 90| E
+    J --> K[Final Markdown and JSON package]
+    K --> L[Final QA report]
+
+    B -.writes.-> M[(ArtifactStore artifacts/jobs)]
+    E -.writes.-> M
+    G -.writes.-> M
+    H -.writes.-> M
+    I -.writes.-> M
+    J -.writes.-> M
+    L -.writes.-> M
+```
+
 ## Status And Routing
 
 FR17 is represented by `PipelineState`, `JobMetadata`, `WorkflowStage`, `WorkflowStatus` and `StatusHistoryEntry`. The UI reads these contracts to explain where the job is and what action is available.
