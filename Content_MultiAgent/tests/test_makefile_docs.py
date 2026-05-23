@@ -35,3 +35,4 @@ def test_readme_mentions_make_shortcuts() -> None:
     assert "make demo-list" in readme
     assert "make demo-all" in readme
     assert "artifacts/demo/demo-summary.json" in readme
+    assert "`version` and `run_count`" in readme

@@ -94,9 +94,11 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if args.summary_file is not None:
         summary = {
+            "version": 1,
             "requested_demo": args.demo,
             "mode": args.mode,
             "artifact_root": str(args.artifact_root),
+            "run_count": len(runs),
             "runs": runs,
         }
         args.summary_file.parent.mkdir(parents=True, exist_ok=True)

@@ -76,9 +76,11 @@ def test_demo_cli_can_write_summary_manifest(tmp_path, capsys) -> None:
 
     assert exit_code == 0
     assert f"summary_file={summary_file}" in output
+    assert summary["version"] == 1
     assert summary["requested_demo"] == "all"
     assert summary["mode"] == "demo"
     assert summary["artifact_root"] == str(artifact_root)
+    assert summary["run_count"] == 3
     assert [run["demo"] for run in summary["runs"]] == ["bp", "lp", "gp"]
     assert [run["article_type"] for run in summary["runs"]] == ["BP", "LP", "GP"]
     assert [run["input_file"] for run in summary["runs"]] == [

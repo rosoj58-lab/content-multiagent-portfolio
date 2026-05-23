@@ -110,6 +110,8 @@ make demo-all
 
 `make demo-all` writes `artifacts/demo/demo-summary.json` with the input file,
 article type, scenario purpose, status and final artifact paths for the BP, LP and GP jobs.
+The manifest includes a `version` and `run_count` field so it can be treated as
+a stable demo index.
 
 Run from the Git/Compose root when using Docker:
 
