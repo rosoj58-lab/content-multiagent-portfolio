@@ -71,6 +71,15 @@ uv run pytest
 uv run streamlit run app.py
 ```
 
+Or use the local shortcuts:
+
+```bash
+make lint
+make test
+make app
+make demo
+```
+
 Run from the Git/Compose root when using Docker:
 
 ```bash
