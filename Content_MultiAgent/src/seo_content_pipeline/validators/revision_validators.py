@@ -1,1 +1,0 @@
-"""Revision validator placeholders."""

@@ -20,17 +20,8 @@ services:
       UV_LINK_MODE: copy
     command: >
       sh -lc '
-        if [ -f pyproject.toml ]; then
-          if [ -f uv.lock ]; then uv sync --frozen; else uv sync; fi;
-        fi;
-        if [ -f app.py ]; then
-          uv run streamlit run app.py --server.address=0.0.0.0 --server.port=8501;
-        elif [ -f src/seo_content_pipeline/app.py ]; then
-          uv run streamlit run src/seo_content_pipeline/app.py --server.address=0.0.0.0 --server.port=8501;
-        else
-          echo "Project scaffold is ready. Add the Streamlit app, then run docker compose up --build.";
-          sleep infinity;
-        fi
+        uv sync --frozen;
+        uv run streamlit run app.py --server.address=0.0.0.0 --server.port=8501;
       '
 
 volumes:
