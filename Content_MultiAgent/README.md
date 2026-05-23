@@ -160,6 +160,7 @@ uv run pytest
 
 - `CHANGELOG.md` - MVP release notes and known limits.
 - `CONTRIBUTING.md` - local contribution, quality gate and Docker checks.
+- `SECURITY.md` - secrets, local artifacts and provider safety rules.
 - `docs/demo-setup.md` - local setup and demo flow.
 - `docs/demo-script.md` - interview walkthrough.
 - `docs/interview-cheatsheet.md` - concise pitch, tradeoffs and Q&A.

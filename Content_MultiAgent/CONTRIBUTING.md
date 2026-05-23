@@ -51,6 +51,8 @@ same setup on another machine.
 
 - Keep generated runtime files out of commits: `artifacts/jobs/*` and
   `artifacts/demo/*` are local demo outputs.
+- Follow `SECURITY.md` for `.env`, API keys, provider credentials and generated
+  content before sharing artifacts.
 - Update tests when changing commands, filenames, artifacts or README promises.
 - Keep the offline demo path working without OpenAI or Copyleaks credentials.
 - Prefer small commits that can be explained as one portfolio improvement.

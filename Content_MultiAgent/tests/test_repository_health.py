@@ -87,6 +87,12 @@ def test_gitignore_excludes_generated_artifacts_but_keeps_gitkeep_files() -> Non
     gitignore = (PROJECT_ROOT / ".gitignore").read_text(encoding="utf-8")
 
     required_patterns = [
+        ".env",
+        ".env.*",
+        "!.env.example",
+        "*.key",
+        "*secret*",
+        "*token*",
         "artifacts/jobs/*",
         "!artifacts/jobs/.gitkeep",
         "artifacts/demo/*",

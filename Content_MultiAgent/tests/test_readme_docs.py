@@ -10,6 +10,7 @@ def test_readme_documents_interview_demo_flow() -> None:
     readme = (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
 
     assert "CONTRIBUTING.md" in readme
+    assert "SECURITY.md" in readme
     assert "docs/decisions/0001-offline-first-demo-and-provider-boundaries.md" in readme
     assert "Run full demo pipeline" in readme
     assert "artifacts/jobs/<job_id>/" in readme
@@ -51,3 +52,20 @@ def test_contributing_docs_cover_local_and_docker_quality_gates() -> None:
     assert "docker compose run --rm app uv run pytest" in contributing
     assert "artifacts/jobs/*" in contributing
     assert "artifacts/demo/*" in contributing
+    assert "SECURITY.md" in contributing
+
+
+def test_security_docs_cover_secrets_artifacts_and_provider_boundaries() -> None:
+    security = (PROJECT_ROOT / "SECURITY.md").read_text(encoding="utf-8")
+
+    assert "uv run seo-demo --demo bp --mode demo" in security
+    assert "uv run seo-demo --demo all --mode demo" in security
+    assert "make interview-check" in security
+    assert ".env.example" in security
+    assert "OPENAI_API_KEY" in security
+    assert "COPYLEAKS_EMAIL" in security
+    assert "COPYLEAKS_API_KEY" in security
+    assert "artifacts/jobs/*" in security
+    assert "artifacts/demo/*" in security
+    assert "provider boundaries" in security
+    assert "Python 3.12" in security
