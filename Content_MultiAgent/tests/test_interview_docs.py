@@ -7,6 +7,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DOCS = {
     "demo_setup": PROJECT_ROOT / "docs" / "demo-setup.md",
     "demo_script": PROJECT_ROOT / "docs" / "demo-script.md",
+    "interview_cheatsheet": PROJECT_ROOT / "docs" / "interview-cheatsheet.md",
     "artifact_map": PROJECT_ROOT / "docs" / "artifact-map.md",
     "architecture_summary": PROJECT_ROOT / "docs" / "architecture-summary.md",
     "project_structure": PROJECT_ROOT / "docs" / "project-structure.md",
@@ -34,6 +35,17 @@ def test_docs_explain_three_demo_paths() -> None:
     assert "bp-demo.txt" in combined
     assert "lp-demo.txt" in combined
     assert "gp-demo.txt" in combined
+
+
+def test_interview_cheatsheet_covers_pitch_tradeoffs_and_questions() -> None:
+    cheatsheet = _read_doc("interview_cheatsheet").lower()
+
+    assert "60-second pitch" in cheatsheet
+    assert "uv run seo-demo --demo bp --mode demo" in cheatsheet
+    assert "honest tradeoffs" in cheatsheet
+    assert "likely questions" in cheatsheet
+    assert "not a hosted production system" in cheatsheet
+    assert "production-ready" in cheatsheet
 
 
 def test_artifact_map_identifies_storage_and_qa_decisions() -> None:

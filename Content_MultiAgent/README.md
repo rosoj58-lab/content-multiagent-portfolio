@@ -106,6 +106,7 @@ uv run pytest
 
 - `docs/demo-setup.md` - local setup and demo flow.
 - `docs/demo-script.md` - interview walkthrough.
+- `docs/interview-cheatsheet.md` - concise pitch, tradeoffs and Q&A.
 - `docs/artifact-map.md` - artifact filenames and QA decision map.
 - `docs/architecture-summary.md` - architecture and routing summary.
 - `docs/project-structure.md` - codebase structure.
