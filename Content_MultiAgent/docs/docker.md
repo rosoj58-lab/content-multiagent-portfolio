@@ -57,6 +57,8 @@ make docker-build
 make docker-test
 make docker-up
 make docker-down
+make docker-logs
+make docker-shell
 ```
 
 ## Demo Flow

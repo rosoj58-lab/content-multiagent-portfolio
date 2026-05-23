@@ -34,6 +34,10 @@ def test_makefile_exposes_common_project_commands() -> None:
     assert "docker compose -f ../compose.yaml up" in makefile
     assert "docker-down:" in makefile
     assert "docker compose -f ../compose.yaml down" in makefile
+    assert "docker-logs:" in makefile
+    assert "docker compose -f ../compose.yaml logs -f app" in makefile
+    assert "docker-shell:" in makefile
+    assert "docker compose -f ../compose.yaml run --rm app sh" in makefile
 
 
 def test_readme_mentions_make_shortcuts() -> None:
@@ -51,5 +55,7 @@ def test_readme_mentions_make_shortcuts() -> None:
     assert "make docker-test" in readme
     assert "make docker-up" in readme
     assert "make docker-down" in readme
+    assert "make docker-logs" in readme
+    assert "make docker-shell" in readme
     assert "artifacts/demo/demo-summary.json" in readme
     assert "`version` and `run_count`" in readme

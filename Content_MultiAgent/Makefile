@@ -1,4 +1,4 @@
-.PHONY: help sync lint test app demo demo-list demo-all ci interview-check docker-build docker-test docker-up docker-down
+.PHONY: help sync lint test app demo demo-list demo-all ci interview-check docker-build docker-test docker-up docker-down docker-logs docker-shell
 
 help:
 	@printf '%s\n' \
@@ -15,7 +15,9 @@ help:
 		'  make docker-build     Build the Docker image from compose root' \
 		'  make docker-test      Run lint and tests in Docker' \
 		'  make docker-up        Start the Dockerized Streamlit app' \
-		'  make docker-down      Stop Docker services'
+		'  make docker-down      Stop Docker services' \
+		'  make docker-logs      Follow Docker app logs' \
+		'  make docker-shell     Open a shell in the Docker app service'
 
 sync:
 	uv sync
@@ -54,3 +56,9 @@ docker-up:
 
 docker-down:
 	docker compose -f ../compose.yaml down
+
+docker-logs:
+	docker compose -f ../compose.yaml logs -f app
+
+docker-shell:
+	docker compose -f ../compose.yaml run --rm app sh

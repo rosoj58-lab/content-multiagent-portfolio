@@ -32,3 +32,5 @@ def test_docker_docs_match_current_streamlit_app() -> None:
     assert "make docker-test" in docker_docs
     assert "make docker-up" in docker_docs
     assert "make docker-down" in docker_docs
+    assert "make docker-logs" in docker_docs
+    assert "make docker-shell" in docker_docs
