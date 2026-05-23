@@ -11,6 +11,7 @@ def test_root_readme_points_to_portfolio_project() -> None:
 
     assert "Content_MultiAgent/README.md" in readme
     assert "Content_MultiAgent/CHANGELOG.md" in readme
+    assert "Content_MultiAgent/CONTRIBUTING.md" in readme
     assert "MVP release notes" in readme
     assert "Content_MultiAgent/docs/interview-cheatsheet.md" in readme
     assert "Content_MultiAgent/examples/outputs/" in readme

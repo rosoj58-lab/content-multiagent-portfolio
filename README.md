@@ -8,6 +8,7 @@ Open the project here:
 
 - `Content_MultiAgent/README.md` - full project overview, demo flow and development commands.
 - `Content_MultiAgent/CHANGELOG.md` - MVP release notes and known limits.
+- `Content_MultiAgent/CONTRIBUTING.md` - setup, quality gate and contribution rules.
 - `Content_MultiAgent/docs/interview-cheatsheet.md` - short pitch, architecture talking points, tradeoffs and likely interview questions.
 - `Content_MultiAgent/examples/outputs/` - stable sample final package and final QA report.
 

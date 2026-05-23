@@ -159,6 +159,7 @@ uv run pytest
 ## Useful Docs
 
 - `CHANGELOG.md` - MVP release notes and known limits.
+- `CONTRIBUTING.md` - local contribution, quality gate and Docker checks.
 - `docs/demo-setup.md` - local setup and demo flow.
 - `docs/demo-script.md` - interview walkthrough.
 - `docs/interview-cheatsheet.md` - concise pitch, tradeoffs and Q&A.
