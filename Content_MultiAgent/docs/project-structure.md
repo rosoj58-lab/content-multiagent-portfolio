@@ -5,6 +5,7 @@ This structure is optimized for an inspectable local portfolio project. The impo
 ```text
 app.py
 src/seo_content_pipeline/
+  cli/
   config.py
   models/
   services/
@@ -21,6 +22,8 @@ artifacts/jobs/
 ```
 
 ## Key Directories
+
+`cli/` contains command-line entrypoints such as `seo-demo`, which runs the offline demo pipeline without opening Streamlit.
 
 `models/` contains the public contracts: `PipelineState`, `JobMetadata`, `ArtifactKey`, `QAReport`, `UniquenessResult`, `FinalQAReport`, `WorkflowStage` and `WorkflowStatus`.
 

@@ -46,6 +46,12 @@ The offline demo runner creates the full approved artifact set without external 
 - `final_package.json`
 - `final_qa_report.json`
 
+The same offline path can be smoke-tested from the terminal:
+
+```bash
+uv run seo-demo --demo bp --mode demo
+```
+
 ## Demo Inputs
 
 | Input | Article type | Demo path |
@@ -87,6 +93,7 @@ uv run pytest
 ## Project Map
 
 - `app.py` - Streamlit entrypoint.
+- `src/seo_content_pipeline/cli/` - command-line demo entrypoints.
 - `src/seo_content_pipeline/models/` - typed workflow, artifact, QA and content contracts.
 - `src/seo_content_pipeline/services/` - stage orchestration and artifact persistence.
 - `src/seo_content_pipeline/validators/` - deterministic QA checks.

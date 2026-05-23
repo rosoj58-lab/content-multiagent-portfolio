@@ -13,6 +13,9 @@ dependencies = [
     "streamlit",
 ]
 
+[project.scripts]
+seo-demo = "seo_content_pipeline.cli.demo:main"
+
 [dependency-groups]
 dev = [
     "mypy",

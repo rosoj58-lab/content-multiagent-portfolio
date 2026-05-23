@@ -12,6 +12,12 @@ uv run streamlit run app.py
 
 The app opens a local form with Dry input, Article type and Mode. Keep Mode set to `demo` for shorter generated articles. The same pipeline can be inspected through artifacts under `artifacts/jobs/<job_id>/`.
 
+For a terminal-only smoke demo, run:
+
+```bash
+uv run seo-demo --demo bp --mode demo
+```
+
 ## Demo Inputs
 
 | Path | Article type | Demo path | Purpose |
