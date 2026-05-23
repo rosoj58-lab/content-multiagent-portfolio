@@ -1,16 +1,10 @@
 # Docker Development Environment
 
-This project uses Docker Desktop to keep the local Python runtime isolated from other portfolio projects.
+This project uses Docker Desktop to keep the Python runtime isolated from other local portfolio projects.
 
-## Installed Tooling
+## Run The App
 
-- Docker Desktop for Mac is installed in `~/Applications/Docker.app`.
-- Docker CLI symlinks are available through `~/.local/bin`.
-- Compose is available as `docker compose`.
-
-## Run The Project
-
-From the repository root:
+Run from the Git/Compose root, one directory above `Content_MultiAgent`:
 
 ```bash
 docker compose up --build
@@ -22,15 +16,25 @@ The Streamlit app will be available at:
 http://localhost:8501
 ```
 
-The current image is intentionally ready before the app scaffold exists. Until `app.py` or `src/seo_content_pipeline/app.py` is added, the container starts and waits with a setup message.
+The compose file mounts `Content_MultiAgent` into `/app`, so source edits are visible inside the container. Generated job artifacts are written to `Content_MultiAgent/artifacts/jobs/`.
+
+## Test In Docker
+
+```bash
+docker compose run --rm app uv run ruff check .
+docker compose run --rm app uv run pytest
+```
 
 ## Environment Variables
 
-Create `Content_MultiAgent/.env` locally when API keys are needed. This file is ignored by Git.
-
-Example future values:
+Create `Content_MultiAgent/.env` locally when API keys are needed. This file is ignored by Git. The repeatable offline demo does not require these values.
 
 ```bash
+APP_MODE=demo
+ARTIFACT_ROOT=artifacts/jobs
+BMAD_OUTPUT_DIR=/bmad-output
+MAX_REVISION_ATTEMPTS=2
+UNIQUENESS_PROVIDER=manual
 OPENAI_API_KEY=
 COPYLEAKS_EMAIL=
 COPYLEAKS_API_KEY=
@@ -45,7 +49,10 @@ docker compose logs -f app
 docker compose run --rm app sh
 ```
 
-## Notes
+## Demo Flow
 
-- Generated job artifacts stay outside the image and are mounted through `./bmad-output`.
-- Python dependencies should be pinned through `pyproject.toml` and `uv.lock` once the application scaffold is created.
+1. Open `http://localhost:8501`.
+2. Paste one of the stable inputs from `examples/inputs/`.
+3. Create a job.
+4. Click `Run full demo pipeline`.
+5. Inspect the final package and QA report under `artifacts/jobs/<job_id>/`.
