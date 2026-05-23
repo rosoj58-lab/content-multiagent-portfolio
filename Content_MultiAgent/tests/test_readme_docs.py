@@ -15,6 +15,7 @@ def test_readme_documents_interview_demo_flow() -> None:
     assert "final_qa_report.json" in readme
     assert "examples/inputs/bp-demo.txt" in readme
     assert "uv run seo-demo --demo bp --mode demo" in readme
+    assert "uv run seo-demo --list-demos" in readme
     assert "uv run seo-demo --demo all --mode demo" in readme
     assert "--summary-file artifacts/demo/demo-summary.json" in readme
     assert "docker compose run --rm app uv run pytest" in readme

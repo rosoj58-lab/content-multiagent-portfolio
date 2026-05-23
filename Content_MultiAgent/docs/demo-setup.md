@@ -18,6 +18,12 @@ For a terminal-only smoke demo, run:
 uv run seo-demo --demo bp --mode demo
 ```
 
+To list the stable scenarios and their purpose:
+
+```bash
+uv run seo-demo --list-demos
+```
+
 To prepare all stable demo paths before an interview, run:
 
 ```bash

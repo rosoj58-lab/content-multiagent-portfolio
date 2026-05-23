@@ -20,6 +20,12 @@ For a terminal smoke demo:
 uv run seo-demo --demo bp --mode demo
 ```
 
+To list the available scenarios before choosing one:
+
+```bash
+uv run seo-demo --list-demos
+```
+
 To generate BP, LP and GP artifacts in one terminal run:
 
 ```bash

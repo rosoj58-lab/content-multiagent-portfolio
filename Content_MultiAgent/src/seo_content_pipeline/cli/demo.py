@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Sequence
 
@@ -14,10 +15,35 @@ from seo_content_pipeline.services.demo_pipeline_service import DemoPipelineServ
 from seo_content_pipeline.services.job_service import JobService
 
 
+@dataclass(frozen=True)
+class DemoInput:
+    """Stable input metadata for one offline demo scenario."""
+
+    article_type: ArticleType
+    input_path: Path
+    demo_path: str
+    purpose: str
+
+
 DEMO_INPUTS = {
-    "bp": (ArticleType.BP, Path("examples/inputs/bp-demo.txt")),
-    "lp": (ArticleType.LP, Path("examples/inputs/lp-demo.txt")),
-    "gp": (ArticleType.GP, Path("examples/inputs/gp-demo.txt")),
+    "bp": DemoInput(
+        article_type=ArticleType.BP,
+        input_path=Path("examples/inputs/bp-demo.txt"),
+        demo_path="happy_path",
+        purpose="Clean end-to-end workflow from dry input to final package.",
+    ),
+    "lp": DemoInput(
+        article_type=ArticleType.LP,
+        input_path=Path("examples/inputs/lp-demo.txt"),
+        demo_path="revision_path",
+        purpose="Revision routing discussion for unsupported claims or commercial copy risk.",
+    ),
+    "gp": DemoInput(
+        article_type=ArticleType.GP,
+        input_path=Path("examples/inputs/gp-demo.txt"),
+        demo_path="human_review_path",
+        purpose="Human-review discussion for sensitive guest-post link placement.",
+    ),
 }
 DEMO_CHOICES = [*DEMO_INPUTS, "all"]
 
@@ -48,7 +74,16 @@ def main(argv: Sequence[str] | None = None) -> int:
         type=Path,
         help="Optional JSON file where a manifest of generated demo runs should be written.",
     )
+    parser.add_argument(
+        "--list-demos",
+        action="store_true",
+        help="Print the stable demo catalog and exit without generating artifacts.",
+    )
     args = parser.parse_args(argv)
+
+    if args.list_demos:
+        _print_demo_catalog()
+        return 0
 
     demo_names = list(DEMO_INPUTS) if args.demo == "all" else [args.demo]
     runs: list[dict[str, str]] = []
@@ -72,7 +107,9 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 
 def _run_demo(demo_name: str, *, mode: str, artifact_root: Path) -> dict[str, str]:
-    article_type, input_path = DEMO_INPUTS[demo_name]
+    demo_input = DEMO_INPUTS[demo_name]
+    article_type = demo_input.article_type
+    input_path = demo_input.input_path
     dry_input = input_path.read_text(encoding="utf-8")
     settings = AppSettings(artifact_root=artifact_root)
     store = ArtifactStore(settings.artifact_root)
@@ -92,12 +129,24 @@ def _run_demo(demo_name: str, *, mode: str, artifact_root: Path) -> dict[str, st
         "demo": demo_name,
         "article_type": article_type.value,
         "input_file": input_path.as_posix(),
+        "demo_path": demo_input.demo_path,
+        "purpose": demo_input.purpose,
         "job_id": result.job_id,
         "status": result.status.value,
         "artifact_dir": str(store.job_dir(result.job_id)),
         "final_package": result.final_package_path,
         "final_qa_report": result.final_qa_report_path,
     }
+
+
+def _print_demo_catalog() -> None:
+    for demo_name, demo_input in DEMO_INPUTS.items():
+        print(f"demo={demo_name}")
+        print(f"article_type={demo_input.article_type.value}")
+        print(f"input_file={demo_input.input_path.as_posix()}")
+        print(f"demo_path={demo_input.demo_path}")
+        print(f"purpose={demo_input.purpose}")
+        print()
 
 
 if __name__ == "__main__":

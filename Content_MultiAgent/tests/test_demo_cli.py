@@ -86,8 +86,33 @@ def test_demo_cli_can_write_summary_manifest(tmp_path, capsys) -> None:
         "examples/inputs/lp-demo.txt",
         "examples/inputs/gp-demo.txt",
     ]
+    assert [run["demo_path"] for run in summary["runs"]] == [
+        "happy_path",
+        "revision_path",
+        "human_review_path",
+    ]
+    assert "Clean end-to-end workflow" in summary["runs"][0]["purpose"]
+    assert "Revision routing" in summary["runs"][1]["purpose"]
+    assert "Human-review discussion" in summary["runs"][2]["purpose"]
     assert {run["status"] for run in summary["runs"]} == {"approved"}
     for run in summary["runs"]:
         assert Path(run["artifact_dir"]).exists()
         assert Path(run["final_package"]).exists()
         assert Path(run["final_qa_report"]).exists()
+
+
+def test_demo_cli_can_list_stable_demo_catalog(tmp_path, capsys) -> None:
+    exit_code = main(["--list-demos", "--artifact-root", str(tmp_path)])
+
+    output = capsys.readouterr().out
+
+    assert exit_code == 0
+    assert "demo=bp" in output
+    assert "article_type=BP" in output
+    assert "input_file=examples/inputs/bp-demo.txt" in output
+    assert "demo_path=happy_path" in output
+    assert "demo=lp" in output
+    assert "demo_path=revision_path" in output
+    assert "demo=gp" in output
+    assert "demo_path=human_review_path" in output
+    assert list(tmp_path.iterdir()) == []

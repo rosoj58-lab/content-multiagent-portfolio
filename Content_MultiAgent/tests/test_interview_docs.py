@@ -43,6 +43,7 @@ def test_interview_cheatsheet_covers_pitch_tradeoffs_and_questions() -> None:
 
     assert "60-second pitch" in cheatsheet
     assert "uv run seo-demo --demo bp --mode demo" in cheatsheet
+    assert "uv run seo-demo --list-demos" in cheatsheet
     assert "uv run seo-demo --demo all --mode demo" in cheatsheet
     assert "artifacts/demo/demo-summary.json" in cheatsheet
     assert "honest tradeoffs" in cheatsheet

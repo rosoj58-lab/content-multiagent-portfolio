@@ -39,6 +39,12 @@ Use the CLI when you want to verify the pipeline without opening the browser:
 uv run seo-demo --demo bp --mode demo
 ```
 
+To confirm available scenario names:
+
+```bash
+uv run seo-demo --list-demos
+```
+
 The command should print `status=approved`, `artifact_dir=...`, `final_package=...` and `final_qa_report=...`.
 
 For all stable demo paths, generate a manifest:

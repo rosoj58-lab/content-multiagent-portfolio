@@ -13,6 +13,7 @@ def test_troubleshooting_docs_cover_demo_recovery_paths() -> None:
     assert "uv run streamlit run app.py --server.port 8502" in text
     assert "uv sync --frozen" in text
     assert "uv run seo-demo --demo bp --mode demo" in text
+    assert "uv run seo-demo --list-demos" in text
     assert "artifacts/demo/demo-summary.json" in text
     assert "artifacts/jobs/<job_id>/" in text
     assert "docker compose up --build" in text

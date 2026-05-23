@@ -52,6 +52,12 @@ The same offline path can be smoke-tested from the terminal:
 uv run seo-demo --demo bp --mode demo
 ```
 
+To list the available stable demo scenarios:
+
+```bash
+uv run seo-demo --list-demos
+```
+
 To generate all three stable demo paths at once:
 
 ```bash
@@ -98,11 +104,12 @@ make lint
 make test
 make app
 make demo
+make demo-list
 make demo-all
 ```
 
 `make demo-all` writes `artifacts/demo/demo-summary.json` with the input file,
-article type, status and final artifact paths for the BP, LP and GP jobs.
+article type, scenario purpose, status and final artifact paths for the BP, LP and GP jobs.
 
 Run from the Git/Compose root when using Docker:
 
