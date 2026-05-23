@@ -106,12 +106,16 @@ make app
 make demo
 make demo-list
 make demo-all
+make interview-check
 ```
 
 `make demo-all` writes `artifacts/demo/demo-summary.json` with the input file,
 article type, scenario purpose, status and final artifact paths for the BP, LP and GP jobs.
 The manifest includes a `version` and `run_count` field so it can be treated as
 a stable demo index.
+
+Before an interview, `make interview-check` runs the local quality gate, lists the
+demo scenarios and regenerates the demo summary manifest.
 
 Run from the Git/Compose root when using Docker:
 

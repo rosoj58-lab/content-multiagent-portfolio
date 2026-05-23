@@ -23,6 +23,7 @@ def test_makefile_exposes_common_project_commands() -> None:
     assert "uv run seo-demo --demo all --mode demo" in makefile
     assert "--summary-file artifacts/demo/demo-summary.json" in makefile
     assert "ci: lint test" in makefile
+    assert "interview-check: ci demo-list demo-all" in makefile
 
 
 def test_readme_mentions_make_shortcuts() -> None:
@@ -34,5 +35,6 @@ def test_readme_mentions_make_shortcuts() -> None:
     assert "make demo" in readme
     assert "make demo-list" in readme
     assert "make demo-all" in readme
+    assert "make interview-check" in readme
     assert "artifacts/demo/demo-summary.json" in readme
     assert "`version` and `run_count`" in readme

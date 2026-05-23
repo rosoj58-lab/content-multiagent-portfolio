@@ -1,4 +1,4 @@
-.PHONY: sync lint test app demo demo-list demo-all ci
+.PHONY: sync lint test app demo demo-list demo-all ci interview-check
 
 sync:
 	uv sync
@@ -22,3 +22,5 @@ demo-all:
 	uv run seo-demo --demo all --mode demo --summary-file artifacts/demo/demo-summary.json
 
 ci: lint test
+
+interview-check: ci demo-list demo-all

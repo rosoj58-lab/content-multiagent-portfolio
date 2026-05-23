@@ -36,6 +36,12 @@ To create one JSON manifest with all generated job folders, run:
 uv run seo-demo --demo all --mode demo --summary-file artifacts/demo/demo-summary.json
 ```
 
+To run the quality gate and prepare all terminal demo artifacts together:
+
+```bash
+make interview-check
+```
+
 ## Demo Inputs
 
 | Path | Article type | Demo path | Purpose |

@@ -38,6 +38,12 @@ For a quick manifest of all generated input files, article types and job folders
 uv run seo-demo --demo all --mode demo --summary-file artifacts/demo/demo-summary.json
 ```
 
+Before an interview, run the full local readiness check:
+
+```bash
+make interview-check
+```
+
 After the run, open `artifacts/jobs/<job_id>/` and show `state.json`, `brief.json`, QA reports, localizations, `final_package.md` and `final_qa_report.json`.
 
 ## What To Emphasize
