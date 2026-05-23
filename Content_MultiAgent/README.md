@@ -64,6 +64,9 @@ Static sample outputs are available in `examples/outputs/` for quick GitHub revi
 
 ## Development
 
+The local toolchain targets Python 3.12. The version is pinned for local tools in
+`.python-version` and mirrored in CI.
+
 Run from this directory when `uv` is installed locally:
 
 ```bash
