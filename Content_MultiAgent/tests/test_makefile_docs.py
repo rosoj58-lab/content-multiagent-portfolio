@@ -13,6 +13,8 @@ def test_makefile_exposes_common_project_commands() -> None:
     assert "help:" in makefile
     assert ".DEFAULT_GOAL := help" in makefile
     assert "Available commands:" in makefile
+    assert "version:" in makefile
+    assert "uv run seo-demo --version" in makefile
     assert "lint:" in makefile
     assert "uv run ruff check ." in makefile
     assert "test:" in makefile
@@ -52,14 +54,29 @@ def test_make_help_prints_available_commands() -> None:
     )
 
     assert "Available commands:" in result.stdout
+    assert "make version" in result.stdout
     assert "make interview-check" in result.stdout
     assert "make docker-shell" in result.stdout
+
+
+def test_make_version_prints_cli_version() -> None:
+    result = subprocess.run(
+        ["make", "--no-print-directory", "version"],
+        cwd=PROJECT_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert "uv run seo-demo --version" in result.stdout
+    assert "seo-demo 0.1.0" in result.stdout
 
 
 def test_readme_mentions_make_shortcuts() -> None:
     readme = (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
 
     assert "make help" in readme
+    assert "make version" in readme
     assert "make lint" in readme
     assert "make test" in readme
     assert "make app" in readme

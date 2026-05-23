@@ -101,6 +101,7 @@ Or use the local shortcuts:
 
 ```bash
 make help
+make version
 make lint
 make test
 make app
