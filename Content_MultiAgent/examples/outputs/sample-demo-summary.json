@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "requested_demo": "all",
+  "mode": "demo",
+  "artifact_root": "artifacts/jobs",
+  "run_count": 3,
+  "runs": [
+    {
+      "demo": "bp",
+      "article_type": "BP",
+      "input_file": "examples/inputs/bp-demo.txt",
+      "demo_path": "happy_path",
+      "purpose": "Use this case to show the clean end-to-end path from dry input to final package.",
+      "job_id": "job-demo-bp",
+      "status": "approved",
+      "artifact_dir": "artifacts/jobs/job-demo-bp",
+      "final_package": "artifacts/jobs/job-demo-bp/final_package.md",
+      "final_qa_report": "artifacts/jobs/job-demo-bp/final_qa_report.json"
+    },
+    {
+      "demo": "lp",
+      "article_type": "LP",
+      "input_file": "examples/inputs/lp-demo.txt",
+      "demo_path": "revision_path",
+      "purpose": "Use this case to demonstrate revision routing for unsupported claims or commercial copy risk.",
+      "job_id": "job-demo-lp",
+      "status": "approved",
+      "artifact_dir": "artifacts/jobs/job-demo-lp",
+      "final_package": "artifacts/jobs/job-demo-lp/final_package.md",
+      "final_qa_report": "artifacts/jobs/job-demo-lp/final_qa_report.json"
+    },
+    {
+      "demo": "gp",
+      "article_type": "GP",
+      "input_file": "examples/inputs/gp-demo.txt",
+      "demo_path": "human_review_path",
+      "purpose": "Use this case to explain human-review handling for sensitive link-placement workflows.",
+      "job_id": "job-demo-gp",
+      "status": "approved",
+      "artifact_dir": "artifacts/jobs/job-demo-gp",
+      "final_package": "artifacts/jobs/job-demo-gp/final_package.md",
+      "final_qa_report": "artifacts/jobs/job-demo-gp/final_qa_report.json"
+    }
+  ]
+}
