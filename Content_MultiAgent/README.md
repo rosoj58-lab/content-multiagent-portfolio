@@ -96,7 +96,7 @@ docker compose up
 GitHub Actions runs the same quality gate on changes under `Content_MultiAgent/`:
 
 ```bash
-uv sync
+uv sync --frozen
 uv run ruff check .
 uv run pytest
 ```
