@@ -95,3 +95,15 @@ def test_gitignore_excludes_generated_artifacts_but_keeps_gitkeep_files() -> Non
 
     for pattern in required_patterns:
         assert pattern in gitignore
+
+
+def test_editorconfig_documents_basic_text_formatting_contract() -> None:
+    editorconfig = (PROJECT_ROOT / ".editorconfig").read_text(encoding="utf-8")
+
+    assert "root = true" in editorconfig
+    assert "charset = utf-8" in editorconfig
+    assert "end_of_line = lf" in editorconfig
+    assert "insert_final_newline = true" in editorconfig
+    assert "trim_trailing_whitespace = true" in editorconfig
+    assert "[Makefile]" in editorconfig
+    assert "indent_style = tab" in editorconfig
