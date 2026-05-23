@@ -76,6 +76,9 @@ uv run pytest
 uv run streamlit run app.py
 ```
 
+The offline demo works without a `.env` file. When testing external integrations, copy
+`.env.example` to `.env` and fill only the credentials you need.
+
 Or use the local shortcuts:
 
 ```bash

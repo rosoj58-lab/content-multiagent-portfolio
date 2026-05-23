@@ -11,6 +11,16 @@ from seo_content_pipeline.config import AppSettings, get_settings
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 PACKAGE_ROOT = PROJECT_ROOT / "src" / "seo_content_pipeline"
+EXPECTED_ENV_KEYS = {
+    "APP_MODE",
+    "ARTIFACT_ROOT",
+    "BMAD_OUTPUT_DIR",
+    "MAX_REVISION_ATTEMPTS",
+    "UNIQUENESS_PROVIDER",
+    "OPENAI_API_KEY",
+    "COPYLEAKS_EMAIL",
+    "COPYLEAKS_API_KEY",
+}
 
 
 def test_default_settings_do_not_require_external_credentials(monkeypatch) -> None:
@@ -47,6 +57,20 @@ def test_settings_read_environment_overrides(monkeypatch, tmp_path) -> None:
         uniqueness_provider="mock",
         openai_api_key="test-openai",
     )
+
+
+def test_env_example_documents_supported_settings() -> None:
+    env_example = (PROJECT_ROOT / ".env.example").read_text(encoding="utf-8")
+    documented_keys = {
+        line.split("=", maxsplit=1)[0]
+        for line in env_example.splitlines()
+        if line and not line.startswith("#")
+    }
+
+    assert documented_keys == EXPECTED_ENV_KEYS
+    assert "APP_MODE=demo" in env_example
+    assert "ARTIFACT_ROOT=artifacts/jobs" in env_example
+    assert "UNIQUENESS_PROVIDER=manual" in env_example
 
 
 def test_invalid_numeric_environment_value_uses_settings_validation(monkeypatch) -> None:
