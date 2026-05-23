@@ -74,6 +74,16 @@ docker compose run --rm app uv run pytest
 docker compose up
 ```
 
+## CI
+
+GitHub Actions runs the same quality gate on changes under `Content_MultiAgent/`:
+
+```bash
+uv sync
+uv run ruff check .
+uv run pytest
+```
+
 ## Project Map
 
 - `app.py` - Streamlit entrypoint.
