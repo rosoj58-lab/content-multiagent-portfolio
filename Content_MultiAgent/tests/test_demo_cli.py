@@ -1,5 +1,6 @@
 """Offline demo CLI tests."""
 
+import json
 from pathlib import Path
 
 from seo_content_pipeline.cli.demo import main
@@ -51,3 +52,36 @@ def test_demo_cli_can_run_all_stable_inputs(tmp_path, capsys) -> None:
     for job_id in job_ids:
         assert (tmp_path / job_id / "final_package.md").exists()
         assert (tmp_path / job_id / "final_qa_report.json").exists()
+
+
+def test_demo_cli_can_write_summary_manifest(tmp_path, capsys) -> None:
+    summary_file = tmp_path / "demo-summary.json"
+    artifact_root = tmp_path / "jobs"
+
+    exit_code = main(
+        [
+            "--demo",
+            "all",
+            "--mode",
+            "demo",
+            "--artifact-root",
+            str(artifact_root),
+            "--summary-file",
+            str(summary_file),
+        ]
+    )
+
+    output = capsys.readouterr().out
+    summary = json.loads(summary_file.read_text(encoding="utf-8"))
+
+    assert exit_code == 0
+    assert f"summary_file={summary_file}" in output
+    assert summary["requested_demo"] == "all"
+    assert summary["mode"] == "demo"
+    assert summary["artifact_root"] == str(artifact_root)
+    assert [run["demo"] for run in summary["runs"]] == ["bp", "lp", "gp"]
+    assert {run["status"] for run in summary["runs"]} == {"approved"}
+    for run in summary["runs"]:
+        assert Path(run["artifact_dir"]).exists()
+        assert Path(run["final_package"]).exists()
+        assert Path(run["final_qa_report"]).exists()

@@ -26,6 +26,12 @@ To generate BP, LP and GP artifacts in one terminal run:
 uv run seo-demo --demo all --mode demo
 ```
 
+For a quick manifest of all generated job folders:
+
+```bash
+uv run seo-demo --demo all --mode demo --summary-file artifacts/demo/demo-summary.json
+```
+
 After the run, open `artifacts/jobs/<job_id>/` and show `state.json`, `brief.json`, QA reports, localizations, `final_package.md` and `final_qa_report.json`.
 
 ## What To Emphasize

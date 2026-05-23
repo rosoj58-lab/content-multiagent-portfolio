@@ -58,6 +58,12 @@ To generate all three stable demo paths at once:
 uv run seo-demo --demo all --mode demo
 ```
 
+For an interview-ready manifest of all generated jobs:
+
+```bash
+uv run seo-demo --demo all --mode demo --summary-file artifacts/demo/demo-summary.json
+```
+
 Static sample outputs are available in `examples/outputs/` for quick GitHub review.
 
 ## Demo Inputs
@@ -94,6 +100,9 @@ make app
 make demo
 make demo-all
 ```
+
+`make demo-all` writes `artifacts/demo/demo-summary.json` with links to the
+generated BP, LP and GP job folders.
 
 Run from the Git/Compose root when using Docker:
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 from typing import Sequence
 
@@ -42,18 +43,35 @@ def main(argv: Sequence[str] | None = None) -> int:
         default=Path("artifacts/jobs"),
         help="Directory where job artifacts should be written.",
     )
+    parser.add_argument(
+        "--summary-file",
+        type=Path,
+        help="Optional JSON file where a manifest of generated demo runs should be written.",
+    )
     args = parser.parse_args(argv)
 
     demo_names = list(DEMO_INPUTS) if args.demo == "all" else [args.demo]
+    runs: list[dict[str, str]] = []
     for index, demo_name in enumerate(demo_names):
         if index > 0:
             print()
-        _run_demo(demo_name, mode=args.mode, artifact_root=args.artifact_root)
+        runs.append(_run_demo(demo_name, mode=args.mode, artifact_root=args.artifact_root))
+
+    if args.summary_file is not None:
+        summary = {
+            "requested_demo": args.demo,
+            "mode": args.mode,
+            "artifact_root": str(args.artifact_root),
+            "runs": runs,
+        }
+        args.summary_file.parent.mkdir(parents=True, exist_ok=True)
+        args.summary_file.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+        print(f"summary_file={args.summary_file}")
 
     return 0
 
 
-def _run_demo(demo_name: str, *, mode: str, artifact_root: Path) -> None:
+def _run_demo(demo_name: str, *, mode: str, artifact_root: Path) -> dict[str, str]:
     article_type, input_path = DEMO_INPUTS[demo_name]
     dry_input = input_path.read_text(encoding="utf-8")
     settings = AppSettings(artifact_root=artifact_root)
@@ -70,6 +88,14 @@ def _run_demo(demo_name: str, *, mode: str, artifact_root: Path) -> None:
     print(f"artifact_dir={store.job_dir(result.job_id)}")
     print(f"final_package={result.final_package_path}")
     print(f"final_qa_report={result.final_qa_report_path}")
+    return {
+        "demo": demo_name,
+        "job_id": result.job_id,
+        "status": result.status.value,
+        "artifact_dir": str(store.job_dir(result.job_id)),
+        "final_package": result.final_package_path,
+        "final_qa_report": result.final_qa_report_path,
+    }
 
 
 if __name__ == "__main__":

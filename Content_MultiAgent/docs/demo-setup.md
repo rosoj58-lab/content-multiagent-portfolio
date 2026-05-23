@@ -24,6 +24,12 @@ To prepare all stable demo paths before an interview, run:
 uv run seo-demo --demo all --mode demo
 ```
 
+To create one JSON manifest with all generated job folders, run:
+
+```bash
+uv run seo-demo --demo all --mode demo --summary-file artifacts/demo/demo-summary.json
+```
+
 ## Demo Inputs
 
 | Path | Article type | Demo path | Purpose |

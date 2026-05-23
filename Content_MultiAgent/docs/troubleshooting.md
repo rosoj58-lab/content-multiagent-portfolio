@@ -41,6 +41,12 @@ uv run seo-demo --demo bp --mode demo
 
 The command should print `status=approved`, `artifact_dir=...`, `final_package=...` and `final_qa_report=...`.
 
+For all stable demo paths, generate a manifest:
+
+```bash
+uv run seo-demo --demo all --mode demo --summary-file artifacts/demo/demo-summary.json
+```
+
 ## Generated Artifacts
 
 Runtime job folders are written under:

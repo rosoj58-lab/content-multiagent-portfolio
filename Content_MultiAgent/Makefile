@@ -16,6 +16,6 @@ demo:
 	uv run seo-demo --demo bp --mode demo
 
 demo-all:
-	uv run seo-demo --demo all --mode demo
+	uv run seo-demo --demo all --mode demo --summary-file artifacts/demo/demo-summary.json
 
 ci: lint test
