@@ -52,6 +52,8 @@ The same offline path can be smoke-tested from the terminal:
 uv run seo-demo --demo bp --mode demo
 ```
 
+Static sample outputs are available in `examples/outputs/` for quick GitHub review.
+
 ## Demo Inputs
 
 | Input | Article type | Demo path |

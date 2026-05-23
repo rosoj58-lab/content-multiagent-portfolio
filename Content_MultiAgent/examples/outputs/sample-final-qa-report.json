@@ -1,0 +1,45 @@
+{
+  "job_id": "sample-bp-happy-path",
+  "status": "approved",
+  "completed_stages": [
+    "input_received",
+    "brief_drafted",
+    "brief_approved",
+    "writing",
+    "editorial_review",
+    "seo_qa",
+    "uniqueness_check",
+    "localization",
+    "final_qa"
+  ],
+  "failed_checks": [],
+  "uniqueness_result": {
+    "score": 94.0,
+    "source": "manual",
+    "threshold": 90.0,
+    "passed": true
+  },
+  "localization_status": {
+    "es": {
+      "language": "es",
+      "artifact_key": "localization_es",
+      "present": true,
+      "geo": "es-US"
+    },
+    "it": {
+      "language": "it",
+      "artifact_key": "localization_it",
+      "present": true,
+      "geo": "it-IT"
+    },
+    "fr": {
+      "language": "fr",
+      "artifact_key": "localization_fr",
+      "present": true,
+      "geo": "fr-FR"
+    }
+  },
+  "routing_target": null,
+  "routing_guidance": null,
+  "generated_at": "sample"
+}
