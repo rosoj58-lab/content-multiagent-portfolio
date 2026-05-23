@@ -107,3 +107,20 @@ def test_editorconfig_documents_basic_text_formatting_contract() -> None:
     assert "trim_trailing_whitespace = true" in editorconfig
     assert "[Makefile]" in editorconfig
     assert "indent_style = tab" in editorconfig
+
+
+def test_gitattributes_normalizes_portfolio_text_files_to_lf() -> None:
+    gitattributes = (PROJECT_ROOT / ".gitattributes").read_text(encoding="utf-8")
+
+    required_patterns = [
+        "* text=auto eol=lf",
+        "*.md text eol=lf",
+        "*.py text eol=lf",
+        "*.toml text eol=lf",
+        "*.yaml text eol=lf",
+        "*.json text eol=lf",
+        "Makefile text eol=lf",
+    ]
+
+    for pattern in required_patterns:
+        assert pattern in gitattributes
