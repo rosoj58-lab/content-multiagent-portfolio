@@ -135,3 +135,15 @@ def test_demo_cli_help_documents_public_options(capsys) -> None:
     assert "--artifact-root" in output
     assert "--summary-file" in output
     assert "--list-demos" in output
+
+
+def test_demo_cli_rejects_unknown_demo_without_artifacts(tmp_path, capsys) -> None:
+    with pytest.raises(SystemExit) as exc_info:
+        main(["--demo", "unknown", "--artifact-root", str(tmp_path)])
+
+    captured = capsys.readouterr()
+
+    assert exc_info.value.code == 2
+    assert "invalid choice: 'unknown'" in captured.err
+    assert "choose from bp, lp, gp, all" in captured.err
+    assert list(tmp_path.iterdir()) == []
