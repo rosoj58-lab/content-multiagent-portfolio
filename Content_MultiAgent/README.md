@@ -122,3 +122,4 @@ uv run pytest
 - `docs/architecture-summary.md` - architecture and routing summary.
 - `docs/project-structure.md` - codebase structure.
 - `docs/docker.md` - Docker run commands.
+- `docs/roadmap.md` - current MVP status, next steps and deferred scope.

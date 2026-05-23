@@ -11,6 +11,7 @@ DOCS = {
     "artifact_map": PROJECT_ROOT / "docs" / "artifact-map.md",
     "architecture_summary": PROJECT_ROOT / "docs" / "architecture-summary.md",
     "project_structure": PROJECT_ROOT / "docs" / "project-structure.md",
+    "roadmap": PROJECT_ROOT / "docs" / "roadmap.md",
 }
 
 
@@ -46,6 +47,19 @@ def test_interview_cheatsheet_covers_pitch_tradeoffs_and_questions() -> None:
     assert "likely questions" in cheatsheet
     assert "not a hosted production system" in cheatsheet
     assert "production-ready" in cheatsheet
+
+
+def test_roadmap_documents_mvp_next_steps_and_deferred_scope() -> None:
+    roadmap = _read_doc("roadmap").lower()
+
+    assert "current mvp" in roadmap
+    assert "next technical steps" in roadmap
+    assert "deferred on purpose" in roadmap
+    assert "known risks" in roadmap
+    assert "async stage execution" in roadmap
+    assert "real llm provider" in roadmap
+    assert "hosted deployment" in roadmap
+    assert "not as a production saas platform" in roadmap
 
 
 def test_artifact_map_identifies_storage_and_qa_decisions() -> None:
