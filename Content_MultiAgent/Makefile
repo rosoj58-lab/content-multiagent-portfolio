@@ -1,4 +1,5 @@
 .PHONY: help sync lint test app demo demo-list demo-all ci interview-check docker-build docker-test docker-up docker-down docker-logs docker-shell
+.DEFAULT_GOAL := help
 
 help:
 	@printf '%s\n' \

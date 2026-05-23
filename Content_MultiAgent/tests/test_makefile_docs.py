@@ -1,6 +1,7 @@
 """Makefile and README command coverage tests."""
 
 from pathlib import Path
+import subprocess
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -10,6 +11,7 @@ def test_makefile_exposes_common_project_commands() -> None:
     makefile = (PROJECT_ROOT / "Makefile").read_text(encoding="utf-8")
 
     assert "help:" in makefile
+    assert ".DEFAULT_GOAL := help" in makefile
     assert "Available commands:" in makefile
     assert "lint:" in makefile
     assert "uv run ruff check ." in makefile
@@ -38,6 +40,20 @@ def test_makefile_exposes_common_project_commands() -> None:
     assert "docker compose -f ../compose.yaml logs -f app" in makefile
     assert "docker-shell:" in makefile
     assert "docker compose -f ../compose.yaml run --rm app sh" in makefile
+
+
+def test_make_help_prints_available_commands() -> None:
+    result = subprocess.run(
+        ["make", "--no-print-directory", "help"],
+        cwd=PROJECT_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert "Available commands:" in result.stdout
+    assert "make interview-check" in result.stdout
+    assert "make docker-shell" in result.stdout
 
 
 def test_readme_mentions_make_shortcuts() -> None:
