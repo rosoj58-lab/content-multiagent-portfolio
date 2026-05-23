@@ -30,19 +30,19 @@ DEMO_INPUTS = {
         article_type=ArticleType.BP,
         input_path=Path("examples/inputs/bp-demo.txt"),
         demo_path="happy_path",
-        purpose="Clean end-to-end workflow from dry input to final package.",
+        purpose="Use this case to show the clean end-to-end path from dry input to final package.",
     ),
     "lp": DemoInput(
         article_type=ArticleType.LP,
         input_path=Path("examples/inputs/lp-demo.txt"),
         demo_path="revision_path",
-        purpose="Revision routing discussion for unsupported claims or commercial copy risk.",
+        purpose="Use this case to demonstrate revision routing for unsupported claims or commercial copy risk.",
     ),
     "gp": DemoInput(
         article_type=ArticleType.GP,
         input_path=Path("examples/inputs/gp-demo.txt"),
         demo_path="human_review_path",
-        purpose="Human-review discussion for sensitive guest-post link placement.",
+        purpose="Use this case to explain human-review handling for sensitive link-placement workflows.",
     ),
 }
 DEMO_CHOICES = [*DEMO_INPUTS, "all"]

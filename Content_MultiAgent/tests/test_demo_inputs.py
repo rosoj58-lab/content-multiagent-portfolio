@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 
+from seo_content_pipeline.cli.demo import DEMO_INPUTS
 from seo_content_pipeline.config import AppSettings
 from seo_content_pipeline.models import ArtifactKey, ArticleType
 from seo_content_pipeline.services.artifact_store import ArtifactStore
@@ -42,6 +43,18 @@ def test_sample_keywords_metadata_matches_demo_inputs() -> None:
         assert demo["main_keyword"]
         assert demo["secondary_keywords"]
         assert demo["lsi_keywords"]
+
+
+def test_cli_demo_catalog_matches_sample_keywords_metadata() -> None:
+    metadata = json.loads((INPUTS_DIR / "sample-keywords.json").read_text(encoding="utf-8"))
+
+    assert set(DEMO_INPUTS) == set(metadata["demos"])
+    for key, demo_input in DEMO_INPUTS.items():
+        demo = metadata["demos"][key]
+        assert demo_input.article_type.value == demo["article_type"]
+        assert demo_input.input_path.name == demo["input_file"]
+        assert demo_input.demo_path == demo["demo_path"]
+        assert demo_input.purpose == demo["notes"]
 
 
 def test_demo_inputs_can_create_job_shells(tmp_path) -> None:

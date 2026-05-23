@@ -91,9 +91,9 @@ def test_demo_cli_can_write_summary_manifest(tmp_path, capsys) -> None:
         "revision_path",
         "human_review_path",
     ]
-    assert "Clean end-to-end workflow" in summary["runs"][0]["purpose"]
-    assert "Revision routing" in summary["runs"][1]["purpose"]
-    assert "Human-review discussion" in summary["runs"][2]["purpose"]
+    assert "clean end-to-end path" in summary["runs"][0]["purpose"]
+    assert "revision routing" in summary["runs"][1]["purpose"]
+    assert "human-review handling" in summary["runs"][2]["purpose"]
     assert {run["status"] for run in summary["runs"]} == {"approved"}
     for run in summary["runs"]:
         assert Path(run["artifact_dir"]).exists()
