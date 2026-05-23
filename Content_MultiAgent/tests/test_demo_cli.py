@@ -2,10 +2,14 @@
 
 import json
 from pathlib import Path
+import tomllib
 
 import pytest
 
 from seo_content_pipeline.cli.demo import main
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_demo_cli_creates_approved_job(tmp_path, capsys) -> None:
@@ -130,11 +134,24 @@ def test_demo_cli_help_documents_public_options(capsys) -> None:
 
     assert exc_info.value.code == 0
     assert "Run the offline SEO content pipeline demo." in output
+    assert "--version" in output
     assert "--demo {bp,lp,gp,all}" in output
     assert "--mode {demo,full}" in output
     assert "--artifact-root" in output
     assert "--summary-file" in output
     assert "--list-demos" in output
+
+
+def test_demo_cli_version_matches_project_metadata(capsys) -> None:
+    pyproject = tomllib.loads((PROJECT_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+
+    with pytest.raises(SystemExit) as exc_info:
+        main(["--version"])
+
+    output = capsys.readouterr().out
+
+    assert exc_info.value.code == 0
+    assert output.strip() == f"seo-demo {pyproject['project']['version']}"
 
 
 def test_demo_cli_rejects_unknown_demo_without_artifacts(tmp_path, capsys) -> None:

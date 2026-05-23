@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 from dataclasses import dataclass
+from importlib.metadata import version
 from pathlib import Path
 from typing import Sequence
 
@@ -51,6 +52,11 @@ DEMO_CHOICES = [*DEMO_INPUTS, "all"]
 def main(argv: Sequence[str] | None = None) -> int:
     """Run a deterministic offline demo job and print the artifact locations."""
     parser = argparse.ArgumentParser(description="Run the offline SEO content pipeline demo.")
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"seo-demo {version('seo-content-pipeline')}",
+    )
     parser.add_argument(
         "--demo",
         choices=DEMO_CHOICES,
