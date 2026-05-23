@@ -3,6 +3,8 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from seo_content_pipeline.cli.demo import main
 
 
@@ -118,3 +120,18 @@ def test_demo_cli_can_list_stable_demo_catalog(tmp_path, capsys) -> None:
     assert "demo=gp" in output
     assert "demo_path=human_review_path" in output
     assert list(tmp_path.iterdir()) == []
+
+
+def test_demo_cli_help_documents_public_options(capsys) -> None:
+    with pytest.raises(SystemExit) as exc_info:
+        main(["--help"])
+
+    output = capsys.readouterr().out
+
+    assert exc_info.value.code == 0
+    assert "Run the offline SEO content pipeline demo." in output
+    assert "--demo {bp,lp,gp,all}" in output
+    assert "--mode {demo,full}" in output
+    assert "--artifact-root" in output
+    assert "--summary-file" in output
+    assert "--list-demos" in output
