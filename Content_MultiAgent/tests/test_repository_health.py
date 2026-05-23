@@ -75,7 +75,23 @@ def test_dockerignore_excludes_local_state_and_keeps_env_example() -> None:
         ".streamlit/secrets.toml",
         "artifacts/jobs/*",
         "!artifacts/jobs/.gitkeep",
+        "artifacts/demo/*",
+        "!artifacts/demo/.gitkeep",
     ]
 
     for pattern in required_patterns:
         assert pattern in dockerignore
+
+
+def test_gitignore_excludes_generated_artifacts_but_keeps_gitkeep_files() -> None:
+    gitignore = (PROJECT_ROOT / ".gitignore").read_text(encoding="utf-8")
+
+    required_patterns = [
+        "artifacts/jobs/*",
+        "!artifacts/jobs/.gitkeep",
+        "artifacts/demo/*",
+        "!artifacts/demo/.gitkeep",
+    ]
+
+    for pattern in required_patterns:
+        assert pattern in gitignore
