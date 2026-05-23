@@ -26,6 +26,14 @@ def test_makefile_exposes_common_project_commands() -> None:
     assert "--summary-file artifacts/demo/demo-summary.json" in makefile
     assert "ci: lint test" in makefile
     assert "interview-check: ci demo-list demo-all" in makefile
+    assert "docker-build:" in makefile
+    assert "docker compose -f ../compose.yaml build" in makefile
+    assert "docker-test:" in makefile
+    assert "docker compose -f ../compose.yaml run --rm app uv run pytest" in makefile
+    assert "docker-up:" in makefile
+    assert "docker compose -f ../compose.yaml up" in makefile
+    assert "docker-down:" in makefile
+    assert "docker compose -f ../compose.yaml down" in makefile
 
 
 def test_readme_mentions_make_shortcuts() -> None:
@@ -39,5 +47,9 @@ def test_readme_mentions_make_shortcuts() -> None:
     assert "make demo-list" in readme
     assert "make demo-all" in readme
     assert "make interview-check" in readme
+    assert "make docker-build" in readme
+    assert "make docker-test" in readme
+    assert "make docker-up" in readme
+    assert "make docker-down" in readme
     assert "artifacts/demo/demo-summary.json" in readme
     assert "`version` and `run_count`" in readme

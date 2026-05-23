@@ -1,4 +1,4 @@
-.PHONY: help sync lint test app demo demo-list demo-all ci interview-check
+.PHONY: help sync lint test app demo demo-list demo-all ci interview-check docker-build docker-test docker-up docker-down
 
 help:
 	@printf '%s\n' \
@@ -11,7 +11,11 @@ help:
 		'  make demo-list        List stable demo scenarios' \
 		'  make demo-all         Generate BP, LP and GP demo artifacts' \
 		'  make ci               Run lint and tests' \
-		'  make interview-check  Run CI checks and prepare demo artifacts'
+		'  make interview-check  Run CI checks and prepare demo artifacts' \
+		'  make docker-build     Build the Docker image from compose root' \
+		'  make docker-test      Run lint and tests in Docker' \
+		'  make docker-up        Start the Dockerized Streamlit app' \
+		'  make docker-down      Stop Docker services'
 
 sync:
 	uv sync
@@ -37,3 +41,16 @@ demo-all:
 ci: lint test
 
 interview-check: ci demo-list demo-all
+
+docker-build:
+	docker compose -f ../compose.yaml build
+
+docker-test:
+	docker compose -f ../compose.yaml run --rm app uv run ruff check .
+	docker compose -f ../compose.yaml run --rm app uv run pytest
+
+docker-up:
+	docker compose -f ../compose.yaml up
+
+docker-down:
+	docker compose -f ../compose.yaml down

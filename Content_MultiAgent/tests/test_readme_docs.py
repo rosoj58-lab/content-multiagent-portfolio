@@ -28,3 +28,7 @@ def test_docker_docs_match_current_streamlit_app() -> None:
     assert "Run full demo pipeline" in docker_docs
     assert "Project scaffold is ready" not in docker_docs
     assert "artifacts/jobs/<job_id>/" in docker_docs
+    assert "make docker-build" in docker_docs
+    assert "make docker-test" in docker_docs
+    assert "make docker-up" in docker_docs
+    assert "make docker-down" in docker_docs

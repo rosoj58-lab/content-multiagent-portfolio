@@ -49,6 +49,16 @@ docker compose logs -f app
 docker compose run --rm app sh
 ```
 
+From `Content_MultiAgent/`, the same common Docker actions are available as
+shortcuts:
+
+```bash
+make docker-build
+make docker-test
+make docker-up
+make docker-down
+```
+
 ## Demo Flow
 
 1. Open `http://localhost:8501`.

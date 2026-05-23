@@ -108,6 +108,10 @@ make demo
 make demo-list
 make demo-all
 make interview-check
+make docker-build
+make docker-test
+make docker-up
+make docker-down
 ```
 
 `make demo-all` writes `artifacts/demo/demo-summary.json` with the input file,
