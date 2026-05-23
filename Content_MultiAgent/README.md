@@ -158,6 +158,7 @@ uv run pytest
 
 ## Useful Docs
 
+- `CHANGELOG.md` - MVP release notes and known limits.
 - `docs/demo-setup.md` - local setup and demo flow.
 - `docs/demo-script.md` - interview walkthrough.
 - `docs/interview-cheatsheet.md` - concise pitch, tradeoffs and Q&A.
