@@ -2,6 +2,28 @@
 
 Artifacts are stored under `artifacts/jobs/<job_id>/` by default. The `ArtifactStore` writes files through the registry in `models/artifacts.py`, so filenames are not scattered through the codebase.
 
+## Demo Index
+
+`make demo-all` writes `artifacts/demo/demo-summary.json` as a versioned index of
+the BP, LP and GP demo runs. This file is outside individual job folders and is
+intended for interview navigation.
+
+| Field | Purpose |
+| --- | --- |
+| `version` | Manifest contract version. Current value: `1`. |
+| `requested_demo` | Requested CLI scenario, usually `all`. |
+| `mode` | Article generation mode used for the run. |
+| `artifact_root` | Root folder where job folders were written. |
+| `run_count` | Number of entries in `runs`. |
+| `runs[].demo` | Scenario key: `bp`, `lp`, or `gp`. |
+| `runs[].article_type` | Article type used by the job: `BP`, `LP`, or `GP`. |
+| `runs[].input_file` | Stable source input used for the job. |
+| `runs[].demo_path` | Scenario purpose category, such as `happy_path`. |
+| `runs[].purpose` | Human-readable explanation of why this scenario exists. |
+| `runs[].artifact_dir` | Generated job folder to open during a demo. |
+| `runs[].final_package` | Path to the human-readable final package. |
+| `runs[].final_qa_report` | Path to the final QA report. |
+
 ## Core State
 
 | File | Purpose |

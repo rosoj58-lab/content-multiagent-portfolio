@@ -69,12 +69,37 @@ def test_artifact_map_identifies_storage_and_qa_decisions() -> None:
     artifact_map = _read_doc("artifact_map").lower()
 
     assert "artifacts/jobs" in artifact_map
+    assert "artifacts/demo/demo-summary.json" in artifact_map
     assert "state.json" in artifact_map
     assert "final_package.md" in artifact_map
     assert "final_package.json" in artifact_map
     assert "final_qa_report.json" in artifact_map
     assert "qa decision" in artifact_map
     assert "revision routing" in artifact_map
+
+
+def test_artifact_map_documents_demo_summary_manifest_contract() -> None:
+    artifact_map = _read_doc("artifact_map")
+
+    required_fields = [
+        "`version`",
+        "`requested_demo`",
+        "`mode`",
+        "`artifact_root`",
+        "`run_count`",
+        "`runs[].demo`",
+        "`runs[].article_type`",
+        "`runs[].input_file`",
+        "`runs[].demo_path`",
+        "`runs[].purpose`",
+        "`runs[].artifact_dir`",
+        "`runs[].final_package`",
+        "`runs[].final_qa_report`",
+    ]
+
+    assert "Manifest contract version" in artifact_map
+    for field in required_fields:
+        assert field in artifact_map
 
 
 def test_architecture_docs_reinforce_status_and_routing_requirements() -> None:
