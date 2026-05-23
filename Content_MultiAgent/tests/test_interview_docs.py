@@ -12,6 +12,10 @@ DOCS = {
     "architecture_summary": PROJECT_ROOT / "docs" / "architecture-summary.md",
     "project_structure": PROJECT_ROOT / "docs" / "project-structure.md",
     "roadmap": PROJECT_ROOT / "docs" / "roadmap.md",
+    "offline_first_adr": PROJECT_ROOT
+    / "docs"
+    / "decisions"
+    / "0001-offline-first-demo-and-provider-boundaries.md",
 }
 
 
@@ -124,3 +128,22 @@ def test_architecture_summary_includes_pipeline_diagram() -> None:
     assert "uniqueness gate" in architecture
     assert "final qa report" in architecture
     assert "artifactstore artifacts/jobs" in architecture
+
+
+def test_offline_first_provider_boundary_adr_is_linked_from_interview_docs() -> None:
+    adr = _read_doc("offline_first_adr").lower()
+    architecture = _read_doc("architecture_summary")
+    cheatsheet = _read_doc("interview_cheatsheet")
+
+    adr_path = "docs/decisions/0001-offline-first-demo-and-provider-boundaries.md"
+
+    assert "offline-first demo" in adr
+    assert "provider boundaries" in adr
+    assert "openai" in adr
+    assert "copyleaks" in adr
+    assert "credentials" in adr
+    assert "artifacts/jobs/<job_id>/" in adr
+    assert "uv run seo-demo --demo all --mode demo" in adr
+    assert "make interview-check" in adr
+    assert adr_path in architecture
+    assert adr_path in cheatsheet

@@ -70,6 +70,7 @@ After the run, open `artifacts/jobs/<job_id>/` and show `state.json`, `brief.jso
 - This is a local MVP, not a hosted production system.
 - The repeatable demo uses deterministic offline content rather than live LLM calls.
 - Manual uniqueness is included so the project is demoable without external plagiarism credentials.
+- ADR `docs/decisions/0001-offline-first-demo-and-provider-boundaries.md` explains why external services are optional provider implementations instead of requirements for the demo.
 - CMS publishing, live SERP research and production auth are intentionally out of scope.
 - File-based persistence is simple and inspectable; a production version would likely use a database and queue.
 

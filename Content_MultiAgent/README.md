@@ -165,6 +165,7 @@ uv run pytest
 - `docs/interview-cheatsheet.md` - concise pitch, tradeoffs and Q&A.
 - `docs/artifact-map.md` - artifact filenames and QA decision map.
 - `docs/architecture-summary.md` - architecture and routing summary.
+- `docs/decisions/0001-offline-first-demo-and-provider-boundaries.md` - ADR for offline demo reliability and optional provider integrations.
 - `docs/project-structure.md` - codebase structure.
 - `docs/docker.md` - Docker run commands.
 - `docs/roadmap.md` - current MVP status, next steps and deferred scope.

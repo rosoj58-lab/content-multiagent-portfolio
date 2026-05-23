@@ -10,6 +10,7 @@ def test_readme_documents_interview_demo_flow() -> None:
     readme = (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
 
     assert "CONTRIBUTING.md" in readme
+    assert "docs/decisions/0001-offline-first-demo-and-provider-boundaries.md" in readme
     assert "Run full demo pipeline" in readme
     assert "artifacts/jobs/<job_id>/" in readme
     assert "final_package.md" in readme

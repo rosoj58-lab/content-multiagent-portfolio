@@ -49,3 +49,8 @@ FR18 is represented by routing targets, revision notes and QA reports. Brief pro
 ## Demo Reliability
 
 The demo does not require a hosted backend. Manual and mock uniqueness paths keep the workflow repeatable. Optional Copyleaks support exists as an integration point, but the interview demo remains reliable without credentials.
+
+The ADR in `docs/decisions/0001-offline-first-demo-and-provider-boundaries.md`
+records this as an explicit architecture decision: offline-first demo execution
+is the supported baseline, while external services remain optional provider
+implementations.
