@@ -26,7 +26,7 @@ To generate BP, LP and GP artifacts in one terminal run:
 uv run seo-demo --demo all --mode demo
 ```
 
-For a quick manifest of all generated job folders:
+For a quick manifest of all generated input files, article types and job folders:
 
 ```bash
 uv run seo-demo --demo all --mode demo --summary-file artifacts/demo/demo-summary.json

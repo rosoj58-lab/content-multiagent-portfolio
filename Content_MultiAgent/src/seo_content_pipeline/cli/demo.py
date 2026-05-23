@@ -90,6 +90,8 @@ def _run_demo(demo_name: str, *, mode: str, artifact_root: Path) -> dict[str, st
     print(f"final_qa_report={result.final_qa_report_path}")
     return {
         "demo": demo_name,
+        "article_type": article_type.value,
+        "input_file": input_path.as_posix(),
         "job_id": result.job_id,
         "status": result.status.value,
         "artifact_dir": str(store.job_dir(result.job_id)),

@@ -101,8 +101,8 @@ make demo
 make demo-all
 ```
 
-`make demo-all` writes `artifacts/demo/demo-summary.json` with links to the
-generated BP, LP and GP job folders.
+`make demo-all` writes `artifacts/demo/demo-summary.json` with the input file,
+article type, status and final artifact paths for the BP, LP and GP jobs.
 
 Run from the Git/Compose root when using Docker:
 

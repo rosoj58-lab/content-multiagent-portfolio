@@ -80,6 +80,12 @@ def test_demo_cli_can_write_summary_manifest(tmp_path, capsys) -> None:
     assert summary["mode"] == "demo"
     assert summary["artifact_root"] == str(artifact_root)
     assert [run["demo"] for run in summary["runs"]] == ["bp", "lp", "gp"]
+    assert [run["article_type"] for run in summary["runs"]] == ["BP", "LP", "GP"]
+    assert [run["input_file"] for run in summary["runs"]] == [
+        "examples/inputs/bp-demo.txt",
+        "examples/inputs/lp-demo.txt",
+        "examples/inputs/gp-demo.txt",
+    ]
     assert {run["status"] for run in summary["runs"]} == {"approved"}
     for run in summary["runs"]:
         assert Path(run["artifact_dir"]).exists()
