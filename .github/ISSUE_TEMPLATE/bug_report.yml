@@ -1,0 +1,55 @@
+name: Bug report
+description: Report a reproducible problem in the Content Multi-Agent portfolio app.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for reproducible app, CLI, Docker, documentation or demo issues.
+        Do not paste `.env` values, API keys, provider tokens or private generated content.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened, and what did you expect instead?
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - Streamlit UI
+        - seo-demo CLI
+        - Docker
+        - Documentation
+        - CI
+        - Provider integration
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Include commands such as `uv run seo-demo --demo bp --mode demo` when relevant.
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Add logs, screenshots or artifact paths such as `artifacts/jobs/<job_id>/`.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Local checks
+      options:
+        - label: I ran `uv run ruff check .`
+        - label: I ran `uv run pytest`
+        - label: I ran `make interview-check` if demo behavior changed
+        - label: I reviewed `SECURITY.md` before sharing logs or artifacts

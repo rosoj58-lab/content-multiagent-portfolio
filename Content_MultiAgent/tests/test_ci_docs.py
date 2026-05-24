@@ -41,6 +41,36 @@ def test_pull_request_template_covers_quality_demo_docker_and_security() -> None
     assert "API keys" in text
 
 
+def test_issue_templates_cover_bug_feature_demo_and_security_context() -> None:
+    issue_dir = REPO_ROOT / ".github" / "ISSUE_TEMPLATE"
+    bug = (issue_dir / "bug_report.yml").read_text(encoding="utf-8")
+    feature = (issue_dir / "feature_request.yml").read_text(encoding="utf-8")
+    config = (issue_dir / "config.yml").read_text(encoding="utf-8")
+
+    assert "name: Bug report" in bug
+    assert "uv run seo-demo --demo bp --mode demo" in bug
+    assert "artifacts/jobs/<job_id>/" in bug
+    assert "uv run ruff check ." in bug
+    assert "uv run pytest" in bug
+    assert "make interview-check" in bug
+    assert "SECURITY.md" in bug
+    assert ".env" in bug
+
+    assert "name: Feature request" in feature
+    assert "offline-first" in feature
+    assert "Multi-agent workflow" in feature
+    assert "Uniqueness provider" in feature
+    assert "uv run seo-demo --demo bp --mode demo" in feature
+    assert "make interview-check" in feature
+    assert "without OpenAI or Copyleaks credentials" in feature
+    assert "SECURITY.md" in feature
+
+    assert "blank_issues_enabled: true" in config
+    assert "Security and privacy guidance" in config
+    assert "docs.github.com" in config
+    assert "SECURITY.md" in config
+
+
 def test_readme_mentions_ci_quality_gate() -> None:
     readme = (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
 

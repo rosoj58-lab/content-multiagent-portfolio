@@ -1,0 +1,57 @@
+name: Feature request
+description: Propose a portfolio improvement for the Content Multi-Agent app.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for product, architecture, demo, provider or interview-readiness improvements.
+        Keep the default demo path offline-first unless the request explicitly changes that decision.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What portfolio, demo or user workflow problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the smallest useful change.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Streamlit UI
+        - Multi-agent workflow
+        - SEO QA
+        - Uniqueness provider
+        - Localization
+        - Demo observability
+        - Docker
+        - Documentation
+        - CI
+    validations:
+      required: true
+  - type: textarea
+    id: demo-proof
+    attributes:
+      label: Demo proof
+      description: How should this be demonstrated after implementation?
+      value: |
+        - `uv run seo-demo --demo bp --mode demo`
+        - `make interview-check`
+        - Review artifacts under `artifacts/jobs/<job_id>/`
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Constraints
+      options:
+        - label: The offline demo path should still work without OpenAI or Copyleaks credentials
+        - label: Generated artifacts should stay out of commits
+        - label: Security/privacy handling should follow `SECURITY.md`
