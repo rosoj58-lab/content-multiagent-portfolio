@@ -69,3 +69,27 @@ def test_security_docs_cover_secrets_artifacts_and_provider_boundaries() -> None
     assert "artifacts/demo/*" in security
     assert "provider boundaries" in security
     assert "Python 3.12" in security
+
+
+def test_release_checklist_covers_quality_demo_docker_docs_and_security() -> None:
+    readme = (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
+    checklist = (PROJECT_ROOT / "docs" / "release-checklist.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert "docs/release-checklist.md" in readme
+    assert "uv sync" in checklist
+    assert "uv run ruff check ." in checklist
+    assert "uv run pytest" in checklist
+    assert "make interview-check" in checklist
+    assert "uv run seo-demo --demo bp --mode demo" in checklist
+    assert "--summary-file artifacts/demo/demo-summary.json" in checklist
+    assert "artifacts/jobs/<job_id>/" in checklist
+    assert "final_package.md" in checklist
+    assert "final_qa_report.json" in checklist
+    assert "docker compose build" in checklist
+    assert "docker compose run --rm app uv run pytest" in checklist
+    assert "CHANGELOG.md" in checklist
+    assert "SECURITY.md" in checklist
+    assert "docs/decisions/" in checklist
+    assert "git status --short" in checklist
