@@ -20,6 +20,27 @@ def test_github_actions_ci_runs_project_quality_gate() -> None:
     assert "uv run pytest" in text
 
 
+def test_pull_request_template_covers_quality_demo_docker_and_security() -> None:
+    template = REPO_ROOT / ".github" / "pull_request_template.md"
+    text = template.read_text(encoding="utf-8")
+
+    assert "## Summary" in text
+    assert "## Quality Gate" in text
+    assert "uv run ruff check ." in text
+    assert "uv run pytest" in text
+    assert "make interview-check" in text
+    assert "## Demo Proof" in text
+    assert "uv run seo-demo --demo bp --mode demo" in text
+    assert "artifacts/jobs/<job_id>/" in text
+    assert "## Docker" in text
+    assert "docker compose build" in text
+    assert "docker compose run --rm app uv run pytest" in text
+    assert "## Security And Privacy" in text
+    assert "SECURITY.md" in text
+    assert ".env" in text
+    assert "API keys" in text
+
+
 def test_readme_mentions_ci_quality_gate() -> None:
     readme = (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
 
