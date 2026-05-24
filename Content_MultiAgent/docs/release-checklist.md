@@ -21,8 +21,11 @@ credentials.
 Regenerate the stable demo manifest:
 
 ```bash
-make interview-check
+make release-check
 ```
+
+`make release-check` delegates to `make interview-check`, which runs the local
+quality gate, lists demo scenarios and regenerates the demo summary manifest.
 
 For a focused smoke check:
 

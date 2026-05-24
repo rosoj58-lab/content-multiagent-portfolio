@@ -82,6 +82,7 @@ def test_release_checklist_covers_quality_demo_docker_docs_and_security() -> Non
     assert "uv run ruff check ." in checklist
     assert "uv run pytest" in checklist
     assert "make interview-check" in checklist
+    assert "make release-check" in checklist
     assert "uv run seo-demo --demo bp --mode demo" in checklist
     assert "--summary-file artifacts/demo/demo-summary.json" in checklist
     assert "artifacts/jobs/<job_id>/" in checklist

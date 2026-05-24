@@ -1,4 +1,4 @@
-.PHONY: help version sync lint test app demo demo-list demo-all ci interview-check docker-build docker-test docker-up docker-down docker-logs docker-shell
+.PHONY: help version sync lint test app demo demo-list demo-all ci interview-check release-check docker-build docker-test docker-up docker-down docker-logs docker-shell
 .DEFAULT_GOAL := help
 
 help:
@@ -14,6 +14,7 @@ help:
 		'  make demo-all         Generate BP, LP and GP demo artifacts' \
 		'  make ci               Run lint and tests' \
 		'  make interview-check  Run CI checks and prepare demo artifacts' \
+		'  make release-check    Run the release readiness gate' \
 		'  make docker-build     Build the Docker image from compose root' \
 		'  make docker-test      Run lint and tests in Docker' \
 		'  make docker-up        Start the Dockerized Streamlit app' \
@@ -48,6 +49,8 @@ demo-all:
 ci: lint test
 
 interview-check: ci demo-list demo-all
+
+release-check: interview-check
 
 docker-build:
 	docker compose -f ../compose.yaml build

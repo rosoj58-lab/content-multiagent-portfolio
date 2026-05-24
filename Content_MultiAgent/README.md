@@ -109,6 +109,7 @@ make demo
 make demo-list
 make demo-all
 make interview-check
+make release-check
 make docker-build
 make docker-test
 make docker-up
@@ -123,7 +124,8 @@ The manifest includes a `version` and `run_count` field so it can be treated as
 a stable demo index.
 
 Before an interview, `make interview-check` runs the local quality gate, lists the
-demo scenarios and regenerates the demo summary manifest.
+demo scenarios and regenerates the demo summary manifest. Before tagging or
+presenting a portfolio release, `make release-check` runs the same readiness gate.
 
 Run from the Git/Compose root when using Docker:
 

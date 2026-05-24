@@ -30,6 +30,7 @@ def test_makefile_exposes_common_project_commands() -> None:
     assert "--summary-file artifacts/demo/demo-summary.json" in makefile
     assert "ci: lint test" in makefile
     assert "interview-check: ci demo-list demo-all" in makefile
+    assert "release-check: interview-check" in makefile
     assert "docker-build:" in makefile
     assert "docker compose -f ../compose.yaml build" in makefile
     assert "docker-test:" in makefile
@@ -56,6 +57,7 @@ def test_make_help_prints_available_commands() -> None:
     assert "Available commands:" in result.stdout
     assert "make version" in result.stdout
     assert "make interview-check" in result.stdout
+    assert "make release-check" in result.stdout
     assert "make docker-shell" in result.stdout
 
 
@@ -84,6 +86,7 @@ def test_readme_mentions_make_shortcuts() -> None:
     assert "make demo-list" in readme
     assert "make demo-all" in readme
     assert "make interview-check" in readme
+    assert "make release-check" in readme
     assert "make docker-build" in readme
     assert "make docker-test" in readme
     assert "make docker-up" in readme
