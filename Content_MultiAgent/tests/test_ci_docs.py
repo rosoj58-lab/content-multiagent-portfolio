@@ -71,6 +71,25 @@ def test_issue_templates_cover_bug_feature_demo_and_security_context() -> None:
     assert "SECURITY.md" in config
 
 
+def test_dependabot_covers_project_dependencies_and_platform_files() -> None:
+    dependabot = (REPO_ROOT / ".github" / "dependabot.yml").read_text(
+        encoding="utf-8"
+    )
+
+    assert "version: 2" in dependabot
+    assert 'package-ecosystem: "pip"' in dependabot
+    assert 'directory: "/Content_MultiAgent"' in dependabot
+    assert 'package-ecosystem: "github-actions"' in dependabot
+    assert 'package-ecosystem: "docker"' in dependabot
+    assert 'package-ecosystem: "docker-compose"' in dependabot
+    assert 'interval: "weekly"' in dependabot
+    assert "open-pull-requests-limit: 5" in dependabot
+    assert '"dependencies"' in dependabot
+    assert '"python"' in dependabot
+    assert '"github-actions"' in dependabot
+    assert '"docker"' in dependabot
+
+
 def test_readme_mentions_ci_quality_gate() -> None:
     readme = (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
 
