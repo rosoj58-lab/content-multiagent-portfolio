@@ -3,6 +3,8 @@
 import ast
 from pathlib import Path
 
+from streamlit.testing.v1 import AppTest
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
@@ -25,3 +27,41 @@ def test_app_uses_controlled_error_for_empty_intake_input() -> None:
         for call in ast.walk(handler)
         if isinstance(call, ast.Call)
     )
+
+
+def _run_demo_scenario_in_app(tmp_path, monkeypatch, *, article_type: str, input_file: str) -> AppTest:
+    monkeypatch.setenv("ARTIFACT_ROOT", str(tmp_path))
+    dry_input = (PROJECT_ROOT / "examples" / "inputs" / input_file).read_text(encoding="utf-8")
+    app = AppTest.from_file(PROJECT_ROOT / "app.py").run()
+    app.text_area[0].input(dry_input)
+    app.selectbox[0].select(article_type)
+    app.button[0].click().run()
+    scenario_button = next(button for button in app.button if button.label == "Run demo scenario")
+    scenario_button.click().run()
+    return app
+
+
+def test_app_displays_landing_page_revision_decision(tmp_path, monkeypatch) -> None:
+    app = _run_demo_scenario_in_app(
+        tmp_path,
+        monkeypatch,
+        article_type="LP",
+        input_file="lp-demo.txt",
+    )
+
+    assert any("needs_revision" in warning.value for warning in app.warning)
+    assert any("editorial_qa.json" in caption.value for caption in app.caption)
+    assert not any("Final package:" in caption.value for caption in app.caption)
+
+
+def test_app_displays_guest_post_human_review_decision(tmp_path, monkeypatch) -> None:
+    app = _run_demo_scenario_in_app(
+        tmp_path,
+        monkeypatch,
+        article_type="GP",
+        input_file="gp-demo.txt",
+    )
+
+    assert any("needs_human_review" in warning.value for warning in app.warning)
+    assert any("editorial_qa.json" in caption.value for caption in app.caption)
+    assert not any("Final package:" in caption.value for caption in app.caption)

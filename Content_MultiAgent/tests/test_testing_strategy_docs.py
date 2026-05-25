@@ -14,6 +14,8 @@ def test_testing_strategy_documents_quality_gate_and_coverage() -> None:
     assert "uv run pytest" in strategy
     assert "offline demo pipeline" in strategy
     assert "Final package and final QA" in strategy
+    assert "LP editorial revision routing" in strategy
+    assert "GP human-review escalation" in strategy
     assert "Documentation and repository health" in strategy
     assert "What Is Not Covered Yet" in strategy
 

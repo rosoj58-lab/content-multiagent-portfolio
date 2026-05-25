@@ -26,6 +26,7 @@ make ci
 - Deterministic validators: brief completeness, article structure, word count, SEO signals and uniqueness score validation.
 - Uniqueness providers: manual, mock and optional Copyleaks availability without requiring external credentials.
 - Final package and final QA: Markdown/JSON package assembly, failed-check routing and approved status.
+- Stable scenario outcomes: BP approval, LP editorial revision routing and GP human-review escalation.
 - Demo inputs and offline demo pipeline: BP/LP/GP inputs, Streamlit demo path and `seo-demo` terminal smoke path.
 - UI helpers: status timeline, artifact previews, controlled error messages and download actions.
 - Documentation and repository health: README, Docker docs, interview docs, sample outputs, roadmap, root README and scaffold-cleanliness.

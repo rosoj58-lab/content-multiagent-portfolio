@@ -12,7 +12,7 @@ def test_readme_documents_interview_demo_flow() -> None:
     assert "CONTRIBUTING.md" in readme
     assert "SECURITY.md" in readme
     assert "docs/decisions/0001-offline-first-demo-and-provider-boundaries.md" in readme
-    assert "Run full demo pipeline" in readme
+    assert "Run demo scenario" in readme
     assert "artifacts/jobs/<job_id>/" in readme
     assert "final_package.md" in readme
     assert "final_qa_report.json" in readme
@@ -28,7 +28,7 @@ def test_docker_docs_match_current_streamlit_app() -> None:
     docker_docs = (PROJECT_ROOT / "docs" / "docker.md").read_text(encoding="utf-8")
 
     assert "http://localhost:8501" in docker_docs
-    assert "Run full demo pipeline" in docker_docs
+    assert "Run demo scenario" in docker_docs
     assert "Project scaffold is ready" not in docker_docs
     assert "artifacts/jobs/<job_id>/" in docker_docs
     assert "make docker-build" in docker_docs
@@ -88,6 +88,8 @@ def test_release_checklist_covers_quality_demo_docker_docs_and_security() -> Non
     assert "artifacts/jobs/<job_id>/" in checklist
     assert "final_package.md" in checklist
     assert "final_qa_report.json" in checklist
+    assert "needs_revision" in checklist
+    assert "needs_human_review" in checklist
     assert "docker compose build" in checklist
     assert "docker compose run --rm app uv run pytest" in checklist
     assert "CHANGELOG.md" in checklist

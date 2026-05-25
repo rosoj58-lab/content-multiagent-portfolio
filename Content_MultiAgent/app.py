@@ -38,12 +38,12 @@ def main() -> None:
 
     artifact_paths = {key.value: path for key, path in result.artifact_paths.items()}
     render_job_summary(result.metadata.job_id, artifact_paths, st.session_state.get("demo_mode", "demo"))
-    if st.button("Run full demo pipeline", type="secondary"):
+    if st.button("Run demo scenario", type="secondary"):
         try:
             demo_result = DemoPipelineService(
                 settings=service.settings,
                 artifact_store=service.artifact_store,
-            ).run_full_demo(
+            ).run_demo_scenario(
                 result.metadata.job_id,
                 mode=st.session_state.get("demo_mode", "demo"),
             )
@@ -55,8 +55,13 @@ def main() -> None:
                 )
             )
         else:
-            st.success(f"Demo pipeline complete: {demo_result.status.value}")
-            st.caption(f"Final package: {demo_result.final_package_path}")
+            if demo_result.status.value == "approved":
+                st.success(f"Demo scenario complete: {demo_result.status.value}")
+            else:
+                st.warning(f"Demo scenario complete: {demo_result.status.value}")
+            st.caption(f"Decision artifact: {demo_result.decision_artifact_path}")
+            if demo_result.final_package_path:
+                st.caption(f"Final package: {demo_result.final_package_path}")
     try:
         state = PipelineState.model_validate(
             service.artifact_store.read_json(result.metadata.job_id, ArtifactKey.STATE)

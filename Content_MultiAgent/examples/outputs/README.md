@@ -8,7 +8,7 @@ These files are intentionally not copied from a timestamped job folder. Runtime 
 
 - `sample-final-package.md` - abbreviated final Markdown package with traceability, article content, localization summaries and QA sections.
 - `sample-final-qa-report.json` - final QA readiness report showing approved status, completed stages, uniqueness result and localization status.
-- `sample-demo-summary.json` - versioned demo index showing the BP, LP and GP run manifest shape.
+- `sample-demo-summary.json` - versioned demo index showing BP approval, LP revision and GP human-review outcome paths.
 
 ## Reproduce Locally
 
@@ -23,3 +23,7 @@ To reproduce the demo summary shape:
 ```bash
 uv run seo-demo --demo all --mode demo --summary-file artifacts/demo/demo-summary.json
 ```
+
+In that manifest BP points to its final QA report; LP and GP point to their
+editorial decision artifacts because those scenarios intentionally stop before
+final package assembly.

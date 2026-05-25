@@ -15,7 +15,7 @@ def test_demo_pipeline_service_builds_approved_final_package(tmp_path) -> None:
         ArticleType.BP,
     )
 
-    result = DemoPipelineService(settings=settings, artifact_store=store).run_full_demo(
+    result = DemoPipelineService(settings=settings, artifact_store=store).run_demo_scenario(
         job.metadata.job_id,
         mode="demo",
     )
@@ -26,6 +26,7 @@ def test_demo_pipeline_service_builds_approved_final_package(tmp_path) -> None:
     article = store.read_text(job.metadata.job_id, ArtifactKey.ENGLISH_ORIGINAL)
 
     assert result.status is WorkflowStatus.APPROVED
+    assert result.decision_artifact_path.endswith("final_qa_report.json")
     assert result.final_package_path.endswith("final_package.md")
     assert result.final_qa_report_path.endswith("final_qa_report.json")
     assert state["status"] == WorkflowStatus.APPROVED.value
@@ -42,10 +43,10 @@ def test_demo_pipeline_service_supports_full_mode_word_count(tmp_path) -> None:
     store = ArtifactStore(settings.artifact_root)
     job = JobService(settings=settings, artifact_store=store).create_job(
         "Stable portfolio demo notes for a landing page.",
-        ArticleType.LP,
+        ArticleType.BP,
     )
 
-    result = DemoPipelineService(settings=settings, artifact_store=store).run_full_demo(
+    result = DemoPipelineService(settings=settings, artifact_store=store).run_demo_scenario(
         job.metadata.job_id,
         mode="full",
     )
@@ -59,3 +60,61 @@ def test_demo_pipeline_service_supports_full_mode_word_count(tmp_path) -> None:
     assert word_count_check["passed"] is True
     assert word_count_check["severity"] == "info"
     assert 1500 <= word_count_check["metadata"]["word_count"] <= 1600
+
+
+def test_landing_page_demo_stops_on_editorial_revision_for_unsupported_claim(tmp_path) -> None:
+    settings = AppSettings(artifact_root=tmp_path)
+    store = ArtifactStore(settings.artifact_root)
+    job = JobService(settings=settings, artifact_store=store).create_job(
+        "Landing page source notes with controlled proof requirements.",
+        ArticleType.LP,
+    )
+
+    result = DemoPipelineService(settings=settings, artifact_store=store).run_demo_scenario(
+        job.metadata.job_id,
+        mode="demo",
+    )
+
+    state = store.read_json(job.metadata.job_id, ArtifactKey.STATE)
+    editorial = store.read_json(job.metadata.job_id, ArtifactKey.EDITORIAL_QA)
+    article = store.read_text(job.metadata.job_id, ArtifactKey.ENGLISH_ORIGINAL)
+
+    assert result.status is WorkflowStatus.NEEDS_REVISION
+    assert result.decision_artifact_path.endswith("editorial_qa.json")
+    assert result.final_package_path is None
+    assert "70 percent" in article
+    assert editorial["passed"] is False
+    assert editorial["routing_target"] == "writing"
+    assert state["status"] == "needs_revision"
+    assert state["revision_notes"]["editorial_review"] == [
+        "Remove the 70 percent claim or provide evidence."
+    ]
+
+
+def test_guest_post_demo_stops_for_human_link_placement_review(tmp_path) -> None:
+    settings = AppSettings(artifact_root=tmp_path)
+    store = ArtifactStore(settings.artifact_root)
+    job = JobService(settings=settings, artifact_store=store).create_job(
+        "Guest post source notes with sensitive contextual link placement.",
+        ArticleType.GP,
+    )
+
+    result = DemoPipelineService(settings=settings, artifact_store=store).run_demo_scenario(
+        job.metadata.job_id,
+        mode="demo",
+    )
+
+    state = store.read_json(job.metadata.job_id, ArtifactKey.STATE)
+    editorial = store.read_json(job.metadata.job_id, ArtifactKey.EDITORIAL_QA)
+    article = store.read_text(job.metadata.job_id, ArtifactKey.ENGLISH_ORIGINAL)
+
+    assert result.status is WorkflowStatus.NEEDS_HUMAN_REVIEW
+    assert result.decision_artifact_path.endswith("editorial_qa.json")
+    assert result.final_package_path is None
+    assert "https://example.com/seo-content-pipeline" in article
+    assert editorial["requires_human_review"] is True
+    assert editorial["routing_target"] is None
+    assert state["errors"][0]["code"] == "editorial_human_review_required"
+    assert state["revision_notes"]["editorial_review"] == [
+        "Confirm that the contextual project link is acceptable to the host publication."
+    ]

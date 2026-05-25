@@ -17,3 +17,4 @@ class QAReport(BaseModel):
     score: float | None = None
     recommendations: list[str] = Field(default_factory=list)
     routing_target: WorkflowStage | None = None
+    requires_human_review: bool = False

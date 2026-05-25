@@ -54,3 +54,8 @@ The ADR in `docs/decisions/0001-offline-first-demo-and-provider-boundaries.md`
 records this as an explicit architecture decision: offline-first demo execution
 is the supported baseline, while external services remain optional provider
 implementations.
+
+The stable scenarios exercise real routing outcomes: BP reaches `approved` and
+final package export, LP stops at editorial QA with `needs_revision` for an
+unsupported commercial claim, and GP stops at editorial QA with
+`needs_human_review` for contextual link-placement judgment.

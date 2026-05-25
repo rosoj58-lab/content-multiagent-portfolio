@@ -66,5 +66,6 @@ make docker-shell
 1. Open `http://localhost:8501`.
 2. Paste one of the stable inputs from `examples/inputs/`.
 3. Create a job.
-4. Click `Run full demo pipeline`.
-5. Inspect the final package and QA report under `artifacts/jobs/<job_id>/`.
+4. Click `Run demo scenario`.
+5. For BP, inspect the final package and QA report under `artifacts/jobs/<job_id>/`.
+   For LP and GP, inspect `editorial_qa.json` and `state.json` for routed outcomes.

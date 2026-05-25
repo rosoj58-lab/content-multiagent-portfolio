@@ -43,7 +43,7 @@ def _brief_artifact(job_id: str) -> SEOBriefArtifact:
     )
 
 
-def _qa_report_json(*, passed: bool) -> str:
+def _qa_report_json(*, passed: bool, requires_human_review: bool = False) -> str:
     return json.dumps(
         {
             "job_id": "placeholder",
@@ -66,6 +66,7 @@ def _qa_report_json(*, passed: bool) -> str:
             "score": 1.0 if passed else 0.0,
             "recommendations": [] if passed else ["Remove unsupported performance claims."],
             "routing_target": None,
+            "requires_human_review": requires_human_review,
         }
     )
 
@@ -146,6 +147,30 @@ def test_editorial_qa_service_routes_failed_report_to_writing_revision(tmp_path)
     assert report["recommendations"] == ["Remove unsupported performance claims."]
     assert state["status"] == "needs_revision"
     assert state["qa_flags"]["editorial_qa_passed"] is False
+    assert state["revision_notes"]["editorial_review"] == [
+        "Remove unsupported performance claims."
+    ]
+
+
+def test_editorial_qa_service_routes_sensitive_review_to_human(tmp_path) -> None:
+    job_id, service, store, _client = _create_job_with_editorial_inputs(
+        tmp_path,
+        [_qa_report_json(passed=False, requires_human_review=True)],
+    )
+
+    result = service.run_editorial_qa(job_id)
+
+    report = store.read_json(job_id, ArtifactKey.EDITORIAL_QA)
+    state = store.read_json(job_id, ArtifactKey.STATE)
+
+    assert result.status.value == "needs_human_review"
+    assert report["requires_human_review"] is True
+    assert report["routing_target"] is None
+    assert state["status"] == "needs_human_review"
+    assert state["errors"][0]["code"] == "editorial_human_review_required"
+    assert state["revision_notes"]["editorial_review"] == [
+        "Remove unsupported performance claims."
+    ]
 
 
 def test_editorial_qa_service_requires_article_validation_report(tmp_path) -> None:

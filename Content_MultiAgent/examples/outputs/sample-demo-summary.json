@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "requested_demo": "all",
   "mode": "demo",
   "artifact_root": "artifacts/jobs",
@@ -14,6 +14,7 @@
       "job_id": "job-demo-bp",
       "status": "approved",
       "artifact_dir": "artifacts/jobs/job-demo-bp",
+      "decision_artifact": "artifacts/jobs/job-demo-bp/final_qa_report.json",
       "final_package": "artifacts/jobs/job-demo-bp/final_package.md",
       "final_qa_report": "artifacts/jobs/job-demo-bp/final_qa_report.json"
     },
@@ -24,10 +25,11 @@
       "demo_path": "revision_path",
       "purpose": "Use this case to demonstrate revision routing for unsupported claims or commercial copy risk.",
       "job_id": "job-demo-lp",
-      "status": "approved",
+      "status": "needs_revision",
       "artifact_dir": "artifacts/jobs/job-demo-lp",
-      "final_package": "artifacts/jobs/job-demo-lp/final_package.md",
-      "final_qa_report": "artifacts/jobs/job-demo-lp/final_qa_report.json"
+      "decision_artifact": "artifacts/jobs/job-demo-lp/editorial_qa.json",
+      "final_package": null,
+      "final_qa_report": null
     },
     {
       "demo": "gp",
@@ -36,10 +38,11 @@
       "demo_path": "human_review_path",
       "purpose": "Use this case to explain human-review handling for sensitive link-placement workflows.",
       "job_id": "job-demo-gp",
-      "status": "approved",
+      "status": "needs_human_review",
       "artifact_dir": "artifacts/jobs/job-demo-gp",
-      "final_package": "artifacts/jobs/job-demo-gp/final_package.md",
-      "final_qa_report": "artifacts/jobs/job-demo-gp/final_qa_report.json"
+      "decision_artifact": "artifacts/jobs/job-demo-gp/editorial_qa.json",
+      "final_package": null,
+      "final_qa_report": null
     }
   ]
 }

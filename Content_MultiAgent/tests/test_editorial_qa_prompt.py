@@ -32,4 +32,6 @@ def test_editorial_qa_prompt_requires_factual_discipline_and_schema() -> None:
     assert "Unsupported factual claims must be flagged" in prompt
     assert "generic and low-risk" in prompt
     assert '"writing"' in prompt
+    assert "requires_human_review true" in prompt
+    assert "sensitive native link placement" in prompt
     assert "Deterministic validation summary" in prompt

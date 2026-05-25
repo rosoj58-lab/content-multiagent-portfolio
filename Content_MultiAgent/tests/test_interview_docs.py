@@ -50,7 +50,10 @@ def test_interview_cheatsheet_covers_pitch_tradeoffs_and_questions() -> None:
     assert "uv run seo-demo --list-demos" in cheatsheet
     assert "uv run seo-demo --demo all --mode demo" in cheatsheet
     assert "make interview-check" in cheatsheet
+    assert "make release-check" in cheatsheet
     assert "artifacts/demo/demo-summary.json" in cheatsheet
+    assert "needs_revision" in cheatsheet
+    assert "needs_human_review" in cheatsheet
     assert "honest tradeoffs" in cheatsheet
     assert "likely questions" in cheatsheet
     assert "not a hosted production system" in cheatsheet
@@ -98,11 +101,14 @@ def test_artifact_map_documents_demo_summary_manifest_contract() -> None:
         "`runs[].demo_path`",
         "`runs[].purpose`",
         "`runs[].artifact_dir`",
+        "`runs[].status`",
+        "`runs[].decision_artifact`",
         "`runs[].final_package`",
         "`runs[].final_qa_report`",
     ]
 
     assert "Manifest contract version" in artifact_map
+    assert "Current value: `2`" in artifact_map
     for field in required_fields:
         assert field in artifact_map
 

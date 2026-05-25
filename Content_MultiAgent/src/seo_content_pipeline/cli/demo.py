@@ -92,7 +92,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
 
     demo_names = list(DEMO_INPUTS) if args.demo == "all" else [args.demo]
-    runs: list[dict[str, str]] = []
+    runs: list[dict[str, str | None]] = []
     for index, demo_name in enumerate(demo_names):
         if index > 0:
             print()
@@ -100,7 +100,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if args.summary_file is not None:
         summary = {
-            "version": 1,
+            "version": 2,
             "requested_demo": args.demo,
             "mode": args.mode,
             "artifact_root": str(args.artifact_root),
@@ -114,7 +114,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     return 0
 
 
-def _run_demo(demo_name: str, *, mode: str, artifact_root: Path) -> dict[str, str]:
+def _run_demo(demo_name: str, *, mode: str, artifact_root: Path) -> dict[str, str | None]:
     demo_input = DEMO_INPUTS[demo_name]
     article_type = demo_input.article_type
     input_path = demo_input.input_path
@@ -122,7 +122,7 @@ def _run_demo(demo_name: str, *, mode: str, artifact_root: Path) -> dict[str, st
     settings = AppSettings(artifact_root=artifact_root)
     store = ArtifactStore(settings.artifact_root)
     job = JobService(settings=settings, artifact_store=store).create_job(dry_input, article_type)
-    result = DemoPipelineService(settings=settings, artifact_store=store).run_full_demo(
+    result = DemoPipelineService(settings=settings, artifact_store=store).run_demo_scenario(
         job.metadata.job_id,
         mode=mode,
     )
@@ -131,8 +131,9 @@ def _run_demo(demo_name: str, *, mode: str, artifact_root: Path) -> dict[str, st
     print(f"job_id={result.job_id}")
     print(f"status={result.status.value}")
     print(f"artifact_dir={store.job_dir(result.job_id)}")
-    print(f"final_package={result.final_package_path}")
-    print(f"final_qa_report={result.final_qa_report_path}")
+    print(f"decision_artifact={result.decision_artifact_path}")
+    print(f"final_package={result.final_package_path or 'not_generated'}")
+    print(f"final_qa_report={result.final_qa_report_path or 'not_generated'}")
     return {
         "demo": demo_name,
         "article_type": article_type.value,
@@ -142,6 +143,7 @@ def _run_demo(demo_name: str, *, mode: str, artifact_root: Path) -> dict[str, st
         "job_id": result.job_id,
         "status": result.status.value,
         "artifact_dir": str(store.job_dir(result.job_id)),
+        "decision_artifact": result.decision_artifact_path,
         "final_package": result.final_package_path,
         "final_qa_report": result.final_qa_report_path,
     }

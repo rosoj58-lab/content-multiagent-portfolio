@@ -33,7 +33,10 @@ artifacts/jobs/
 
 `examples/inputs/` contains the reproducible BP, LP and GP demo inputs. These support UX-DR6: happy path, revision path and human-review path.
 
-`artifacts/jobs/` is where demo runs are inspected. During an interview, open a job folder and show `state.json`, QA reports, localizations, final package files and `final_qa_report.json`.
+`artifacts/jobs/` is where demo runs are inspected. During an interview, open BP
+to show `state.json`, QA reports, localizations, final package files and
+`final_qa_report.json`; open LP and GP to show their routed
+`editorial_qa.json` decision artifacts.
 
 ## Requirements Trace
 

@@ -37,7 +37,7 @@ def test_sample_final_qa_report_matches_approved_shape() -> None:
 def test_sample_demo_summary_matches_versioned_manifest_shape() -> None:
     summary = json.loads((OUTPUTS_DIR / "sample-demo-summary.json").read_text(encoding="utf-8"))
 
-    assert summary["version"] == 1
+    assert summary["version"] == 2
     assert summary["requested_demo"] == "all"
     assert summary["mode"] == "demo"
     assert summary["run_count"] == 3
@@ -48,9 +48,16 @@ def test_sample_demo_summary_matches_versioned_manifest_shape() -> None:
         "revision_path",
         "human_review_path",
     ]
+    assert [run["status"] for run in summary["runs"]] == [
+        "approved",
+        "needs_revision",
+        "needs_human_review",
+    ]
     for run in summary["runs"]:
-        assert run["status"] == "approved"
         assert run["input_file"].startswith("examples/inputs/")
         assert run["artifact_dir"].startswith("artifacts/jobs/")
-        assert run["final_package"].endswith("final_package.md")
-        assert run["final_qa_report"].endswith("final_qa_report.json")
+        assert run["decision_artifact"].startswith("artifacts/jobs/")
+    assert summary["runs"][0]["final_package"].endswith("final_package.md")
+    assert summary["runs"][0]["final_qa_report"].endswith("final_qa_report.json")
+    assert summary["runs"][1]["final_package"] is None
+    assert summary["runs"][2]["final_qa_report"] is None

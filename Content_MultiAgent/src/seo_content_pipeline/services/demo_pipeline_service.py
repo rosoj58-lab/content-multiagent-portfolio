@@ -35,8 +35,9 @@ class DemoPipelineResult(BaseModel):
 
     job_id: str
     status: WorkflowStatus
-    final_package_path: str
-    final_qa_report_path: str
+    decision_artifact_path: str
+    final_package_path: str | None = None
+    final_qa_report_path: str | None = None
 
 
 class _DeterministicDemoClient:
@@ -63,14 +64,14 @@ class DemoPipelineService:
         self.settings = settings or get_settings()
         self.artifact_store = artifact_store or ArtifactStore(self.settings.artifact_root)
 
-    def run_full_demo(self, job_id: str, *, mode: DemoRunMode = "demo") -> DemoPipelineResult:
-        """Generate all required artifacts for an existing job without external services."""
+    def run_demo_scenario(self, job_id: str, *, mode: DemoRunMode = "demo") -> DemoPipelineResult:
+        """Run the article-type scenario until approval, revision or human review."""
         state = PipelineState.model_validate(self.artifact_store.read_json(job_id, ArtifactKey.STATE))
         article_type = state.article_type or ArticleType.BP
         responses = [
             json.dumps(_brief_payload(article_type)),
             _article_markdown(article_type, mode),
-            json.dumps(_editorial_qa_payload(job_id)),
+            json.dumps(_editorial_qa_payload(job_id, article_type)),
             _localized_markdown("Spanish", article_type),
             _localized_markdown("Italian", article_type),
             _localized_markdown("French", article_type),
@@ -93,11 +94,19 @@ class DemoPipelineService:
             settings=self.settings,
             artifact_store=self.artifact_store,
         ).validate_english_original(job_id, mode=mode)
-        EditorialQAService(
+        editorial_result = EditorialQAService(
             settings=self.settings,
             artifact_store=self.artifact_store,
             llm_runner=llm_runner,
         ).run_editorial_qa(job_id)
+        if editorial_result.status is not WorkflowStatus.RUNNING:
+            return DemoPipelineResult(
+                job_id=job_id,
+                status=editorial_result.status,
+                decision_artifact_path=str(
+                    self.artifact_store.artifact_path(job_id, ArtifactKey.EDITORIAL_QA)
+                ),
+            )
         SEOQAService(settings=self.settings, artifact_store=self.artifact_store).run_seo_qa(job_id)
         UniquenessProviderService(
             settings=self.settings,
@@ -133,6 +142,9 @@ class DemoPipelineService:
         return DemoPipelineResult(
             job_id=job_id,
             status=final_qa.status,
+            decision_artifact_path=str(
+                self.artifact_store.artifact_path(job_id, ArtifactKey.FINAL_QA_REPORT)
+            ),
             final_package_path=package.markdown_path,
             final_qa_report_path=str(self.artifact_store.artifact_path(job_id, ArtifactKey.FINAL_QA_REPORT)),
         )
@@ -172,8 +184,12 @@ def _brief_payload(article_type: ArticleType) -> dict:
 def _article_markdown(article_type: ArticleType, mode: DemoRunMode) -> str:
     context = {
         ArticleType.BP: "The blog post path shows a clean informational workflow.",
-        ArticleType.LP: "The landing page path shows how commercial claims stay controlled.",
-        ArticleType.GP: "The guest post path shows where human review protects link placement.",
+        ArticleType.LP: "The landing page promises to cut content cost by 70 percent.",
+        ArticleType.GP: (
+            "The guest post includes one contextual reference to "
+            "[SEO Content Multi-Agent Pipeline](https://example.com/seo-content-pipeline), "
+            "whose publication fit requires human review."
+        ),
     }[article_type]
     paragraphs = [
         (
@@ -325,7 +341,47 @@ def _word_count(text: str) -> int:
     return len(re.findall(r"\b[\w'-]+\b", text))
 
 
-def _editorial_qa_payload(job_id: str) -> dict:
+def _editorial_qa_payload(job_id: str, article_type: ArticleType) -> dict:
+    if article_type is ArticleType.LP:
+        return {
+            "job_id": job_id,
+            "stage": "editorial_review",
+            "passed": False,
+            "checks": [
+                {
+                    "name": "unsupported_factual_claims",
+                    "passed": False,
+                    "severity": "error",
+                    "message": "The 70 percent cost reduction claim has no supplied evidence.",
+                    "metadata": {"area": "factual_discipline"},
+                }
+            ],
+            "summary": "Editorial QA failed: unsupported commercial performance claim.",
+            "score": 0.0,
+            "recommendations": ["Remove the 70 percent claim or provide evidence."],
+            "routing_target": "writing",
+            "requires_human_review": False,
+        }
+    if article_type is ArticleType.GP:
+        return {
+            "job_id": job_id,
+            "stage": "editorial_review",
+            "passed": False,
+            "checks": [
+                {
+                    "name": "native_link_placement_review",
+                    "passed": False,
+                    "severity": "error",
+                    "message": "Guest-post link placement requires editorial judgment.",
+                    "metadata": {"area": "publication_fit"},
+                }
+            ],
+            "summary": "Editorial QA paused for human review of native link placement.",
+            "score": 0.0,
+            "recommendations": ["Confirm that the contextual project link is acceptable to the host publication."],
+            "routing_target": None,
+            "requires_human_review": True,
+        }
     return {
         "job_id": job_id,
         "stage": "editorial_review",
@@ -350,6 +406,7 @@ def _editorial_qa_payload(job_id: str) -> dict:
         "score": 1.0,
         "recommendations": [],
         "routing_target": None,
+        "requires_human_review": False,
     }
 
 

@@ -28,10 +28,10 @@ Open `http://localhost:8501`, then:
 2. Select article type `BP`.
 3. Keep Mode as `demo`.
 4. Click `Create job`.
-5. Click `Run full demo pipeline`.
+5. Click `Run demo scenario`.
 6. Open the generated folder under `artifacts/jobs/<job_id>/`.
 
-The offline demo runner creates the full approved artifact set without external APIs:
+The offline BP happy-path runner creates the full approved artifact set without external APIs:
 
 - `brief.json`
 - `english_original.md`
@@ -119,9 +119,10 @@ make docker-shell
 ```
 
 `make demo-all` writes `artifacts/demo/demo-summary.json` with the input file,
-article type, scenario purpose, status and final artifact paths for the BP, LP and GP jobs.
-The manifest includes a `version` and `run_count` field so it can be treated as
-a stable demo index.
+article type, scenario purpose, outcome status and decision artifact for the BP, LP and GP jobs.
+BP reaches final package approval, LP stops with editorial revision guidance, and GP stops
+for human review of link placement. The manifest includes a `version` and `run_count`
+field so it can be treated as a stable demo index.
 
 Before an interview, `make interview-check` runs the local quality gate, lists the
 demo scenarios and regenerates the demo summary manifest. Before tagging or

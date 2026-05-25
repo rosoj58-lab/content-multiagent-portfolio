@@ -12,7 +12,7 @@ Use the BP happy path first:
 uv run streamlit run app.py
 ```
 
-Then open `http://localhost:8501`, paste `examples/inputs/bp-demo.txt`, select `BP`, keep Mode as `demo`, create a job and click `Run full demo pipeline`.
+Then open `http://localhost:8501`, paste `examples/inputs/bp-demo.txt`, select `BP`, keep Mode as `demo`, create a job and click `Run demo scenario`.
 
 For a terminal smoke demo:
 
@@ -38,13 +38,22 @@ For a quick manifest of all generated input files, article types and job folders
 uv run seo-demo --demo all --mode demo --summary-file artifacts/demo/demo-summary.json
 ```
 
-Before an interview, run the full local readiness check:
+Before an interview, prepare demo artifacts and run the local quality gate:
 
 ```bash
 make interview-check
 ```
 
-After the run, open `artifacts/jobs/<job_id>/` and show `state.json`, `brief.json`, QA reports, localizations, `final_package.md` and `final_qa_report.json`.
+Before tagging or presenting a portfolio release, the equivalent release command is:
+
+```bash
+make release-check
+```
+
+The generated manifest proves three distinct outcomes: BP is `approved`, LP is
+`needs_revision`, and GP is `needs_human_review`. Open BP to show `final_package.md`
+and `final_qa_report.json`; open LP and GP to show their `english_original.md`,
+`editorial_qa.json` and routed status in `state.json`.
 
 ## What To Emphasize
 

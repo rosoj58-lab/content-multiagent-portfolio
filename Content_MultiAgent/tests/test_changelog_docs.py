@@ -14,6 +14,8 @@ def test_changelog_documents_current_portfolio_release() -> None:
     assert f"## {pyproject['project']['version']} - Portfolio MVP" in changelog
     assert "seo-demo" in changelog
     assert "make interview-check" in changelog
+    assert "LP editorial revision" in changelog
+    assert "GP human-review escalation" in changelog
     assert "Docker development environment" in changelog
     assert "GitHub Actions quality gate" in changelog
     assert "Tracked example outputs" in changelog

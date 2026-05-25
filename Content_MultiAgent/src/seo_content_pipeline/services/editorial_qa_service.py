@@ -12,6 +12,7 @@ from seo_content_pipeline.models import (
     QAReport,
     SEOBriefArtifact,
     StatusHistoryEntry,
+    WorkflowError,
     WorkflowStage,
     WorkflowStatus,
 )
@@ -63,8 +64,8 @@ class EditorialQAService:
         )
         report = self._normalize_report(job_id, report)
         report_path = self.artifact_store.write_json(job_id, ArtifactKey.EDITORIAL_QA, report)
-        status = WorkflowStatus.RUNNING if report.passed else WorkflowStatus.NEEDS_REVISION
-        self._persist_state(job_id, status, str(report_path))
+        status = self._status_for_report(report)
+        self._persist_state(job_id, status, str(report_path), report)
         return EditorialQAResult(job_id=job_id, report=report, status=status)
 
     @staticmethod
@@ -72,6 +73,9 @@ class EditorialQAService:
         report.job_id = job_id
         report.stage = WorkflowStage.EDITORIAL_REVIEW
         if report.passed:
+            report.requires_human_review = False
+            report.routing_target = None
+        elif report.requires_human_review:
             report.routing_target = None
         else:
             report.routing_target = WorkflowStage.WRITING
@@ -79,16 +83,45 @@ class EditorialQAService:
                 report.recommendations = [check.message for check in report.checks if not check.passed]
         return report
 
-    def _persist_state(self, job_id: str, status: WorkflowStatus, report_path: str) -> None:
+    @staticmethod
+    def _status_for_report(report: QAReport) -> WorkflowStatus:
+        if report.passed:
+            return WorkflowStatus.RUNNING
+        if report.requires_human_review:
+            return WorkflowStatus.NEEDS_HUMAN_REVIEW
+        return WorkflowStatus.NEEDS_REVISION
+
+    def _persist_state(
+        self,
+        job_id: str,
+        status: WorkflowStatus,
+        report_path: str,
+        report: QAReport,
+    ) -> None:
         state = self._load_state(job_id)
         metadata = self._load_metadata(job_id)
+        if status is WorkflowStatus.NEEDS_HUMAN_REVIEW:
+            state.errors.append(
+                WorkflowError(
+                    code="editorial_human_review_required",
+                    message="Editorial QA requires human review.",
+                    node="editorial_qa_service",
+                    stage=WorkflowStage.EDITORIAL_REVIEW,
+                    recoverable=True,
+                    details={},
+                )
+            )
         history_entry = StatusHistoryEntry(
             stage=WorkflowStage.EDITORIAL_REVIEW,
             status=status,
             message=(
                 "Editorial QA passed."
                 if status is WorkflowStatus.RUNNING
-                else "Editorial QA failed. Targeted writing revision is required."
+                else (
+                    "Editorial QA requires human review."
+                    if status is WorkflowStatus.NEEDS_HUMAN_REVIEW
+                    else "Editorial QA failed. Targeted writing revision is required."
+                )
             ),
         )
 
@@ -96,6 +129,9 @@ class EditorialQAService:
         state.status = status
         state.artifact_paths[ArtifactKey.EDITORIAL_QA] = report_path
         state.qa_flags["editorial_qa_passed"] = status is WorkflowStatus.RUNNING
+        if not report.passed:
+            notes = state.revision_notes.setdefault(WorkflowStage.EDITORIAL_REVIEW, [])
+            notes.extend(report.recommendations or [report.summary])
         state.status_history.append(history_entry)
 
         metadata.current_stage = WorkflowStage.EDITORIAL_REVIEW

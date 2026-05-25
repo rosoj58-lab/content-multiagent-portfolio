@@ -45,13 +45,18 @@ To confirm available scenario names:
 uv run seo-demo --list-demos
 ```
 
-The command should print `status=approved`, `artifact_dir=...`, `final_package=...` and `final_qa_report=...`.
+The BP command should print `status=approved`, `decision_artifact=...`,
+`final_package=...` and `final_qa_report=...`.
 
 For all stable demo paths, generate a manifest:
 
 ```bash
 uv run seo-demo --demo all --mode demo --summary-file artifacts/demo/demo-summary.json
 ```
+
+The all-scenario output should show BP as `approved`, LP as `needs_revision` and
+GP as `needs_human_review`. LP and GP intentionally print
+`final_package=not_generated`; inspect their `decision_artifact` instead.
 
 ## Generated Artifacts
 
@@ -61,7 +66,9 @@ Runtime job folders are written under:
 artifacts/jobs/<job_id>/
 ```
 
-Those folders are ignored by Git. To inspect a run, open the printed `artifact_dir` and check `state.json`, `final_package.md` and `final_qa_report.json`.
+Those folders are ignored by Git. To inspect a run, open the printed `artifact_dir`
+and check `state.json` plus the printed `decision_artifact`. Approved BP runs also
+include `final_package.md` and `final_qa_report.json`.
 
 ## Docker
 

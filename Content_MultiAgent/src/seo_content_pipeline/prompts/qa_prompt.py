@@ -25,8 +25,10 @@ def build_editorial_qa_prompt(
         "Examples of claims that need support: statistics, market leadership, medical/legal/"
         "financial outcomes, precise performance numbers, named comparisons and guarantees. "
         "Generic low-risk claims may pass if they do not imply a specific unverifiable fact.\n\n"
-        "If the article fails, include actionable recommendations and set routing_target to "
-        '"writing" so targeted revision can happen without regenerating the whole workflow.\n\n'
+        "If the article fails and can be revised automatically, include actionable recommendations, "
+        'set routing_target to "writing", and keep requires_human_review false. '
+        "If publication judgment is required, such as sensitive native link placement, set "
+        "requires_human_review true and routing_target to null.\n\n"
         f"Brief topic: {brief.topic}\n"
         f"Brief goal: {brief.goal}\n"
         f"Brief audience: {brief.audience}\n"

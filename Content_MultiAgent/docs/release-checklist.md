@@ -39,13 +39,16 @@ For full scenario coverage:
 uv run seo-demo --demo all --mode demo --summary-file artifacts/demo/demo-summary.json
 ```
 
-Inspect at least one generated `artifacts/jobs/<job_id>/` folder and confirm:
+Inspect generated `artifacts/jobs/<job_id>/` folders and confirm:
 
-- `state.json` explains the final workflow status.
-- `final_package.md` and `final_package.json` exist.
-- `final_qa_report.json` records an approved or intentionally routed result.
-- `artifacts/demo/demo-summary.json` lists BP, LP and GP runs when all scenarios
-  were generated.
+- BP contains `final_package.md`, `final_package.json` and an approved
+  `final_qa_report.json`.
+- LP contains `editorial_qa.json` with a writing revision route for an unsupported
+  performance claim.
+- GP contains `editorial_qa.json` with a human-review escalation for contextual
+  link placement.
+- `artifacts/demo/demo-summary.json` lists BP as `approved`, LP as
+  `needs_revision` and GP as `needs_human_review`.
 
 ## 3. Docker Check
 

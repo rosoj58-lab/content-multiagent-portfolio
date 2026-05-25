@@ -57,7 +57,11 @@ make interview-check
 2. Paste the full text into the Dry input field.
 3. Select the matching article type: `BP`, `LP`, or `GP`.
 4. Create the job and inspect the progress timeline and artifact panel.
-5. Click `Run full demo pipeline` to generate the offline brief, article, QA reports, uniqueness result, localizations, final package and final QA report.
+5. Click `Run demo scenario` to execute the selected outcome.
 6. Open `artifacts/jobs/<job_id>/` to show the persisted source of truth.
 
-The BP case is the main happy path. The LP case is meant to explain revision path behavior. The GP case is the human review path and is meant to explain why human review remains valuable for sensitive guest-post link placement.
+The BP case is the main happy path and generates the approved final package. The LP case
+produces an English draft with an unsupported performance claim, then stops at
+`editorial_qa.json` with `needs_revision` guidance. The GP case includes a contextual
+project link, then stops at `editorial_qa.json` with `needs_human_review` because
+publication fit needs editorial judgment.

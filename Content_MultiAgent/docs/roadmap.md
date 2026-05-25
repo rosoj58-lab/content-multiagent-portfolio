@@ -10,7 +10,7 @@ This roadmap explains the current portfolio MVP and the most useful next steps. 
 - Typed Pydantic models for workflow state, artifacts, QA reports, uniqueness and final QA.
 - File-based artifact persistence under `artifacts/jobs/<job_id>/`.
 - Deterministic QA gates for article structure, SEO signals, uniqueness thresholding and final package readiness.
-- Manual/human checkpoints for brief approval, revision routing and sensitive review discussion.
+- Distinct offline outcomes: BP approval, LP revision routing for unsupported claims and GP human review for sensitive link placement.
 - Spanish, Italian and French localization artifacts.
 - Markdown and JSON final package exports.
 - GitHub Actions quality gate with `uv sync --frozen`, `ruff` and `pytest`.

@@ -10,7 +10,7 @@ intended for interview navigation.
 
 | Field | Purpose |
 | --- | --- |
-| `version` | Manifest contract version. Current value: `1`. |
+| `version` | Manifest contract version. Current value: `2`. |
 | `requested_demo` | Requested CLI scenario, usually `all`. |
 | `mode` | Article generation mode used for the run. |
 | `artifact_root` | Root folder where job folders were written. |
@@ -21,8 +21,10 @@ intended for interview navigation.
 | `runs[].demo_path` | Scenario purpose category, such as `happy_path`. |
 | `runs[].purpose` | Human-readable explanation of why this scenario exists. |
 | `runs[].artifact_dir` | Generated job folder to open during a demo. |
-| `runs[].final_package` | Path to the human-readable final package. |
-| `runs[].final_qa_report` | Path to the final QA report. |
+| `runs[].status` | Observed outcome: `approved`, `needs_revision`, or `needs_human_review`. |
+| `runs[].decision_artifact` | Path to the report that proves the scenario outcome. |
+| `runs[].final_package` | Path to the human-readable final package for approved runs; otherwise `null`. |
+| `runs[].final_qa_report` | Path to final QA for approved runs; otherwise `null`. |
 
 ## Core State
 
@@ -58,3 +60,7 @@ intended for interview navigation.
 ## QA Decisions
 
 QA decisions are made from persisted reports and state flags. A job is approved only when mandatory artifacts exist, QA reports pass, the uniqueness gate passes, all localizations exist and the final package is assembled. If a required check fails, final QA writes `needs_revision`, adds revision routing guidance, and records the target stage in `final_qa_report.json`.
+
+The stable demo scenarios intentionally stop at different decision points: BP
+continues through final QA, LP stops after editorial QA with writing revision
+guidance, and GP stops after editorial QA for human link-placement review.
