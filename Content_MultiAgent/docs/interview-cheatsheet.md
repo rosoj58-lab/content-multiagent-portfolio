@@ -53,7 +53,9 @@ make release-check
 The generated manifest proves three distinct outcomes: BP is `approved`, LP is
 `needs_revision`, and GP is `needs_human_review`. Open BP to show `final_package.md`
 and `final_qa_report.json`; open LP and GP to show their `english_original.md`,
-`editorial_qa.json` and routed status in `state.json`.
+`editorial_qa.json` and routed status in `state.json`. In Streamlit, begin each
+scenario with the Decision QA Scorecard: it makes the evidence and next action
+visible before opening the raw artifacts.
 
 ## What To Emphasize
 
@@ -71,7 +73,7 @@ and `final_qa_report.json`; open LP and GP to show their `english_original.md`,
 - `services/` owns workflow actions: job creation, brief generation, QA, uniqueness, localization, export and final QA.
 - `validators/` handles deterministic checks that do not need an LLM.
 - `providers/` isolates uniqueness implementations.
-- `ui/` renders Streamlit status, artifact previews and controlled errors.
+- `ui/` renders Streamlit decision scorecards, status, artifact previews and controlled errors.
 - `cli/` exposes the same offline demo path through `seo-demo`.
 
 ## Honest Tradeoffs

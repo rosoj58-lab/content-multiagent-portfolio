@@ -51,6 +51,8 @@ def test_app_displays_landing_page_revision_decision(tmp_path, monkeypatch) -> N
 
     assert any("needs_revision" in warning.value for warning in app.warning)
     assert any("editorial_qa.json" in caption.value for caption in app.caption)
+    assert any(subheader.value == "Decision QA Scorecard" for subheader in app.subheader)
+    assert any("Remove the 70 percent claim" in info.value for info in app.info)
     assert not any("Final package:" in caption.value for caption in app.caption)
 
 
@@ -64,4 +66,35 @@ def test_app_displays_guest_post_human_review_decision(tmp_path, monkeypatch) ->
 
     assert any("needs_human_review" in warning.value for warning in app.warning)
     assert any("editorial_qa.json" in caption.value for caption in app.caption)
+    assert any(subheader.value == "Decision QA Scorecard" for subheader in app.subheader)
+    assert any("host publication" in info.value for info in app.info)
     assert not any("Final package:" in caption.value for caption in app.caption)
+
+
+def test_app_displays_approved_scorecard_for_blog_post(tmp_path, monkeypatch) -> None:
+    app = _run_demo_scenario_in_app(
+        tmp_path,
+        monkeypatch,
+        article_type="BP",
+        input_file="bp-demo.txt",
+    )
+
+    assert any("approved" in success.value for success in app.success)
+    assert any(subheader.value == "Decision QA Scorecard" for subheader in app.subheader)
+    assert any("Final package:" in caption.value for caption in app.caption)
+    assert not any("Next action:" in info.value for info in app.info)
+
+    rerendered_app = app.run()
+
+    assert any(
+        subheader.value == "Decision QA Scorecard" for subheader in rerendered_app.subheader
+    )
+
+
+def test_app_hides_scorecard_before_scenario_execution(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("ARTIFACT_ROOT", str(tmp_path))
+    app = AppTest.from_file(PROJECT_ROOT / "app.py").run()
+    app.text_area[0].input("Source notes.")
+    app.button[0].click().run()
+
+    assert not any(subheader.value == "Decision QA Scorecard" for subheader in app.subheader)

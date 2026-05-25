@@ -10,6 +10,10 @@ from seo_content_pipeline.ui.components import render_job_creation_form, render_
 from seo_content_pipeline.ui.empty_states import render_no_job_empty_state
 from seo_content_pipeline.ui.error_presenter import build_controlled_error, render_controlled_error
 from seo_content_pipeline.ui.progress_timeline import render_pipeline_progress_timeline
+from seo_content_pipeline.ui.qa_scorecard import (
+    build_decision_scorecard,
+    render_decision_scorecard,
+)
 
 
 def main() -> None:
@@ -66,6 +70,9 @@ def main() -> None:
         state = PipelineState.model_validate(
             service.artifact_store.read_json(result.metadata.job_id, ArtifactKey.STATE)
         )
+        scorecard = build_decision_scorecard(result.metadata.job_id, service.artifact_store)
+        if scorecard is not None:
+            render_decision_scorecard(scorecard)
         render_pipeline_progress_timeline(state)
         render_artifact_panel(result.metadata.job_id, service.artifact_store)
     except Exception as error:

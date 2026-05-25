@@ -10,7 +10,7 @@ The project is built to be demonstrated in interviews. It does not require hoste
 - Human-in-the-loop approval and revision routing.
 - Deterministic QA gates for article structure, SEO coverage and uniqueness thresholding.
 - File-based artifacts under `artifacts/jobs/<job_id>/` for inspection.
-- Streamlit observability: status timeline, artifact previews, download actions and controlled errors.
+- Streamlit observability: decision QA scorecard, status timeline, artifact previews, download actions and controlled errors.
 - Optional provider boundary for Copyleaks without making it mandatory for the local demo.
 
 ## Quick Demo
@@ -29,7 +29,7 @@ Open `http://localhost:8501`, then:
 3. Keep Mode as `demo`.
 4. Click `Create job`.
 5. Click `Run demo scenario`.
-6. Open the generated folder under `artifacts/jobs/<job_id>/`.
+6. Review the `Decision QA Scorecard`, then open the generated folder under `artifacts/jobs/<job_id>/`.
 
 The offline BP happy-path runner creates the full approved artifact set without external APIs:
 

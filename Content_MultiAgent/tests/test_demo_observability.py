@@ -6,6 +6,7 @@ from pathlib import Path
 from seo_content_pipeline.config import AppSettings
 from seo_content_pipeline.models import (
     ArtifactKey,
+    ArticleType,
     PipelineState,
     QAReport,
     StatusHistoryEntry,
@@ -14,10 +15,12 @@ from seo_content_pipeline.models import (
     WorkflowStatus,
 )
 from seo_content_pipeline.services.artifact_store import ArtifactStore
+from seo_content_pipeline.services.demo_pipeline_service import DemoPipelineService
 from seo_content_pipeline.services.job_service import JobService
 from seo_content_pipeline.services.stage_view_builder import build_pipeline_stage_views
 from seo_content_pipeline.ui.artifact_panel import build_artifact_previews
 from seo_content_pipeline.ui.error_presenter import build_controlled_error
+from seo_content_pipeline.ui.qa_scorecard import build_decision_scorecard
 from seo_content_pipeline.ui.renderers import build_qa_checklist
 
 
@@ -135,3 +138,59 @@ def test_controlled_error_includes_action_without_traceback() -> None:
     assert "dry input" in error.detail
     assert error.action == "Paste a demo input and try again."
     assert "Traceback" not in error.detail
+
+
+def _run_scorecard_demo(tmp_path, article_type: ArticleType):
+    settings = AppSettings(artifact_root=tmp_path)
+    store = ArtifactStore(settings.artifact_root)
+    job = JobService(settings=settings, artifact_store=store).create_job(
+        "Stable source notes for the scorecard demo.",
+        article_type,
+    )
+    DemoPipelineService(settings=settings, artifact_store=store).run_demo_scenario(
+        job.metadata.job_id,
+        mode="demo",
+    )
+    return build_decision_scorecard(job.metadata.job_id, store)
+
+
+def test_decision_scorecard_is_hidden_before_a_terminal_decision(tmp_path) -> None:
+    settings = AppSettings(artifact_root=tmp_path)
+    store = ArtifactStore(settings.artifact_root)
+    job = JobService(settings=settings, artifact_store=store).create_job("Source notes.")
+
+    assert build_decision_scorecard(job.metadata.job_id, store) is None
+
+
+def test_decision_scorecard_explains_approved_final_quality_evidence(tmp_path) -> None:
+    scorecard = _run_scorecard_demo(tmp_path, ArticleType.BP)
+
+    assert scorecard is not None
+    assert scorecard.status is WorkflowStatus.APPROVED
+    assert scorecard.decision_stage is WorkflowStage.FINAL_QA
+    assert scorecard.decision_artifact is ArtifactKey.FINAL_QA_REPORT
+    assert scorecard.next_action is None
+    assert any(signal.label == "Uniqueness threshold" and signal.status_label == "Pass" for signal in scorecard.signals)
+    assert sum(signal.status_label == "Ready" for signal in scorecard.signals) == 3
+
+
+def test_decision_scorecard_explains_landing_page_revision_route(tmp_path) -> None:
+    scorecard = _run_scorecard_demo(tmp_path, ArticleType.LP)
+
+    assert scorecard is not None
+    assert scorecard.status is WorkflowStatus.NEEDS_REVISION
+    assert scorecard.decision_artifact is ArtifactKey.EDITORIAL_QA
+    assert scorecard.routing_target is WorkflowStage.WRITING
+    assert any(signal.label == "unsupported_factual_claims" and signal.status_label == "Fail" for signal in scorecard.signals)
+    assert "70 percent claim" in scorecard.next_action
+
+
+def test_decision_scorecard_explains_guest_post_human_review_action(tmp_path) -> None:
+    scorecard = _run_scorecard_demo(tmp_path, ArticleType.GP)
+
+    assert scorecard is not None
+    assert scorecard.status is WorkflowStatus.NEEDS_HUMAN_REVIEW
+    assert scorecard.decision_artifact is ArtifactKey.EDITORIAL_QA
+    assert scorecard.routing_target is None
+    assert any(signal.label == "native_link_placement_review" and signal.status_label == "Fail" for signal in scorecard.signals)
+    assert "host publication" in scorecard.next_action

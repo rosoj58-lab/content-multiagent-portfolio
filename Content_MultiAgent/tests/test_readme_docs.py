@@ -13,6 +13,7 @@ def test_readme_documents_interview_demo_flow() -> None:
     assert "SECURITY.md" in readme
     assert "docs/decisions/0001-offline-first-demo-and-provider-boundaries.md" in readme
     assert "Run demo scenario" in readme
+    assert "Decision QA Scorecard" in readme
     assert "artifacts/jobs/<job_id>/" in readme
     assert "final_package.md" in readme
     assert "final_qa_report.json" in readme
