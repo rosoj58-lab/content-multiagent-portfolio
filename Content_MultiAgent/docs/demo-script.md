@@ -16,6 +16,10 @@ containing an unsupported 70 percent performance claim, then produces a failed
 The scorecard surfaces the failed claim and its correction action before you open
 the draft and report side by side. The talking point is FR18: failed checks do not
 become vague errors; they become revision guidance with a target stage.
+Then click `Apply recommended revision`. The same job persists the failed report in
+`revision_history.json`, replaces the unsupported wording, runs the existing quality
+gates and finishes with an approved final package. Use the resolved revision evidence
+in the scorecard to show a controlled loop rather than a hidden retry.
 
 ## Human-Review Path: GP
 

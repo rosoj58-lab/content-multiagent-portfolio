@@ -67,6 +67,27 @@ def test_pipeline_stage_views_include_progress_artifacts_and_revision_counters()
     assert final_view.available_actions == []
 
 
+def test_resolved_revision_note_is_not_shown_as_an_active_blocker() -> None:
+    state = PipelineState(
+        job_id="job-resolved",
+        current_stage=WorkflowStage.FINAL_QA,
+        status=WorkflowStatus.APPROVED,
+        revision_attempts={WorkflowStage.EDITORIAL_REVIEW: 1},
+        revision_notes={
+            WorkflowStage.EDITORIAL_REVIEW: ["Remove the unsupported claim."]
+        },
+    )
+
+    views = build_pipeline_stage_views(state)
+    editorial_view = next(
+        view for view in views if view.stage is WorkflowStage.EDITORIAL_REVIEW
+    )
+
+    assert editorial_view.status is WorkflowStatus.APPROVED
+    assert editorial_view.revision_attempt == 1
+    assert editorial_view.blocking_reason is None
+
+
 def test_artifact_previews_handle_json_and_markdown(tmp_path) -> None:
     settings = AppSettings(artifact_root=tmp_path)
     store = ArtifactStore(settings.artifact_root)
@@ -154,6 +175,19 @@ def _run_scorecard_demo(tmp_path, article_type: ArticleType):
     return build_decision_scorecard(job.metadata.job_id, store)
 
 
+def _run_corrected_landing_page_scorecard(tmp_path):
+    settings = AppSettings(artifact_root=tmp_path)
+    store = ArtifactStore(settings.artifact_root)
+    job = JobService(settings=settings, artifact_store=store).create_job(
+        "Stable landing page notes for a corrected demo.",
+        ArticleType.LP,
+    )
+    service = DemoPipelineService(settings=settings, artifact_store=store)
+    service.run_demo_scenario(job.metadata.job_id, mode="demo")
+    service.apply_lp_editorial_revision(job.metadata.job_id, mode="demo")
+    return build_decision_scorecard(job.metadata.job_id, store)
+
+
 def test_decision_scorecard_is_hidden_before_a_terminal_decision(tmp_path) -> None:
     settings = AppSettings(artifact_root=tmp_path)
     store = ArtifactStore(settings.artifact_root)
@@ -194,3 +228,12 @@ def test_decision_scorecard_explains_guest_post_human_review_action(tmp_path) ->
     assert scorecard.routing_target is None
     assert any(signal.label == "native_link_placement_review" and signal.status_label == "Fail" for signal in scorecard.signals)
     assert "host publication" in scorecard.next_action
+
+
+def test_decision_scorecard_explains_resolved_landing_page_revision(tmp_path) -> None:
+    scorecard = _run_corrected_landing_page_scorecard(tmp_path)
+
+    assert scorecard is not None
+    assert scorecard.status is WorkflowStatus.APPROVED
+    assert scorecard.resolved_revisions[0].status_label == "Resolved"
+    assert "Unsupported claim removed" in scorecard.resolved_revisions[0].detail

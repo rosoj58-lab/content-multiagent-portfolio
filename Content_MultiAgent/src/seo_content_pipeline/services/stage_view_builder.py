@@ -127,7 +127,13 @@ def build_pipeline_stage_views(
         ]
         revision_attempt = state.revision_attempts.get(stage, 0)
         revision_notes = state.revision_notes.get(stage, [])
-        blocking_reason = revision_notes[-1] if revision_notes else None
+        blocking_reason = (
+            revision_notes[-1]
+            if revision_notes
+            and stage is state.current_stage
+            and status in {WorkflowStatus.NEEDS_REVISION, WorkflowStatus.NEEDS_HUMAN_REVIEW}
+            else None
+        )
 
         available_actions = actions if stage is state.current_stage and status is not WorkflowStatus.APPROVED else []
 

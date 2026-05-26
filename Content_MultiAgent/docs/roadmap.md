@@ -11,6 +11,7 @@ This roadmap explains the current portfolio MVP and the most useful next steps. 
 - File-based artifact persistence under `artifacts/jobs/<job_id>/`.
 - Deterministic QA gates for article structure, SEO signals, uniqueness thresholding and final package readiness.
 - Distinct offline outcomes: BP approval, LP revision routing for unsupported claims and GP human review for sensitive link placement.
+- Explicit LP correction-to-approval action with persisted revision history evidence.
 - Spanish, Italian and French localization artifacts.
 - Markdown and JSON final package exports.
 - GitHub Actions quality gate with `uv sync --frozen`, `ruff` and `pytest`.
@@ -21,9 +22,9 @@ This roadmap explains the current portfolio MVP and the most useful next steps. 
 
    Move long-running stages into a queue or background worker so Streamlit can show progress without blocking the request lifecycle.
 
-2. Revision UI
+2. Expanded Revision Workspace
 
-   Add explicit UI controls for retrying failed stages, editing revision notes and comparing previous artifact versions.
+   Extend the controlled LP correction into free-form edits, additional failed stages and side-by-side artifact version comparison.
 
 3. Real LLM provider configuration
 

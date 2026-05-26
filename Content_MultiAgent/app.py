@@ -12,6 +12,7 @@ from seo_content_pipeline.ui.error_presenter import build_controlled_error, rend
 from seo_content_pipeline.ui.progress_timeline import render_pipeline_progress_timeline
 from seo_content_pipeline.ui.qa_scorecard import (
     build_decision_scorecard,
+    can_apply_lp_revision,
     render_decision_scorecard,
 )
 
@@ -42,6 +43,10 @@ def main() -> None:
 
     artifact_paths = {key.value: path for key, path in result.artifact_paths.items()}
     render_job_summary(result.metadata.job_id, artifact_paths, st.session_state.get("demo_mode", "demo"))
+    revision_confirmation = st.session_state.pop("revision_confirmation", None)
+    if revision_confirmation:
+        st.success(f"Revision applied: {revision_confirmation['status']}")
+        st.caption(f"Final package: {revision_confirmation['final_package_path']}")
     if st.button("Run demo scenario", type="secondary"):
         try:
             demo_result = DemoPipelineService(
@@ -70,6 +75,28 @@ def main() -> None:
         state = PipelineState.model_validate(
             service.artifact_store.read_json(result.metadata.job_id, ArtifactKey.STATE)
         )
+        if can_apply_lp_revision(state) and st.button("Apply recommended revision", type="primary"):
+            try:
+                revision_result = DemoPipelineService(
+                    settings=service.settings,
+                    artifact_store=service.artifact_store,
+                ).apply_lp_editorial_revision(
+                    result.metadata.job_id,
+                    mode=st.session_state.get("demo_mode", "demo"),
+                )
+            except ValueError as error:
+                render_controlled_error(
+                    build_controlled_error(
+                        error,
+                        action="Run the LP revision scenario again before applying a correction.",
+                    )
+                )
+            else:
+                st.session_state["revision_confirmation"] = {
+                    "status": revision_result.status.value,
+                    "final_package_path": revision_result.final_package_path,
+                }
+                st.rerun()
         scorecard = build_decision_scorecard(result.metadata.job_id, service.artifact_store)
         if scorecard is not None:
             render_decision_scorecard(scorecard)

@@ -1,14 +1,16 @@
 """Decision QA scorecard builders and Streamlit rendering."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field, replace
 
 import streamlit as st
 
 from seo_content_pipeline.models import (
     ArtifactKey,
+    ArticleType,
     FinalQAReport,
     PipelineState,
     QAReport,
+    RevisionHistoryArtifact,
     WorkflowStage,
     WorkflowStatus,
 )
@@ -47,6 +49,16 @@ class DecisionScorecard:
     decision_artifact: ArtifactKey
     routing_target: WorkflowStage | None = None
     next_action: str | None = None
+    resolved_revisions: list[ScorecardSignal] = field(default_factory=list)
+
+
+def can_apply_lp_revision(state: PipelineState) -> bool:
+    """Return whether the explicit LP correction action is currently valid."""
+    return (
+        state.article_type is ArticleType.LP
+        and state.current_stage is WorkflowStage.EDITORIAL_REVIEW
+        and state.status is WorkflowStatus.NEEDS_REVISION
+    )
 
 
 def build_decision_scorecard(
@@ -63,7 +75,22 @@ def build_decision_scorecard(
         report = FinalQAReport.model_validate(
             artifact_store.read_json(job_id, ArtifactKey.FINAL_QA_REPORT)
         )
-        return _build_final_qa_scorecard(report)
+        scorecard = _build_final_qa_scorecard(report)
+        history_path = artifact_store.artifact_path(job_id, ArtifactKey.REVISION_HISTORY)
+        if not history_path.exists():
+            return scorecard
+        history = RevisionHistoryArtifact.model_validate(
+            artifact_store.read_json(job_id, ArtifactKey.REVISION_HISTORY)
+        )
+        resolved_revisions = [
+            ScorecardSignal(
+                label=f"Revision {entry.attempt}: {_revision_check_name(entry.failed_report)}",
+                status_label="Resolved" if entry.resolved_status is WorkflowStatus.APPROVED else "Open",
+                detail=entry.resolution_summary or entry.action,
+            )
+            for entry in history.revisions
+        ]
+        return replace(scorecard, resolved_revisions=resolved_revisions)
 
     editorial_path = artifact_store.artifact_path(job_id, ArtifactKey.EDITORIAL_QA)
     if editorial_path.exists() and state.current_stage is WorkflowStage.EDITORIAL_REVIEW:
@@ -71,6 +98,10 @@ def build_decision_scorecard(
         return _build_editorial_scorecard(report, state.status)
 
     return None
+
+
+def _revision_check_name(report: QAReport) -> str:
+    return report.checks[0].name if report.checks else report.stage.value
 
 
 def _build_final_qa_scorecard(report: FinalQAReport) -> DecisionScorecard:
@@ -166,3 +197,7 @@ def render_decision_scorecard(scorecard: DecisionScorecard) -> None:
         st.caption(f"Route: {scorecard.routing_target.value}")
     if scorecard.next_action:
         st.info(f"Next action: {scorecard.next_action}")
+    if scorecard.resolved_revisions:
+        st.markdown("**Resolved revision evidence**")
+        for revision in scorecard.resolved_revisions:
+            st.write(f"[resolved] {revision.label}: {revision.detail}")

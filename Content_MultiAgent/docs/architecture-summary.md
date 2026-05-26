@@ -24,6 +24,8 @@ flowchart TD
     D -->|revision requested| B
     E --> F[Article validation]
     F --> G[Editorial QA]
+    G -->|targeted LP revision| E
+    G -->|requires judgment| N[Human review]
     G --> H[SEO QA]
     H --> I[Uniqueness gate]
     I -->|score >= 90| J[Localization ES IT FR]
@@ -59,3 +61,8 @@ The stable scenarios exercise real routing outcomes: BP reaches `approved` and
 final package export, LP stops at editorial QA with `needs_revision` for an
 unsupported commercial claim, and GP stops at editorial QA with
 `needs_human_review` for contextual link-placement judgment.
+
+The Streamlit LP walkthrough can then explicitly apply its recommended revision.
+The pipeline preserves the failed report in `revision_history.json`, replaces the
+working draft, and reuses the existing gates before final approval; GP remains a
+human decision rather than an automated continuation.

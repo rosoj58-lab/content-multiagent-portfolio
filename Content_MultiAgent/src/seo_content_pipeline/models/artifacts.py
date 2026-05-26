@@ -16,6 +16,7 @@ class ArtifactKey(str, Enum):
     ENGLISH_ORIGINAL = "english_original"
     ARTICLE_VALIDATION = "article_validation"
     EDITORIAL_QA = "editorial_qa"
+    REVISION_HISTORY = "revision_history"
     SEO_QA = "seo_qa"
     UNIQUENESS = "uniqueness"
     LOCALIZATION_ES = "localization_es"
@@ -92,6 +93,13 @@ ARTIFACT_REGISTRY: dict[ArtifactKey, ArtifactSpec] = {
         content_type="application/json",
         ui_label="Editorial QA",
         description="Editorial quality checks and revision recommendations.",
+    ),
+    ArtifactKey.REVISION_HISTORY: ArtifactSpec(
+        key=ArtifactKey.REVISION_HISTORY,
+        filename="revision_history.json",
+        content_type="application/json",
+        ui_label="Revision History",
+        description="Preserved routed QA decisions and their resolution outcomes.",
     ),
     ArtifactKey.SEO_QA: ArtifactSpec(
         key=ArtifactKey.SEO_QA,

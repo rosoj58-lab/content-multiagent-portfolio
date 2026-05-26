@@ -50,6 +50,10 @@ Inspect generated `artifacts/jobs/<job_id>/` folders and confirm:
 - `artifacts/demo/demo-summary.json` lists BP as `approved`, LP as
   `needs_revision` and GP as `needs_human_review`.
 
+In Streamlit, run LP and click `Apply recommended revision`; confirm the same job
+then contains `revision_history.json`, an approved `final_qa_report.json` and a
+final package, while the scorecard shows resolved revision evidence.
+
 ## 3. Docker Check
 
 Run from the Git/Compose root when dependencies, Dockerfile or Compose config

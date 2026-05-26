@@ -53,7 +53,18 @@ def test_app_displays_landing_page_revision_decision(tmp_path, monkeypatch) -> N
     assert any("editorial_qa.json" in caption.value for caption in app.caption)
     assert any(subheader.value == "Decision QA Scorecard" for subheader in app.subheader)
     assert any("Remove the 70 percent claim" in info.value for info in app.info)
+    assert any(button.label == "Apply recommended revision" for button in app.button)
     assert not any("Final package:" in caption.value for caption in app.caption)
+
+    revision_button = next(
+        button for button in app.button if button.label == "Apply recommended revision"
+    )
+    revision_button.click().run()
+
+    assert any("Revision applied: approved" in success.value for success in app.success)
+    assert any("Final package:" in caption.value for caption in app.caption)
+    assert any("Resolved revision evidence" in markdown.value for markdown in app.markdown)
+    assert not any(button.label == "Apply recommended revision" for button in app.button)
 
 
 def test_app_displays_guest_post_human_review_decision(tmp_path, monkeypatch) -> None:
@@ -68,6 +79,7 @@ def test_app_displays_guest_post_human_review_decision(tmp_path, monkeypatch) ->
     assert any("editorial_qa.json" in caption.value for caption in app.caption)
     assert any(subheader.value == "Decision QA Scorecard" for subheader in app.subheader)
     assert any("host publication" in info.value for info in app.info)
+    assert not any(button.label == "Apply recommended revision" for button in app.button)
     assert not any("Final package:" in caption.value for caption in app.caption)
 
 

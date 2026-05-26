@@ -57,6 +57,11 @@ and `final_qa_report.json`; open LP and GP to show their `english_original.md`,
 scenario with the Decision QA Scorecard: it makes the evidence and next action
 visible before opening the raw artifacts.
 
+For the strongest workflow demonstration, run LP in Streamlit, show its
+`needs_revision` scorecard, then click `Apply recommended revision`. The same job
+ends `approved`, while `revision_history.json` preserves the original failed claim
+decision as evidence of the routed correction.
+
 ## What To Emphasize
 
 - It is staged orchestration, not a single prompt.
@@ -105,4 +110,4 @@ The project is testable and inspectable. The same workflow can be run from Strea
 
 **What would you improve next?**
 
-The next useful improvement would be async stage execution with retryable jobs and a richer revision UI, because those would make the project closer to a production operator workflow.
+The next useful improvement would be async stage execution and a full revision workspace with free-form edits and version comparison, because the current demo deliberately supports one controlled correction path.

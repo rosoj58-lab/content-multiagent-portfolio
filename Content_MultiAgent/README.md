@@ -11,6 +11,7 @@ The project is built to be demonstrated in interviews. It does not require hoste
 - Deterministic QA gates for article structure, SEO coverage and uniqueness thresholding.
 - File-based artifacts under `artifacts/jobs/<job_id>/` for inspection.
 - Streamlit observability: decision QA scorecard, status timeline, artifact previews, download actions and controlled errors.
+- An LP correction action that preserves failed QA evidence and demonstrates revision through approval.
 - Optional provider boundary for Copyleaks without making it mandatory for the local demo.
 
 ## Quick Demo
@@ -72,12 +73,18 @@ uv run seo-demo --demo all --mode demo --summary-file artifacts/demo/demo-summar
 
 Static sample outputs are available in `examples/outputs/` for quick GitHub review.
 
+To demonstrate a complete revision loop in Streamlit, use `examples/inputs/lp-demo.txt`
+with article type `LP`. The first run stops at `needs_revision`; click
+`Apply recommended revision` to preserve the failed decision in
+`revision_history.json`, generate a corrected article and complete the same job
+with an approved final package.
+
 ## Demo Inputs
 
 | Input | Article type | Demo path |
 | --- | --- | --- |
 | `examples/inputs/bp-demo.txt` | `BP` | Happy path |
-| `examples/inputs/lp-demo.txt` | `LP` | Revision path discussion |
+| `examples/inputs/lp-demo.txt` | `LP` | Revision path and correction-to-approval |
 | `examples/inputs/gp-demo.txt` | `GP` | Human-review discussion |
 
 ## Development

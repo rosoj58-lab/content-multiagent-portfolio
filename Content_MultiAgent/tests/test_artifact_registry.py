@@ -6,6 +6,8 @@ from seo_content_pipeline.models import (
     JobMetadata,
     PipelineState,
     QAReport,
+    RevisionHistoryArtifact,
+    RevisionHistoryEntry,
     StageView,
     ValidationCheck,
     WorkflowError,
@@ -38,6 +40,11 @@ def test_artifact_registry_includes_brief_qa_report() -> None:
 def test_artifact_registry_includes_article_validation_report() -> None:
     assert ARTIFACT_REGISTRY[ArtifactKey.ARTICLE_VALIDATION].filename == "article_validation.json"
     assert ARTIFACT_REGISTRY[ArtifactKey.ARTICLE_VALIDATION].content_type == "application/json"
+
+
+def test_artifact_registry_includes_revision_history_report() -> None:
+    assert ARTIFACT_REGISTRY[ArtifactKey.REVISION_HISTORY].filename == "revision_history.json"
+    assert ARTIFACT_REGISTRY[ArtifactKey.REVISION_HISTORY].content_type == "application/json"
 
 
 def test_artifact_registry_has_unique_filenames_and_required_metadata() -> None:
@@ -80,6 +87,21 @@ def test_model_mutable_defaults_are_not_shared() -> None:
         summary="ok",
     )
     first_report.recommendations.append("keep keyword density natural")
+
+    first_history = RevisionHistoryArtifact(
+        job_id="job-1",
+        revisions=[
+            RevisionHistoryEntry(
+                attempt=1,
+                source_stage=WorkflowStage.EDITORIAL_REVIEW,
+                initial_status=WorkflowStatus.NEEDS_REVISION,
+                failed_report=first_report,
+                action="Remove unsupported claim.",
+            )
+        ],
+    )
+    second_history = RevisionHistoryArtifact(job_id="job-2")
+    first_history.revisions[0].action = "Provide supporting evidence."
 
     first_view = StageView(
         stage=WorkflowStage.SEO_QA,
@@ -135,6 +157,7 @@ def test_model_mutable_defaults_are_not_shared() -> None:
 
     assert second_check.metadata == {}
     assert second_report.recommendations == []
+    assert second_history.revisions == []
     assert second_view.available_actions == []
     assert second_job.status_history == []
     assert second_state.revision_notes == {}

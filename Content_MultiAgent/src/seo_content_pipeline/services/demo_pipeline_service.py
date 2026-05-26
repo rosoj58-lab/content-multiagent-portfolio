@@ -4,12 +4,22 @@ from __future__ import annotations
 
 import json
 import re
+from datetime import UTC, datetime
 from typing import Literal
 
 from pydantic import BaseModel
 
 from seo_content_pipeline.config import AppSettings, get_settings
-from seo_content_pipeline.models import ArtifactKey, ArticleType, PipelineState, WorkflowStatus
+from seo_content_pipeline.models import (
+    ArtifactKey,
+    ArticleType,
+    PipelineState,
+    QAReport,
+    RevisionHistoryArtifact,
+    RevisionHistoryEntry,
+    WorkflowStage,
+    WorkflowStatus,
+)
 from seo_content_pipeline.services.article_validation_service import ArticleValidationService
 from seo_content_pipeline.services.artifact_store import ArtifactStore
 from seo_content_pipeline.services.brief_approval_service import BriefApprovalService
@@ -107,6 +117,112 @@ class DemoPipelineService:
                     self.artifact_store.artifact_path(job_id, ArtifactKey.EDITORIAL_QA)
                 ),
             )
+        return self._complete_after_editorial_pass(job_id, llm_runner)
+
+    def apply_lp_editorial_revision(
+        self,
+        job_id: str,
+        *,
+        mode: DemoRunMode = "demo",
+    ) -> DemoPipelineResult:
+        """Correct the routed LP claim and continue the same job to final QA."""
+        state = PipelineState.model_validate(self.artifact_store.read_json(job_id, ArtifactKey.STATE))
+        self._ensure_lp_revision_state(state)
+        failed_report = QAReport.model_validate(
+            self.artifact_store.read_json(job_id, ArtifactKey.EDITORIAL_QA)
+        )
+        self._ensure_lp_revision_report(failed_report)
+        self._preserve_revision_decision(job_id, failed_report)
+        responses = [
+            _article_markdown(ArticleType.LP, mode, revised=True),
+            json.dumps(_editorial_qa_payload(job_id, ArticleType.LP, revised=True)),
+            _localized_markdown("Spanish", ArticleType.LP),
+            _localized_markdown("Italian", ArticleType.LP),
+            _localized_markdown("French", ArticleType.LP),
+        ]
+        llm_runner = LLMRunner(_DeterministicDemoClient(responses))
+
+        WriterService(
+            settings=self.settings,
+            artifact_store=self.artifact_store,
+            llm_runner=llm_runner,
+        ).revise_english_original(job_id, mode=mode)
+        validation_result = ArticleValidationService(
+            settings=self.settings,
+            artifact_store=self.artifact_store,
+        ).validate_english_original(job_id, mode=mode)
+        if validation_result.status is not WorkflowStatus.RUNNING:
+            raise ValueError("corrected LP article did not pass deterministic validation")
+        editorial_result = EditorialQAService(
+            settings=self.settings,
+            artifact_store=self.artifact_store,
+            llm_runner=llm_runner,
+        ).run_editorial_qa(job_id)
+        if editorial_result.status is not WorkflowStatus.RUNNING:
+            raise ValueError("corrected LP article did not pass editorial QA")
+        result = self._complete_after_editorial_pass(job_id, llm_runner)
+        self._resolve_revision_decision(job_id, result.status)
+        return result
+
+    @staticmethod
+    def _ensure_lp_revision_state(state: PipelineState) -> None:
+        if (
+            state.article_type is not ArticleType.LP
+            or state.current_stage is not WorkflowStage.EDITORIAL_REVIEW
+            or state.status is not WorkflowStatus.NEEDS_REVISION
+        ):
+            raise ValueError("LP correction requires an editorial needs_revision decision")
+
+    @staticmethod
+    def _ensure_lp_revision_report(report: QAReport) -> None:
+        if (
+            report.passed
+            or report.routing_target is not WorkflowStage.WRITING
+            or report.requires_human_review
+        ):
+            raise ValueError("LP correction requires a routed failed editorial report")
+
+    def _preserve_revision_decision(self, job_id: str, report: QAReport) -> None:
+        history_path = self.artifact_store.artifact_path(job_id, ArtifactKey.REVISION_HISTORY)
+        if history_path.exists():
+            history = RevisionHistoryArtifact.model_validate(
+                self.artifact_store.read_json(job_id, ArtifactKey.REVISION_HISTORY)
+            )
+        else:
+            history = RevisionHistoryArtifact(job_id=job_id)
+        history.revisions.append(
+            RevisionHistoryEntry(
+                attempt=len(history.revisions) + 1,
+                source_stage=WorkflowStage.EDITORIAL_REVIEW,
+                initial_status=WorkflowStatus.NEEDS_REVISION,
+                failed_report=report,
+                action=report.recommendations[0] if report.recommendations else report.summary,
+            )
+        )
+        persisted_path = self.artifact_store.write_json(
+            job_id,
+            ArtifactKey.REVISION_HISTORY,
+            history,
+        )
+        state = PipelineState.model_validate(self.artifact_store.read_json(job_id, ArtifactKey.STATE))
+        state.artifact_paths[ArtifactKey.REVISION_HISTORY] = str(persisted_path)
+        self.artifact_store.write_json(job_id, ArtifactKey.STATE, state)
+
+    def _resolve_revision_decision(self, job_id: str, status: WorkflowStatus) -> None:
+        history = RevisionHistoryArtifact.model_validate(
+            self.artifact_store.read_json(job_id, ArtifactKey.REVISION_HISTORY)
+        )
+        latest = history.revisions[-1]
+        latest.resolved_status = status
+        latest.resolution_summary = "Unsupported claim removed; corrected LP passed final QA."
+        latest.resolved_at = datetime.now(UTC)
+        self.artifact_store.write_json(job_id, ArtifactKey.REVISION_HISTORY, history)
+
+    def _complete_after_editorial_pass(
+        self,
+        job_id: str,
+        llm_runner: LLMRunner,
+    ) -> DemoPipelineResult:
         SEOQAService(settings=self.settings, artifact_store=self.artifact_store).run_seo_qa(job_id)
         UniquenessProviderService(
             settings=self.settings,
@@ -181,10 +297,19 @@ def _brief_payload(article_type: ArticleType) -> dict:
     }
 
 
-def _article_markdown(article_type: ArticleType, mode: DemoRunMode) -> str:
+def _article_markdown(
+    article_type: ArticleType,
+    mode: DemoRunMode,
+    *,
+    revised: bool = False,
+) -> str:
     context = {
         ArticleType.BP: "The blog post path shows a clean informational workflow.",
-        ArticleType.LP: "The landing page promises to cut content cost by 70 percent.",
+        ArticleType.LP: (
+            "The landing page keeps commercial claims limited to supplied evidence."
+            if revised
+            else "The landing page promises to cut content cost by 70 percent."
+        ),
         ArticleType.GP: (
             "The guest post includes one contextual reference to "
             "[SEO Content Multi-Agent Pipeline](https://example.com/seo-content-pipeline), "
@@ -341,8 +466,13 @@ def _word_count(text: str) -> int:
     return len(re.findall(r"\b[\w'-]+\b", text))
 
 
-def _editorial_qa_payload(job_id: str, article_type: ArticleType) -> dict:
-    if article_type is ArticleType.LP:
+def _editorial_qa_payload(
+    job_id: str,
+    article_type: ArticleType,
+    *,
+    revised: bool = False,
+) -> dict:
+    if article_type is ArticleType.LP and not revised:
         return {
             "job_id": job_id,
             "stage": "editorial_review",
@@ -360,6 +490,26 @@ def _editorial_qa_payload(job_id: str, article_type: ArticleType) -> dict:
             "score": 0.0,
             "recommendations": ["Remove the 70 percent claim or provide evidence."],
             "routing_target": "writing",
+            "requires_human_review": False,
+        }
+    if article_type is ArticleType.LP:
+        return {
+            "job_id": job_id,
+            "stage": "editorial_review",
+            "passed": True,
+            "checks": [
+                {
+                    "name": "unsupported_factual_claims",
+                    "passed": True,
+                    "severity": "info",
+                    "message": "Corrected landing page avoids unsupported performance claims.",
+                    "metadata": {"area": "factual_discipline"},
+                }
+            ],
+            "summary": "Editorial QA passed after targeted landing page revision.",
+            "score": 1.0,
+            "recommendations": [],
+            "routing_target": None,
             "requires_human_review": False,
         }
     if article_type is ArticleType.GP:
