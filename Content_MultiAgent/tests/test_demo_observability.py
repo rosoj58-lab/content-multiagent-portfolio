@@ -21,6 +21,7 @@ from seo_content_pipeline.services.stage_view_builder import build_pipeline_stag
 from seo_content_pipeline.ui.artifact_panel import build_artifact_previews
 from seo_content_pipeline.ui.error_presenter import build_controlled_error
 from seo_content_pipeline.ui.qa_scorecard import build_decision_scorecard
+from seo_content_pipeline.ui.revision_comparison import build_revision_comparison
 from seo_content_pipeline.ui.renderers import build_qa_checklist
 
 
@@ -188,6 +189,20 @@ def _run_corrected_landing_page_scorecard(tmp_path):
     return build_decision_scorecard(job.metadata.job_id, store)
 
 
+def _run_corrected_landing_page_comparison(tmp_path):
+    settings = AppSettings(artifact_root=tmp_path)
+    store = ArtifactStore(settings.artifact_root)
+    job = JobService(settings=settings, artifact_store=store).create_job(
+        "Stable landing page notes for a corrected demo.",
+        ArticleType.LP,
+    )
+    service = DemoPipelineService(settings=settings, artifact_store=store)
+    service.run_demo_scenario(job.metadata.job_id, mode="demo")
+    assert build_revision_comparison(job.metadata.job_id, store) is None
+    service.apply_lp_editorial_revision(job.metadata.job_id, mode="demo")
+    return build_revision_comparison(job.metadata.job_id, store)
+
+
 def test_decision_scorecard_is_hidden_before_a_terminal_decision(tmp_path) -> None:
     settings = AppSettings(artifact_root=tmp_path)
     store = ArtifactStore(settings.artifact_root)
@@ -237,3 +252,11 @@ def test_decision_scorecard_explains_resolved_landing_page_revision(tmp_path) ->
     assert scorecard.status is WorkflowStatus.APPROVED
     assert scorecard.resolved_revisions[0].status_label == "Resolved"
     assert "Unsupported claim removed" in scorecard.resolved_revisions[0].detail
+
+
+def test_revision_comparison_presents_rejected_and_approved_landing_page_versions(tmp_path) -> None:
+    comparison = _run_corrected_landing_page_comparison(tmp_path)
+
+    assert comparison is not None
+    assert "70 percent" in comparison.rejected_markdown
+    assert "70 percent" not in comparison.approved_markdown

@@ -41,6 +41,7 @@ intended for interview navigation.
 | `brief.json` | SEO brief | Defines topic, goal, audience, keywords and outline. |
 | `brief_qa.json` | Brief QA | Records completeness checks before writing. |
 | `english_original.md` | Writing | Source article used by QA, uniqueness and localization. |
+| `english_original_rejected.md` | Routed revision | Preserved LP draft before its targeted correction. |
 | `article_validation.json` | Writing validation | Deterministic article checks such as structure and word count. |
 | `editorial_qa.json` | Editorial review | Checks factual discipline, structure and editorial risk. |
 | `revision_history.json` | Routed revision | Preserves failed QA evidence and records its correction outcome. |
@@ -66,4 +67,5 @@ The stable demo scenarios intentionally stop at different decision points: BP
 continues through final QA, LP stops after editorial QA with writing revision
 guidance, and GP stops after editorial QA for human link-placement review. In the
 Streamlit LP walkthrough, an explicit correction action continues that same job to
-approval while preserving its original decision in `revision_history.json`.
+approval while preserving its original decision in `revision_history.json` and its
+rejected wording in `english_original_rejected.md` for read-only version comparison.

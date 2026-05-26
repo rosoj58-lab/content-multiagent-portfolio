@@ -14,6 +14,7 @@ class ArtifactKey(str, Enum):
     BRIEF = "brief"
     BRIEF_QA = "brief_qa"
     ENGLISH_ORIGINAL = "english_original"
+    REJECTED_ENGLISH_ORIGINAL = "rejected_english_original"
     ARTICLE_VALIDATION = "article_validation"
     EDITORIAL_QA = "editorial_qa"
     REVISION_HISTORY = "revision_history"
@@ -79,6 +80,13 @@ ARTIFACT_REGISTRY: dict[ArtifactKey, ArtifactSpec] = {
         content_type="text/markdown",
         ui_label="English Original",
         description="Approved English US source article.",
+    ),
+    ArtifactKey.REJECTED_ENGLISH_ORIGINAL: ArtifactSpec(
+        key=ArtifactKey.REJECTED_ENGLISH_ORIGINAL,
+        filename="english_original_rejected.md",
+        content_type="text/markdown",
+        ui_label="Rejected English Original",
+        description="Preserved English draft that triggered a routed revision.",
     ),
     ArtifactKey.ARTICLE_VALIDATION: ArtifactSpec(
         key=ArtifactKey.ARTICLE_VALIDATION,

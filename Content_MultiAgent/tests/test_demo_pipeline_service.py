@@ -142,16 +142,23 @@ def test_landing_page_revision_preserves_failed_decision_and_reaches_approval(
     history = store.read_json(job.metadata.job_id, ArtifactKey.REVISION_HISTORY)
     editorial = store.read_json(job.metadata.job_id, ArtifactKey.EDITORIAL_QA)
     article = store.read_text(job.metadata.job_id, ArtifactKey.ENGLISH_ORIGINAL)
+    rejected_article = store.read_text(job.metadata.job_id, ArtifactKey.REJECTED_ENGLISH_ORIGINAL)
 
     assert result.job_id == job.metadata.job_id
     assert result.status is WorkflowStatus.APPROVED
     assert result.final_package_path.endswith("final_package.md")
     assert "70 percent" not in article
+    assert "70 percent" in rejected_article
     assert editorial["passed"] is True
     assert history["revisions"][0]["failed_report"]["checks"][0]["name"] == "unsupported_factual_claims"
+    assert history["revisions"][0]["rejected_article_path"].endswith("english_original_rejected.md")
+    assert history["revisions"][0]["approved_article_path"].endswith("english_original.md")
     assert history["revisions"][0]["resolved_status"] == "approved"
     assert history["revisions"][0]["resolved_at"]
     assert state["artifact_paths"]["revision_history"].endswith("revision_history.json")
+    assert state["artifact_paths"]["rejected_english_original"].endswith(
+        "english_original_rejected.md"
+    )
     assert state["revision_attempts"]["editorial_review"] == 1
 
 
@@ -170,6 +177,9 @@ def test_lp_revision_rejects_non_landing_page_outcomes(tmp_path, article_type) -
         service.apply_lp_editorial_revision(job.metadata.job_id, mode="demo")
 
     assert not store.artifact_path(job.metadata.job_id, ArtifactKey.REVISION_HISTORY).exists()
+    assert not store.artifact_path(
+        job.metadata.job_id, ArtifactKey.REJECTED_ENGLISH_ORIGINAL
+    ).exists()
 
 
 def test_lp_revision_rejects_inconsistent_editorial_report_without_writing_history(tmp_path) -> None:
@@ -190,6 +200,9 @@ def test_lp_revision_rejects_inconsistent_editorial_report_without_writing_histo
         service.apply_lp_editorial_revision(job.metadata.job_id, mode="demo")
 
     assert not store.artifact_path(job.metadata.job_id, ArtifactKey.REVISION_HISTORY).exists()
+    assert not store.artifact_path(
+        job.metadata.job_id, ArtifactKey.REJECTED_ENGLISH_ORIGINAL
+    ).exists()
 
 
 def test_lp_revision_cannot_be_reapplied_after_approval(tmp_path) -> None:

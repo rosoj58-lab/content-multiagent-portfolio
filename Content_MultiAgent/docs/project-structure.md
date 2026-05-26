@@ -38,7 +38,8 @@ to show `state.json`, QA reports, localizations, final package files and
 `final_qa_report.json`; open LP and GP to show their routed
 `editorial_qa.json` decision artifacts.
 For the LP correction walkthrough, open `revision_history.json` beside the
-approved final package to show that initial failed QA evidence was preserved.
+approved final package and `english_original_rejected.md` to show that both the
+failed QA evidence and rejected content were preserved for comparison.
 
 ## Requirements Trace
 

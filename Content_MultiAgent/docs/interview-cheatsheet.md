@@ -60,7 +60,8 @@ visible before opening the raw artifacts.
 For the strongest workflow demonstration, run LP in Streamlit, show its
 `needs_revision` scorecard, then click `Apply recommended revision`. The same job
 ends `approved`, while `revision_history.json` preserves the original failed claim
-decision as evidence of the routed correction.
+decision and `english_original_rejected.md` preserves the rejected wording. Open
+`Revision Comparison` to show the problem and approved correction side by side.
 
 ## What To Emphasize
 
@@ -110,4 +111,4 @@ The project is testable and inspectable. The same workflow can be run from Strea
 
 **What would you improve next?**
 
-The next useful improvement would be async stage execution and a full revision workspace with free-form edits and version comparison, because the current demo deliberately supports one controlled correction path.
+The next useful improvement would be async stage execution and a full revision workspace with free-form edits and repeated version history, because the current demo deliberately supports one controlled read-only comparison path.

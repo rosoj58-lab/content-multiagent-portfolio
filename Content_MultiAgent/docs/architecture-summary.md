@@ -63,6 +63,8 @@ unsupported commercial claim, and GP stops at editorial QA with
 `needs_human_review` for contextual link-placement judgment.
 
 The Streamlit LP walkthrough can then explicitly apply its recommended revision.
-The pipeline preserves the failed report in `revision_history.json`, replaces the
-working draft, and reuses the existing gates before final approval; GP remains a
-human decision rather than an automated continuation.
+The pipeline preserves the failed report in `revision_history.json` and snapshots
+the failed draft in `english_original_rejected.md` before replacing the working
+article. After existing gates approve the correction, Streamlit renders those two
+persisted versions side by side; GP remains a human decision rather than an
+automated continuation.

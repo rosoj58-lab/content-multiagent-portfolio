@@ -47,6 +47,14 @@ def test_artifact_registry_includes_revision_history_report() -> None:
     assert ARTIFACT_REGISTRY[ArtifactKey.REVISION_HISTORY].content_type == "application/json"
 
 
+def test_artifact_registry_includes_rejected_english_original_snapshot() -> None:
+    assert (
+        ARTIFACT_REGISTRY[ArtifactKey.REJECTED_ENGLISH_ORIGINAL].filename
+        == "english_original_rejected.md"
+    )
+    assert ARTIFACT_REGISTRY[ArtifactKey.REJECTED_ENGLISH_ORIGINAL].content_type == "text/markdown"
+
+
 def test_artifact_registry_has_unique_filenames_and_required_metadata() -> None:
     filenames = [spec.filename for spec in ARTIFACT_REGISTRY.values()]
 

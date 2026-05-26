@@ -15,6 +15,10 @@ from seo_content_pipeline.ui.qa_scorecard import (
     can_apply_lp_revision,
     render_decision_scorecard,
 )
+from seo_content_pipeline.ui.revision_comparison import (
+    build_revision_comparison,
+    render_revision_comparison,
+)
 
 
 def main() -> None:
@@ -100,6 +104,9 @@ def main() -> None:
         scorecard = build_decision_scorecard(result.metadata.job_id, service.artifact_store)
         if scorecard is not None:
             render_decision_scorecard(scorecard)
+        comparison = build_revision_comparison(result.metadata.job_id, service.artifact_store)
+        if comparison is not None:
+            render_revision_comparison(comparison)
         render_pipeline_progress_timeline(state)
         render_artifact_panel(result.metadata.job_id, service.artifact_store)
     except Exception as error:

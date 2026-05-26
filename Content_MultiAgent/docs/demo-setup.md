@@ -59,12 +59,13 @@ make interview-check
 4. Create the job and inspect the progress timeline and artifact panel.
 5. Click `Run demo scenario` to execute the selected outcome.
 6. For LP, click `Apply recommended revision` to demonstrate correction and approval.
-7. Open `artifacts/jobs/<job_id>/` to show the persisted source of truth.
+7. After LP approval, inspect `Revision Comparison` and open `artifacts/jobs/<job_id>/`.
 
 The BP case is the main happy path and generates the approved final package. The LP case
 produces an English draft with an unsupported performance claim, then stops at
 `editorial_qa.json` with `needs_revision` guidance. After explicit correction,
-the same LP job writes `revision_history.json`, replaces the working draft and
-reaches an approved final package. The GP case includes a contextual project link,
-then stops at `editorial_qa.json` with `needs_human_review` because publication fit
-needs editorial judgment.
+the same LP job writes `revision_history.json`, snapshots the rejected draft as
+`english_original_rejected.md`, replaces the working draft and reaches an approved
+final package. The UI displays the rejected and approved versions together. The GP
+case includes a contextual project link, then stops at `editorial_qa.json` with
+`needs_human_review` because publication fit needs editorial judgment.

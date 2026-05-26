@@ -76,8 +76,9 @@ Static sample outputs are available in `examples/outputs/` for quick GitHub revi
 To demonstrate a complete revision loop in Streamlit, use `examples/inputs/lp-demo.txt`
 with article type `LP`. The first run stops at `needs_revision`; click
 `Apply recommended revision` to preserve the failed decision in
-`revision_history.json`, generate a corrected article and complete the same job
-with an approved final package.
+`revision_history.json` and the rejected text in `english_original_rejected.md`,
+generate a corrected article and complete the same job with an approved final
+package. The approved view shows the rejected and approved versions side by side.
 
 ## Demo Inputs
 

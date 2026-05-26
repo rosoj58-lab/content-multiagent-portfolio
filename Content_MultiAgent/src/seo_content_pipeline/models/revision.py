@@ -16,6 +16,8 @@ class RevisionHistoryEntry(BaseModel):
     initial_status: WorkflowStatus
     failed_report: QAReport
     action: str
+    rejected_article_path: str | None = None
+    approved_article_path: str | None = None
     resolved_status: WorkflowStatus | None = None
     resolution_summary: str | None = None
     resolved_at: datetime | None = None

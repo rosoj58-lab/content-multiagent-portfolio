@@ -14,6 +14,7 @@ Initial local portfolio release of the multi-agent SEO content pipeline.
 - Distinct deterministic demo outcomes: BP approval, LP editorial revision for an unsupported claim and GP human-review escalation for contextual link placement.
 - Decision QA Scorecard in Streamlit for approval evidence, revision guidance and human-review actions.
 - LP correction-to-approval action with persisted `revision_history.json` evidence.
+- Read-only LP version comparison with a persisted `english_original_rejected.md` snapshot.
 - Docker development environment with app, test and diagnostic shortcuts.
 - GitHub Actions quality gate using `uv sync --frozen`, Ruff and pytest.
 - Tracked example outputs for GitHub review, including a sample final package, final QA report and demo summary manifest.

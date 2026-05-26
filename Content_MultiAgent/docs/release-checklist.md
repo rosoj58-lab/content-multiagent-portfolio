@@ -52,7 +52,9 @@ Inspect generated `artifacts/jobs/<job_id>/` folders and confirm:
 
 In Streamlit, run LP and click `Apply recommended revision`; confirm the same job
 then contains `revision_history.json`, an approved `final_qa_report.json` and a
-final package, while the scorecard shows resolved revision evidence.
+final package, while the scorecard shows resolved revision evidence. Confirm
+`english_original_rejected.md` preserves the unsupported claim and
+`Revision Comparison` shows it beside the approved version.
 
 ## 3. Docker Check
 

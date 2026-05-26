@@ -18,6 +18,7 @@ def test_changelog_documents_current_portfolio_release() -> None:
     assert "GP human-review escalation" in changelog
     assert "Decision QA Scorecard" in changelog
     assert "revision_history.json" in changelog
+    assert "english_original_rejected.md" in changelog
     assert "Docker development environment" in changelog
     assert "GitHub Actions quality gate" in changelog
     assert "Tracked example outputs" in changelog

@@ -57,6 +57,8 @@ def test_interview_cheatsheet_covers_pitch_tradeoffs_and_questions() -> None:
     assert "decision qa scorecard" in cheatsheet
     assert "apply recommended revision" in cheatsheet
     assert "revision_history.json" in cheatsheet
+    assert "english_original_rejected.md" in cheatsheet
+    assert "revision comparison" in cheatsheet
     assert "honest tradeoffs" in cheatsheet
     assert "likely questions" in cheatsheet
     assert "not a hosted production system" in cheatsheet
@@ -75,7 +77,8 @@ def test_roadmap_documents_mvp_next_steps_and_deferred_scope() -> None:
     assert "hosted deployment" in roadmap
     assert "not as a production saas platform" in roadmap
     assert "correction-to-approval" in roadmap
-    assert "expanded revision workspace" in roadmap
+    assert "editable revision workspace" in roadmap
+    assert "read-only lp comparison" in roadmap
 
 
 def test_artifact_map_identifies_storage_and_qa_decisions() -> None:
@@ -90,6 +93,7 @@ def test_artifact_map_identifies_storage_and_qa_decisions() -> None:
     assert "qa decision" in artifact_map
     assert "revision routing" in artifact_map
     assert "revision_history.json" in artifact_map
+    assert "english_original_rejected.md" in artifact_map
 
 
 def test_artifact_map_documents_demo_summary_manifest_contract() -> None:
@@ -129,6 +133,7 @@ def test_architecture_docs_reinforce_status_and_routing_requirements() -> None:
     assert "streamlit" in combined
     assert "artifactstore" in combined
     assert "revision_history.json" in combined
+    assert "english_original_rejected.md" in combined
 
 
 def test_architecture_summary_includes_pipeline_diagram() -> None:

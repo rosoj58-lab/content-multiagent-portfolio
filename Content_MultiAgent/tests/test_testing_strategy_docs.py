@@ -18,6 +18,7 @@ def test_testing_strategy_documents_quality_gate_and_coverage() -> None:
     assert "GP human-review escalation" in strategy
     assert "decision QA scorecard" in strategy
     assert "LP correction lifecycle" in strategy
+    assert "LP version comparison" in strategy
     assert "Documentation and repository health" in strategy
     assert "What Is Not Covered Yet" in strategy
 

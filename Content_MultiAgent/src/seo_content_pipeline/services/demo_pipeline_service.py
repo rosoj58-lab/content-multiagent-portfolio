@@ -132,7 +132,12 @@ class DemoPipelineService:
             self.artifact_store.read_json(job_id, ArtifactKey.EDITORIAL_QA)
         )
         self._ensure_lp_revision_report(failed_report)
-        self._preserve_revision_decision(job_id, failed_report)
+        rejected_article_path = self.artifact_store.write_text(
+            job_id,
+            ArtifactKey.REJECTED_ENGLISH_ORIGINAL,
+            self.artifact_store.read_text(job_id, ArtifactKey.ENGLISH_ORIGINAL),
+        )
+        self._preserve_revision_decision(job_id, failed_report, str(rejected_article_path))
         responses = [
             _article_markdown(ArticleType.LP, mode, revised=True),
             json.dumps(_editorial_qa_payload(job_id, ArticleType.LP, revised=True)),
@@ -182,7 +187,12 @@ class DemoPipelineService:
         ):
             raise ValueError("LP correction requires a routed failed editorial report")
 
-    def _preserve_revision_decision(self, job_id: str, report: QAReport) -> None:
+    def _preserve_revision_decision(
+        self,
+        job_id: str,
+        report: QAReport,
+        rejected_article_path: str,
+    ) -> None:
         history_path = self.artifact_store.artifact_path(job_id, ArtifactKey.REVISION_HISTORY)
         if history_path.exists():
             history = RevisionHistoryArtifact.model_validate(
@@ -197,6 +207,7 @@ class DemoPipelineService:
                 initial_status=WorkflowStatus.NEEDS_REVISION,
                 failed_report=report,
                 action=report.recommendations[0] if report.recommendations else report.summary,
+                rejected_article_path=rejected_article_path,
             )
         )
         persisted_path = self.artifact_store.write_json(
@@ -206,6 +217,7 @@ class DemoPipelineService:
         )
         state = PipelineState.model_validate(self.artifact_store.read_json(job_id, ArtifactKey.STATE))
         state.artifact_paths[ArtifactKey.REVISION_HISTORY] = str(persisted_path)
+        state.artifact_paths[ArtifactKey.REJECTED_ENGLISH_ORIGINAL] = rejected_article_path
         self.artifact_store.write_json(job_id, ArtifactKey.STATE, state)
 
     def _resolve_revision_decision(self, job_id: str, status: WorkflowStatus) -> None:
@@ -213,6 +225,9 @@ class DemoPipelineService:
             self.artifact_store.read_json(job_id, ArtifactKey.REVISION_HISTORY)
         )
         latest = history.revisions[-1]
+        latest.approved_article_path = str(
+            self.artifact_store.artifact_path(job_id, ArtifactKey.ENGLISH_ORIGINAL)
+        )
         latest.resolved_status = status
         latest.resolution_summary = "Unsupported claim removed; corrected LP passed final QA."
         latest.resolved_at = datetime.now(UTC)

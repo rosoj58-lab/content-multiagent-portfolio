@@ -17,9 +17,10 @@ The scorecard surfaces the failed claim and its correction action before you ope
 the draft and report side by side. The talking point is FR18: failed checks do not
 become vague errors; they become revision guidance with a target stage.
 Then click `Apply recommended revision`. The same job persists the failed report in
-`revision_history.json`, replaces the unsupported wording, runs the existing quality
-gates and finishes with an approved final package. Use the resolved revision evidence
-in the scorecard to show a controlled loop rather than a hidden retry.
+`revision_history.json` and the rejected draft in `english_original_rejected.md`,
+replaces the unsupported wording, runs the existing quality gates and finishes with
+an approved final package. Use `Revision Comparison` and the resolved scorecard
+evidence to show exactly what changed in a controlled loop rather than a hidden retry.
 
 ## Human-Review Path: GP
 
