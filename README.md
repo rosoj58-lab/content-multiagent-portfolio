@@ -20,7 +20,7 @@ uv sync
 uv run streamlit run app.py
 ```
 
-Then open `http://localhost:8501`, create a job from `examples/inputs/bp-demo.txt`, and click `Run full demo pipeline`.
+Then open `http://localhost:8501`, create a job from `examples/inputs/bp-demo.txt`, and click `Run demo scenario`.
 
 Terminal smoke demo:
 
