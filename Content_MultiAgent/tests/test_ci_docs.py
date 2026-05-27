@@ -14,6 +14,8 @@ def test_github_actions_ci_runs_project_quality_gate() -> None:
     assert "working-directory: Content_MultiAgent" in text
     assert "workflow_dispatch:" in text
     assert "contents: read" in text
+    assert "actions/checkout@v6" in text
+    assert "actions/setup-python@v6" in text
     assert "python-version: \"3.12\"" in text
     assert "uv sync --frozen" in text
     assert "uv run ruff check ." in text
@@ -88,6 +90,9 @@ def test_dependabot_covers_project_dependencies_and_platform_files() -> None:
     assert '"python"' in dependabot
     assert '"github-actions"' in dependabot
     assert '"docker"' in dependabot
+    assert 'dependency-name: "python"' in dependabot
+    assert '"version-update:semver-major"' in dependabot
+    assert '"version-update:semver-minor"' in dependabot
 
 
 def test_readme_mentions_ci_quality_gate() -> None:
