@@ -14,7 +14,8 @@ def test_readme_documents_interview_demo_flow() -> None:
     assert "docs/decisions/0001-offline-first-demo-and-provider-boundaries.md" in readme
     assert "Run demo scenario" in readme
     assert "Decision QA Scorecard" in readme
-    assert "Apply recommended revision" in readme
+    assert "Replacement statement" in readme
+    assert "Apply correction" in readme
     assert "revision_history.json" in readme
     assert "english_original_rejected.md" in readme
     assert "artifacts/jobs/<job_id>/" in readme
@@ -94,7 +95,8 @@ def test_release_checklist_covers_quality_demo_docker_docs_and_security() -> Non
     assert "final_qa_report.json" in checklist
     assert "needs_revision" in checklist
     assert "needs_human_review" in checklist
-    assert "Apply recommended revision" in checklist
+    assert "Replacement statement" in checklist
+    assert "Apply correction" in checklist
     assert "revision_history.json" in checklist
     assert "english_original_rejected.md" in checklist
     assert "Revision Comparison" in checklist

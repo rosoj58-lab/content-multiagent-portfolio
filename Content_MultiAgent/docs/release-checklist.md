@@ -50,9 +50,12 @@ Inspect generated `artifacts/jobs/<job_id>/` folders and confirm:
 - `artifacts/demo/demo-summary.json` lists BP as `approved`, LP as
   `needs_revision` and GP as `needs_human_review`.
 
-In Streamlit, run LP and click `Apply recommended revision`; confirm the same job
-then contains `revision_history.json`, an approved `final_qa_report.json` and a
-final package, while the scorecard shows resolved revision evidence. Confirm
+In Streamlit, run LP, edit `Replacement statement` and click `Apply correction`;
+confirm the same job contains `revision_history.json`, an approved
+`final_qa_report.json` and a final package, while the scorecard shows resolved
+revision evidence. Submit wording matching a promotional-result pattern once and
+confirm it is rejected
+without a final package. Confirm
 `english_original_rejected.md` preserves the unsupported claim and
 `Revision Comparison` shows it beside the approved version.
 

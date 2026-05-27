@@ -3,10 +3,17 @@
 import streamlit as st
 
 from seo_content_pipeline.models import ArtifactKey, PipelineState
-from seo_content_pipeline.services.demo_pipeline_service import DemoPipelineService
+from seo_content_pipeline.services.demo_pipeline_service import (
+    DEFAULT_LP_CORRECTION_STATEMENT,
+    DemoPipelineService,
+)
 from seo_content_pipeline.services.job_service import JobService
 from seo_content_pipeline.ui.artifact_panel import render_artifact_panel
-from seo_content_pipeline.ui.components import render_job_creation_form, render_job_summary
+from seo_content_pipeline.ui.components import (
+    render_job_creation_form,
+    render_job_summary,
+    render_lp_correction_form,
+)
 from seo_content_pipeline.ui.empty_states import render_no_job_empty_state
 from seo_content_pipeline.ui.error_presenter import build_controlled_error, render_controlled_error
 from seo_content_pipeline.ui.progress_timeline import render_pipeline_progress_timeline
@@ -79,28 +86,31 @@ def main() -> None:
         state = PipelineState.model_validate(
             service.artifact_store.read_json(result.metadata.job_id, ArtifactKey.STATE)
         )
-        if can_apply_lp_revision(state) and st.button("Apply recommended revision", type="primary"):
-            try:
-                revision_result = DemoPipelineService(
-                    settings=service.settings,
-                    artifact_store=service.artifact_store,
-                ).apply_lp_editorial_revision(
-                    result.metadata.job_id,
-                    mode=st.session_state.get("demo_mode", "demo"),
-                )
-            except ValueError as error:
-                render_controlled_error(
-                    build_controlled_error(
-                        error,
-                        action="Run the LP revision scenario again before applying a correction.",
+        if can_apply_lp_revision(state):
+            correction_statement = render_lp_correction_form(DEFAULT_LP_CORRECTION_STATEMENT)
+            if correction_statement is not None:
+                try:
+                    revision_result = DemoPipelineService(
+                        settings=service.settings,
+                        artifact_store=service.artifact_store,
+                    ).apply_lp_editorial_revision(
+                        result.metadata.job_id,
+                        correction_statement,
+                        mode=st.session_state.get("demo_mode", "demo"),
                     )
-                )
-            else:
-                st.session_state["revision_confirmation"] = {
-                    "status": revision_result.status.value,
-                    "final_package_path": revision_result.final_package_path,
-                }
-                st.rerun()
+                except ValueError as error:
+                    render_controlled_error(
+                        build_controlled_error(
+                            error,
+                            action="Use wording without numbers or promotional result promises, then submit again.",
+                        )
+                    )
+                else:
+                    st.session_state["revision_confirmation"] = {
+                        "status": revision_result.status.value,
+                        "final_package_path": revision_result.final_package_path,
+                    }
+                    st.rerun()
         scorecard = build_decision_scorecard(result.metadata.job_id, service.artifact_store)
         if scorecard is not None:
             render_decision_scorecard(scorecard)

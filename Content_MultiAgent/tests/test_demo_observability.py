@@ -26,6 +26,7 @@ from seo_content_pipeline.ui.renderers import build_qa_checklist
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+SAFE_LP_CORRECTION = "The landing page presents only supplied evidence."
 
 
 def test_pipeline_stage_views_include_progress_artifacts_and_revision_counters() -> None:
@@ -185,7 +186,7 @@ def _run_corrected_landing_page_scorecard(tmp_path):
     )
     service = DemoPipelineService(settings=settings, artifact_store=store)
     service.run_demo_scenario(job.metadata.job_id, mode="demo")
-    service.apply_lp_editorial_revision(job.metadata.job_id, mode="demo")
+    service.apply_lp_editorial_revision(job.metadata.job_id, SAFE_LP_CORRECTION, mode="demo")
     return build_decision_scorecard(job.metadata.job_id, store)
 
 
@@ -199,7 +200,7 @@ def _run_corrected_landing_page_comparison(tmp_path):
     service = DemoPipelineService(settings=settings, artifact_store=store)
     service.run_demo_scenario(job.metadata.job_id, mode="demo")
     assert build_revision_comparison(job.metadata.job_id, store) is None
-    service.apply_lp_editorial_revision(job.metadata.job_id, mode="demo")
+    service.apply_lp_editorial_revision(job.metadata.job_id, SAFE_LP_CORRECTION, mode="demo")
     return build_revision_comparison(job.metadata.job_id, store)
 
 
@@ -260,3 +261,4 @@ def test_revision_comparison_presents_rejected_and_approved_landing_page_version
     assert comparison is not None
     assert "70 percent" in comparison.rejected_markdown
     assert "70 percent" not in comparison.approved_markdown
+    assert SAFE_LP_CORRECTION in comparison.approved_markdown

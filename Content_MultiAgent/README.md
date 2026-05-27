@@ -74,11 +74,13 @@ uv run seo-demo --demo all --mode demo --summary-file artifacts/demo/demo-summar
 Static sample outputs are available in `examples/outputs/` for quick GitHub review.
 
 To demonstrate a complete revision loop in Streamlit, use `examples/inputs/lp-demo.txt`
-with article type `LP`. The first run stops at `needs_revision`; click
-`Apply recommended revision` to preserve the failed decision in
-`revision_history.json` and the rejected text in `english_original_rejected.md`,
-generate a corrected article and complete the same job with an approved final
-package. The approved view shows the rejected and approved versions side by side.
+with article type `LP`. The first run stops at `needs_revision`; edit the
+`Replacement statement` and click `Apply correction`. Safe operator wording is
+stored in `revision_history.json`, while the rejected text is preserved in
+`english_original_rejected.md`. The same job completes with an approved final
+package and shows rejected and approved versions side by side. This focused input
+blocks common numerical or promotional-result patterns; it is not general fact
+verification.
 
 ## Demo Inputs
 

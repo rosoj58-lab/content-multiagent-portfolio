@@ -29,6 +29,7 @@ make ci
 - Stable scenario outcomes: BP approval, LP editorial revision routing and GP human-review escalation.
 - LP correction lifecycle: preserved failed QA evidence, targeted correction and approval of the same job.
 - LP version comparison: rejected draft snapshot and approved read-only comparison presentation.
+- LP operator correction: accepted replacement evidence and rejected unsafe wording without mutation.
 - Demo inputs and offline demo pipeline: BP/LP/GP inputs, Streamlit demo path and `seo-demo` terminal smoke path.
 - UI helpers: decision QA scorecard, status timeline, artifact previews, controlled error messages and download actions.
 - Documentation and repository health: README, Docker docs, interview docs, sample outputs, roadmap, root README and scaffold-cleanliness.

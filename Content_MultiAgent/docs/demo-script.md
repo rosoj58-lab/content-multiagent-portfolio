@@ -15,12 +15,13 @@ containing an unsupported 70 percent performance claim, then produces a failed
 `editorial_qa.json` report with `status=needs_revision` and routing target `writing`.
 The scorecard surfaces the failed claim and its correction action before you open
 the draft and report side by side. The talking point is FR18: failed checks do not
-become vague errors; they become revision guidance with a target stage.
-Then click `Apply recommended revision`. The same job persists the failed report in
-`revision_history.json` and the rejected draft in `english_original_rejected.md`,
-replaces the unsupported wording, runs the existing quality gates and finishes with
-an approved final package. Use `Revision Comparison` and the resolved scorecard
-evidence to show exactly what changed in a controlled loop rather than a hidden retry.
+become vague errors; they become revision guidance with a target stage. Edit
+`Replacement statement` with safe wording and click `Apply correction`. Explain
+that this focused guard rejects common numerical or promotional-result patterns
+for the known failed claim; it is not arbitrary fact verification. The same job persists the
+submitted correction in `revision_history.json` and the rejected draft in
+`english_original_rejected.md`, runs the existing gates and finishes with an
+approved final package. Use `Revision Comparison` to show the human decision.
 
 ## Human-Review Path: GP
 

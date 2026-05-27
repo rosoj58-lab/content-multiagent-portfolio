@@ -9,6 +9,9 @@ from seo_content_pipeline.services.demo_pipeline_service import DemoPipelineServ
 from seo_content_pipeline.services.job_service import JobService
 
 
+SAFE_LP_CORRECTION = "The landing page presents only supplied evidence."
+
+
 def test_demo_pipeline_service_builds_approved_final_package(tmp_path) -> None:
     settings = AppSettings(artifact_root=tmp_path)
     store = ArtifactStore(settings.artifact_root)
@@ -136,7 +139,11 @@ def test_landing_page_revision_preserves_failed_decision_and_reaches_approval(
     service = DemoPipelineService(settings=settings, artifact_store=store)
     service.run_demo_scenario(job.metadata.job_id, mode=mode)
 
-    result = service.apply_lp_editorial_revision(job.metadata.job_id, mode=mode)
+    result = service.apply_lp_editorial_revision(
+        job.metadata.job_id,
+        SAFE_LP_CORRECTION,
+        mode=mode,
+    )
 
     state = store.read_json(job.metadata.job_id, ArtifactKey.STATE)
     history = store.read_json(job.metadata.job_id, ArtifactKey.REVISION_HISTORY)
@@ -148,9 +155,11 @@ def test_landing_page_revision_preserves_failed_decision_and_reaches_approval(
     assert result.status is WorkflowStatus.APPROVED
     assert result.final_package_path.endswith("final_package.md")
     assert "70 percent" not in article
+    assert SAFE_LP_CORRECTION in article
     assert "70 percent" in rejected_article
     assert editorial["passed"] is True
     assert history["revisions"][0]["failed_report"]["checks"][0]["name"] == "unsupported_factual_claims"
+    assert history["revisions"][0]["correction_statement"] == SAFE_LP_CORRECTION
     assert history["revisions"][0]["rejected_article_path"].endswith("english_original_rejected.md")
     assert history["revisions"][0]["approved_article_path"].endswith("english_original.md")
     assert history["revisions"][0]["resolved_status"] == "approved"
@@ -174,7 +183,7 @@ def test_lp_revision_rejects_non_landing_page_outcomes(tmp_path, article_type) -
     service.run_demo_scenario(job.metadata.job_id, mode="demo")
 
     with pytest.raises(ValueError, match="LP correction requires"):
-        service.apply_lp_editorial_revision(job.metadata.job_id, mode="demo")
+        service.apply_lp_editorial_revision(job.metadata.job_id, SAFE_LP_CORRECTION, mode="demo")
 
     assert not store.artifact_path(job.metadata.job_id, ArtifactKey.REVISION_HISTORY).exists()
     assert not store.artifact_path(
@@ -197,8 +206,48 @@ def test_lp_revision_rejects_inconsistent_editorial_report_without_writing_histo
     store.write_json(job.metadata.job_id, ArtifactKey.EDITORIAL_QA, editorial)
 
     with pytest.raises(ValueError, match="routed failed editorial report"):
-        service.apply_lp_editorial_revision(job.metadata.job_id, mode="demo")
+        service.apply_lp_editorial_revision(job.metadata.job_id, SAFE_LP_CORRECTION, mode="demo")
 
+    assert not store.artifact_path(job.metadata.job_id, ArtifactKey.REVISION_HISTORY).exists()
+    assert not store.artifact_path(
+        job.metadata.job_id, ArtifactKey.REJECTED_ENGLISH_ORIGINAL
+    ).exists()
+
+
+@pytest.mark.parametrize(
+    ("statement", "expected_message"),
+    [
+        (" ", "must not be empty"),
+        ("Guaranteed 45% lower costs.", "common promotional result wording"),
+        ("We promise lower costs for every team.", "common promotional result wording"),
+        ("Lower costs for every team.", "common promotional result wording"),
+        ("Higher conversions for growing teams.", "common promotional result wording"),
+        ("Higher profits and improved margins.", "common promotional result wording"),
+        ("Sales growth for every team.", "common promotional result wording"),
+        ("Evidence " * 21, "20 words or fewer"),
+    ],
+)
+def test_lp_operator_correction_rejects_unsafe_input_without_mutating_artifacts(
+    tmp_path,
+    statement,
+    expected_message,
+) -> None:
+    settings = AppSettings(artifact_root=tmp_path)
+    store = ArtifactStore(settings.artifact_root)
+    job = JobService(settings=settings, artifact_store=store).create_job(
+        "Landing page source notes with controlled proof requirements.",
+        ArticleType.LP,
+    )
+    service = DemoPipelineService(settings=settings, artifact_store=store)
+    service.run_demo_scenario(job.metadata.job_id, mode="demo")
+    original_article = store.read_text(job.metadata.job_id, ArtifactKey.ENGLISH_ORIGINAL)
+
+    with pytest.raises(ValueError, match=expected_message):
+        service.apply_lp_editorial_revision(job.metadata.job_id, statement, mode="demo")
+
+    state = store.read_json(job.metadata.job_id, ArtifactKey.STATE)
+    assert state["status"] == WorkflowStatus.NEEDS_REVISION.value
+    assert store.read_text(job.metadata.job_id, ArtifactKey.ENGLISH_ORIGINAL) == original_article
     assert not store.artifact_path(job.metadata.job_id, ArtifactKey.REVISION_HISTORY).exists()
     assert not store.artifact_path(
         job.metadata.job_id, ArtifactKey.REJECTED_ENGLISH_ORIGINAL
@@ -214,10 +263,10 @@ def test_lp_revision_cannot_be_reapplied_after_approval(tmp_path) -> None:
     )
     service = DemoPipelineService(settings=settings, artifact_store=store)
     service.run_demo_scenario(job.metadata.job_id, mode="demo")
-    service.apply_lp_editorial_revision(job.metadata.job_id, mode="demo")
+    service.apply_lp_editorial_revision(job.metadata.job_id, SAFE_LP_CORRECTION, mode="demo")
 
     with pytest.raises(ValueError, match="LP correction requires"):
-        service.apply_lp_editorial_revision(job.metadata.job_id, mode="demo")
+        service.apply_lp_editorial_revision(job.metadata.job_id, SAFE_LP_CORRECTION, mode="demo")
 
     history = store.read_json(job.metadata.job_id, ArtifactKey.REVISION_HISTORY)
     assert len(history["revisions"]) == 1

@@ -13,6 +13,7 @@ This roadmap explains the current portfolio MVP and the most useful next steps. 
 - Distinct offline outcomes: BP approval, LP revision routing for unsupported claims and GP human review for sensitive link placement.
 - Explicit LP correction-to-approval action with persisted revision history evidence.
 - Read-only LP comparison of the preserved rejected draft and approved correction.
+- Targeted operator-authored LP claim correction with a deterministic safety guard.
 - Spanish, Italian and French localization artifacts.
 - Markdown and JSON final package exports.
 - GitHub Actions quality gate with `uv sync --frozen`, `ruff` and `pytest`.
@@ -25,7 +26,7 @@ This roadmap explains the current portfolio MVP and the most useful next steps. 
 
 2. Editable Revision Workspace
 
-   Extend the read-only LP comparison into free-form edits, additional failed stages and repeated version history.
+   Extend the focused LP claim correction into whole-article edits, additional failed stages, source-grounded validation and repeated version history.
 
 3. Real LLM provider configuration
 

@@ -38,6 +38,21 @@ from seo_content_pipeline.services.writer_service import WriterService
 
 
 DemoRunMode = Literal["demo", "full"]
+DEFAULT_LP_CORRECTION_STATEMENT = (
+    "The landing page keeps commercial claims limited to supplied evidence."
+)
+UNSAFE_LP_CORRECTION_PATTERNS = (
+    re.compile(r"\d|%|\bpercent(?:age)?\b", re.IGNORECASE),
+    re.compile(
+        r"\b(?:guarantee(?:d|s)?|promise(?:d|s)?|cut|reduce[sd]?|reduction|"
+        r"save[sd]?|savings|increase[sd]?|boost(?:s|ed)?|double[sd]?|triple[sd]?|"
+        r"lower(?:s|ed)?|drop(?:s|ped)?|decrease[sd]?|cheaper|faster|"
+        r"high(?:er|est)?|conversion(?:s)?|revenue|roi|lead(?:s)?|profit(?:s)?|"
+        r"sale(?:s)?|margin(?:s)?|grow(?:s|th|ing)?|earn(?:s|ed)?|"
+        r"improv(?:e|es|ed|ement|ements|ing))\b",
+        re.IGNORECASE,
+    ),
+)
 
 
 class DemoPipelineResult(BaseModel):
@@ -122,24 +137,36 @@ class DemoPipelineService:
     def apply_lp_editorial_revision(
         self,
         job_id: str,
+        correction_statement: str,
         *,
         mode: DemoRunMode = "demo",
     ) -> DemoPipelineResult:
-        """Correct the routed LP claim and continue the same job to final QA."""
+        """Apply a validated operator correction and continue the LP job to final QA."""
         state = PipelineState.model_validate(self.artifact_store.read_json(job_id, ArtifactKey.STATE))
         self._ensure_lp_revision_state(state)
         failed_report = QAReport.model_validate(
             self.artifact_store.read_json(job_id, ArtifactKey.EDITORIAL_QA)
         )
         self._ensure_lp_revision_report(failed_report)
+        correction_statement = self._validate_lp_correction_statement(correction_statement)
         rejected_article_path = self.artifact_store.write_text(
             job_id,
             ArtifactKey.REJECTED_ENGLISH_ORIGINAL,
             self.artifact_store.read_text(job_id, ArtifactKey.ENGLISH_ORIGINAL),
         )
-        self._preserve_revision_decision(job_id, failed_report, str(rejected_article_path))
+        self._preserve_revision_decision(
+            job_id,
+            failed_report,
+            correction_statement,
+            str(rejected_article_path),
+        )
         responses = [
-            _article_markdown(ArticleType.LP, mode, revised=True),
+            _article_markdown(
+                ArticleType.LP,
+                mode,
+                revised=True,
+                correction_statement=correction_statement,
+            ),
             json.dumps(_editorial_qa_payload(job_id, ArticleType.LP, revised=True)),
             _localized_markdown("Spanish", ArticleType.LP),
             _localized_markdown("Italian", ArticleType.LP),
@@ -187,10 +214,24 @@ class DemoPipelineService:
         ):
             raise ValueError("LP correction requires a routed failed editorial report")
 
+    @staticmethod
+    def _validate_lp_correction_statement(correction_statement: str) -> str:
+        normalized = " ".join(correction_statement.split())
+        if not normalized:
+            raise ValueError("Correction statement must not be empty.")
+        if len(normalized.split()) > 20:
+            raise ValueError("Correction statement must be 20 words or fewer.")
+        if any(pattern.search(normalized) for pattern in UNSAFE_LP_CORRECTION_PATTERNS):
+            raise ValueError(
+                "Correction statement must avoid numbers or common promotional result wording."
+            )
+        return normalized
+
     def _preserve_revision_decision(
         self,
         job_id: str,
         report: QAReport,
+        correction_statement: str,
         rejected_article_path: str,
     ) -> None:
         history_path = self.artifact_store.artifact_path(job_id, ArtifactKey.REVISION_HISTORY)
@@ -207,6 +248,7 @@ class DemoPipelineService:
                 initial_status=WorkflowStatus.NEEDS_REVISION,
                 failed_report=report,
                 action=report.recommendations[0] if report.recommendations else report.summary,
+                correction_statement=correction_statement,
                 rejected_article_path=rejected_article_path,
             )
         )
@@ -317,11 +359,12 @@ def _article_markdown(
     mode: DemoRunMode,
     *,
     revised: bool = False,
+    correction_statement: str | None = None,
 ) -> str:
     context = {
         ArticleType.BP: "The blog post path shows a clean informational workflow.",
         ArticleType.LP: (
-            "The landing page keeps commercial claims limited to supplied evidence."
+            (correction_statement or DEFAULT_LP_CORRECTION_STATEMENT)
             if revised
             else "The landing page promises to cut content cost by 70 percent."
         ),

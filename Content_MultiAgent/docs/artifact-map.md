@@ -44,7 +44,7 @@ intended for interview navigation.
 | `english_original_rejected.md` | Routed revision | Preserved LP draft before its targeted correction. |
 | `article_validation.json` | Writing validation | Deterministic article checks such as structure and word count. |
 | `editorial_qa.json` | Editorial review | Checks factual discipline, structure and editorial risk. |
-| `revision_history.json` | Routed revision | Preserves failed QA evidence and records its correction outcome. |
+| `revision_history.json` | Routed revision | Preserves failed QA evidence, operator correction wording and its outcome. |
 | `seo_qa.json` | SEO QA | Checks keyword and heading intent; failed checks can trigger revision routing. |
 | `uniqueness.json` | Uniqueness check | Records manual, mock or provider score and supports the uniqueness gate. |
 
@@ -66,6 +66,7 @@ QA decisions are made from persisted reports and state flags. A job is approved 
 The stable demo scenarios intentionally stop at different decision points: BP
 continues through final QA, LP stops after editorial QA with writing revision
 guidance, and GP stops after editorial QA for human link-placement review. In the
-Streamlit LP walkthrough, an explicit correction action continues that same job to
-approval while preserving its original decision in `revision_history.json` and its
-rejected wording in `english_original_rejected.md` for read-only version comparison.
+Streamlit LP walkthrough, an explicit operator correction continues that same job
+to approval after a focused safety guard, preserving its decision and accepted
+wording in `revision_history.json` and its rejected text in
+`english_original_rejected.md` for read-only version comparison.

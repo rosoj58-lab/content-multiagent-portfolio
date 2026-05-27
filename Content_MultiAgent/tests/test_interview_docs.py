@@ -55,7 +55,8 @@ def test_interview_cheatsheet_covers_pitch_tradeoffs_and_questions() -> None:
     assert "needs_revision" in cheatsheet
     assert "needs_human_review" in cheatsheet
     assert "decision qa scorecard" in cheatsheet
-    assert "apply recommended revision" in cheatsheet
+    assert "replacement statement" in cheatsheet
+    assert "apply correction" in cheatsheet
     assert "revision_history.json" in cheatsheet
     assert "english_original_rejected.md" in cheatsheet
     assert "revision comparison" in cheatsheet
@@ -79,6 +80,7 @@ def test_roadmap_documents_mvp_next_steps_and_deferred_scope() -> None:
     assert "correction-to-approval" in roadmap
     assert "editable revision workspace" in roadmap
     assert "read-only lp comparison" in roadmap
+    assert "operator-authored lp claim correction" in roadmap
 
 
 def test_artifact_map_identifies_storage_and_qa_decisions() -> None:

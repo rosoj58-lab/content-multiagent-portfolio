@@ -58,10 +58,11 @@ scenario with the Decision QA Scorecard: it makes the evidence and next action
 visible before opening the raw artifacts.
 
 For the strongest workflow demonstration, run LP in Streamlit, show its
-`needs_revision` scorecard, then click `Apply recommended revision`. The same job
-ends `approved`, while `revision_history.json` preserves the original failed claim
-decision and `english_original_rejected.md` preserves the rejected wording. Open
-`Revision Comparison` to show the problem and approved correction side by side.
+`needs_revision` scorecard, replace the routed claim using `Replacement statement`,
+then click `Apply correction`. The same job ends `approved`, while
+`revision_history.json` preserves the failed decision and submitted correction and
+`english_original_rejected.md` preserves the rejected wording. Open
+`Revision Comparison` to show the operator's decision side by side with the original.
 
 ## What To Emphasize
 
@@ -111,4 +112,4 @@ The project is testable and inspectable. The same workflow can be run from Strea
 
 **What would you improve next?**
 
-The next useful improvement would be async stage execution and a full revision workspace with free-form edits and repeated version history, because the current demo deliberately supports one controlled read-only comparison path.
+The next useful improvement would be async stage execution and a full revision workspace with whole-article edits, broader source-grounded validation and repeated version history, because the current demo deliberately supports one controlled claim correction.

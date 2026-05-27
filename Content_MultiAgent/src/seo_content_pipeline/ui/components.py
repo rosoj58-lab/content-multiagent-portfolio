@@ -58,3 +58,16 @@ def render_job_summary(job_id: str, artifact_paths: dict[str, str], demo_mode: s
     with st.expander("Artifacts", expanded=True):
         for label, path in artifact_paths.items():
             st.code(f"{label}: {path}", language="text")
+
+
+def render_lp_correction_form(default_statement: str) -> str | None:
+    """Render the focused LP correction input and return submitted wording."""
+    with st.form("lp-correction-form"):
+        statement = st.text_area(
+            "Replacement statement",
+            value=default_statement,
+            height=100,
+        )
+        submitted = st.form_submit_button("Apply correction", type="primary")
+
+    return statement if submitted else None
