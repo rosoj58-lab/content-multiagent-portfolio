@@ -1,10 +1,12 @@
 """LLM runner tests."""
 
 import json
+from types import SimpleNamespace
 
 import pytest
 
 from seo_content_pipeline.models import SEOBrief
+from seo_content_pipeline.services.llm_client import OpenAILLMClient
 from seo_content_pipeline.services.llm_runner import LLMOutputParsingError, LLMRunner
 
 
@@ -106,3 +108,59 @@ def test_llm_runner_rejects_empty_text_output() -> None:
 
     with pytest.raises(ValueError, match="must not be empty"):
         runner.generate_text(prompt="Write article.")
+
+
+class FakeResponsesResource:
+    def __init__(self, *, output_text: str = "Generated text.", error: Exception | None = None) -> None:
+        self.output_text = output_text
+        self.error = error
+        self.requests: list[dict[str, object]] = []
+
+    def create(self, **kwargs):
+        self.requests.append(kwargs)
+        if self.error is not None:
+            raise self.error
+        return SimpleNamespace(output_text=self.output_text)
+
+
+def test_openai_llm_client_uses_responses_api_without_provider_storage() -> None:
+    responses = FakeResponsesResource(output_text="  Generated live brief JSON.  ")
+    client = OpenAILLMClient(
+        api_key="test-key",
+        model="gpt-5.4-mini",
+        client=SimpleNamespace(responses=responses),
+    )
+
+    output = client.generate("Generate a brief.")
+
+    assert output == "  Generated live brief JSON.  "
+    assert responses.requests == [
+        {
+            "model": "gpt-5.4-mini",
+            "input": "Generate a brief.",
+            "max_output_tokens": 1600,
+            "store": False,
+        }
+    ]
+
+
+def test_openai_llm_client_reports_provider_failure_without_output() -> None:
+    client = OpenAILLMClient(
+        api_key="test-key",
+        model="gpt-5.4-mini",
+        client=SimpleNamespace(responses=FakeResponsesResource(error=TimeoutError("timeout"))),
+    )
+
+    with pytest.raises(RuntimeError, match="OpenAI live generation failed"):
+        client.generate("Generate a brief.")
+
+
+def test_openai_llm_client_rejects_empty_response_text() -> None:
+    client = OpenAILLMClient(
+        api_key="test-key",
+        model="gpt-5.4-mini",
+        client=SimpleNamespace(responses=FakeResponsesResource(output_text=" ")),
+    )
+
+    with pytest.raises(ValueError, match="did not include text output"):
+        client.generate("Generate a brief.")

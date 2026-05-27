@@ -64,6 +64,8 @@ def test_interview_cheatsheet_covers_pitch_tradeoffs_and_questions() -> None:
     assert "likely questions" in cheatsheet
     assert "not a hosted production system" in cheatsheet
     assert "production-ready" in cheatsheet
+    assert "generate live seo brief" in cheatsheet
+    assert "optional live openai action stops after brief qa" in cheatsheet
 
 
 def test_roadmap_documents_mvp_next_steps_and_deferred_scope() -> None:
@@ -74,7 +76,8 @@ def test_roadmap_documents_mvp_next_steps_and_deferred_scope() -> None:
     assert "deferred on purpose" in roadmap
     assert "known risks" in roadmap
     assert "async stage execution" in roadmap
-    assert "real llm provider" in roadmap
+    assert "live llm workflow extension" in roadmap
+    assert "optional openai-backed live seo brief" in roadmap
     assert "hosted deployment" in roadmap
     assert "not as a production saas platform" in roadmap
     assert "correction-to-approval" in roadmap
@@ -136,6 +139,8 @@ def test_architecture_docs_reinforce_status_and_routing_requirements() -> None:
     assert "artifactstore" in combined
     assert "revision_history.json" in combined
     assert "english_original_rejected.md" in combined
+    assert "openai responses api adapter" in combined
+    assert "waiting_for_human" in combined
 
 
 def test_architecture_summary_includes_pipeline_diagram() -> None:

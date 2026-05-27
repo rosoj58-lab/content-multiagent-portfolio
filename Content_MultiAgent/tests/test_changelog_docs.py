@@ -20,6 +20,8 @@ def test_changelog_documents_current_portfolio_release() -> None:
     assert "revision_history.json" in changelog
     assert "english_original_rejected.md" in changelog
     assert "operator-authored LP correction" in changelog
+    assert "OpenAI Responses API" in changelog
+    assert "optional live OpenAI path currently stops after SEO brief QA" in changelog
     assert "Docker development environment" in changelog
     assert "GitHub Actions quality gate" in changelog
     assert "Tracked example outputs" in changelog

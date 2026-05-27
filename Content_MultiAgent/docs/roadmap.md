@@ -14,23 +14,24 @@ This roadmap explains the current portfolio MVP and the most useful next steps. 
 - Explicit LP correction-to-approval action with persisted revision history evidence.
 - Read-only LP comparison of the preserved rejected draft and approved correction.
 - Targeted operator-authored LP claim correction with a deterministic safety guard.
+- Optional OpenAI-backed live SEO brief generation followed by deterministic QA and a manual gate.
 - Spanish, Italian and French localization artifacts.
 - Markdown and JSON final package exports.
 - GitHub Actions quality gate with `uv sync --frozen`, `ruff` and `pytest`.
 
 ## Next Technical Steps
 
-1. Async stage execution
+1. Live LLM workflow extension
+
+   Extend the explicit live action beyond brief QA only after designing human approval, spend control and failure routing for writing and later stages.
+
+2. Async stage execution
 
    Move long-running stages into a queue or background worker so Streamlit can show progress without blocking the request lifecycle.
 
-2. Editable Revision Workspace
+3. Editable Revision Workspace
 
    Extend the focused LP claim correction into whole-article edits, additional failed stages, source-grounded validation and repeated version history.
-
-3. Real LLM provider configuration
-
-   Wire an OpenAI-backed client behind the existing `LLMRunner` boundary while keeping deterministic offline demo mode available.
 
 4. Real uniqueness provider execution
 
@@ -58,6 +59,7 @@ This roadmap explains the current portfolio MVP and the most useful next steps. 
 
 - File-based persistence is excellent for a local demo but not enough for concurrent hosted usage.
 - Offline deterministic content proves orchestration, not live model quality.
+- The optional live OpenAI action proves only SEO brief generation and can incur API cost.
 - Manual uniqueness is reliable for interviews but must be replaced or supplemented for production.
 - Localization quality is represented structurally in the MVP; production quality would need stronger language QA.
 - The UI is optimized for demonstration, not for high-volume editorial operations.

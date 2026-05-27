@@ -57,6 +57,12 @@ records this as an explicit architecture decision: offline-first demo execution
 is the supported baseline, while external services remain optional provider
 implementations.
 
+An optional live brief path uses an OpenAI Responses API adapter behind
+`LLMRunner`. It is invoked only by `Generate live SEO brief` for a new job, writes
+the same `brief.json` contract, runs deterministic Brief QA, and stops at
+`waiting_for_human`. It does not replace or silently network-enable the complete
+offline demo.
+
 The stable scenarios exercise real routing outcomes: BP reaches `approved` and
 final package export, LP stops at editorial QA with `needs_revision` for an
 unsupported commercial claim, and GP stops at editorial QA with

@@ -25,6 +25,8 @@ Concretely:
 
 - The stable BP, LP and GP demo paths run without OpenAI or Copyleaks
   credentials.
+- One optional `Generate live SEO brief` action may call OpenAI only after an
+  operator configures a local key and explicitly selects that action.
 - `providers/` owns uniqueness integrations, including manual, mock and optional
   Copyleaks-compatible implementations.
 - Services depend on provider contracts instead of directly calling vendor APIs.
@@ -39,12 +41,15 @@ Positive consequences:
 
 - The demo is reliable in interviews and CI-like local checks.
 - The architecture still shows how real integrations would be added.
+- A reviewer can inspect one real model-backed brief and its deterministic QA
+  state without making the full demo depend on paid calls.
 - Tests can assert behavior without network flakiness or secret management.
 - The project is easier to clone, run and review from GitHub.
 
 Tradeoffs:
 
-- Generated demo content is deterministic and does not prove live LLM quality.
+- The complete demo content is deterministic; the optional live path proves only
+  SEO brief generation, not a complete model-backed pipeline.
 - The optional Copyleaks path is a boundary demonstration, not a full production
   integration.
 - Hosted execution, async workers, queues and persistent databases are deferred.

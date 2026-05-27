@@ -59,6 +59,11 @@ without a final package. Confirm
 `english_original_rejected.md` preserves the unsupported claim and
 `Revision Comparison` shows it beside the approved version.
 
+When presenting the optional OpenAI integration and a disposable local key is
+available, create a separate new job and click `Generate live SEO brief`. Confirm
+only `brief.json` and `brief_qa.json` are added before the state stops at
+`waiting_for_human`; this paid action is not required for release readiness.
+
 ## 3. Docker Check
 
 Run from the Git/Compose root when dependencies, Dockerfile or Compose config

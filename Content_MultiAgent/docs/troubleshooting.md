@@ -93,9 +93,14 @@ The repeatable demo does not need OpenAI or Copyleaks credentials. Leave these e
 
 ```bash
 OPENAI_API_KEY=
+OPENAI_MODEL=gpt-5.4-mini
 COPYLEAKS_EMAIL=
 COPYLEAKS_API_KEY=
 ```
+
+`Generate live SEO brief` is the only UI action that uses OpenAI. It requires a
+local key, may incur API cost and stops after brief QA. If it fails, confirm the
+key and `OPENAI_MODEL` value, then create a fresh job before retrying.
 
 ## Fast Health Check
 

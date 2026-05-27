@@ -18,7 +18,7 @@ credentials.
 
 - Do not commit `.env`, `.env.*`, API keys, provider tokens or Streamlit secrets.
 - Keep `.env.example` committed with empty placeholder values only.
-- Use `OPENAI_API_KEY`, `COPYLEAKS_EMAIL` and `COPYLEAKS_API_KEY` only in a local
+- Use `OPENAI_API_KEY`, `OPENAI_MODEL`, `COPYLEAKS_EMAIL` and `COPYLEAKS_API_KEY` only in a local
   `.env` file when testing external integrations.
 - Rotate any credential immediately if it is accidentally pasted into a prompt,
   terminal transcript, issue, commit or generated artifact.
@@ -36,8 +36,10 @@ live credentials.
 
 External providers are optional integration points behind provider boundaries.
 The default demo path should not make direct network calls to LLM or plagiarism
-services. If a provider is enabled manually, validate it with disposable test
-content first.
+services. `Generate live SEO brief` is the explicit OpenAI-backed, potentially
+billable exception; it uses disposable input, does not persist the provider
+response, and stops after deterministic Brief QA. If a provider is enabled
+manually, validate it with disposable test content first.
 
 ## Dependency And Environment Hygiene
 

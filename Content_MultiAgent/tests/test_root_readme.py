@@ -17,4 +17,6 @@ def test_root_readme_points_to_portfolio_project() -> None:
     assert "Content_MultiAgent/examples/outputs/" in readme
     assert "uv run streamlit run app.py" in readme
     assert "uv run seo-demo --demo bp --mode demo" in readme
+    assert "Generate live SEO brief" in readme
+    assert "complete demo remains offline" in readme
     assert "uv run pytest" in readme

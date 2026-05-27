@@ -71,3 +71,11 @@ patterns are rejected before any correction artifacts are written. The UI displa
 approved versions together. The GP case includes a contextual project link, then
 stops at `editorial_qa.json` with `needs_human_review` because publication fit needs
 editorial judgment.
+
+## Optional Live Brief
+
+To demonstrate a real model call separately from the repeatable demo, configure
+`OPENAI_API_KEY` and optionally `OPENAI_MODEL=gpt-5.4-mini` in local `.env`.
+Create a new job, then click `Generate live SEO brief`. This potentially billable
+action creates only `brief.json` and `brief_qa.json`, then stops at the persisted
+manual approval gate. Do not describe it as a complete live content run.

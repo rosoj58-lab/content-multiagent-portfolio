@@ -71,3 +71,15 @@ def render_lp_correction_form(default_statement: str) -> str | None:
         submitted = st.form_submit_button("Apply correction", type="primary")
 
     return statement if submitted else None
+
+
+def render_live_brief_action(*, configured: bool, model: str) -> bool:
+    """Render the explicit optional paid action for generating only a live brief."""
+    st.caption(f"Optional live SEO brief only. Model: {model}.")
+    if not configured:
+        st.info("Set OPENAI_API_KEY locally to enable live SEO brief generation.")
+    return st.button(
+        "Generate live SEO brief",
+        type="secondary",
+        disabled=not configured,
+    )

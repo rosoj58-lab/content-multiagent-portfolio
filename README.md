@@ -29,6 +29,10 @@ cd Content_MultiAgent
 uv run seo-demo --demo bp --mode demo
 ```
 
+Optional live proof: configure `OPENAI_API_KEY` locally, create a separate new
+job and click `Generate live SEO brief`. This explicit paid action generates only
+the brief and its deterministic QA state; the complete demo remains offline.
+
 ## Quality Gate
 
 ```bash

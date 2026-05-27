@@ -2,16 +2,18 @@
 
 import streamlit as st
 
-from seo_content_pipeline.models import ArtifactKey, PipelineState
+from seo_content_pipeline.models import ArtifactKey, PipelineState, WorkflowStage, WorkflowStatus
 from seo_content_pipeline.services.demo_pipeline_service import (
     DEFAULT_LP_CORRECTION_STATEMENT,
     DemoPipelineService,
 )
 from seo_content_pipeline.services.job_service import JobService
+from seo_content_pipeline.services.live_brief_service import LiveBriefService
 from seo_content_pipeline.ui.artifact_panel import render_artifact_panel
 from seo_content_pipeline.ui.components import (
     render_job_creation_form,
     render_job_summary,
+    render_live_brief_action,
     render_lp_correction_form,
 )
 from seo_content_pipeline.ui.empty_states import render_no_job_empty_state
@@ -58,30 +60,69 @@ def main() -> None:
     if revision_confirmation:
         st.success(f"Revision applied: {revision_confirmation['status']}")
         st.caption(f"Final package: {revision_confirmation['final_package_path']}")
-    if st.button("Run demo scenario", type="secondary"):
-        try:
-            demo_result = DemoPipelineService(
-                settings=service.settings,
-                artifact_store=service.artifact_store,
-            ).run_demo_scenario(
-                result.metadata.job_id,
-                mode=st.session_state.get("demo_mode", "demo"),
-            )
-        except Exception as error:
-            render_controlled_error(
-                build_controlled_error(
-                    error,
-                    action="Recreate the job from a stable demo input and run the demo again.",
+    try:
+        action_state = PipelineState.model_validate(
+            service.artifact_store.read_json(result.metadata.job_id, ArtifactKey.STATE)
+        )
+        can_start_generation = (
+            action_state.current_stage is WorkflowStage.INPUT_RECEIVED
+            and action_state.status is WorkflowStatus.RUNNING
+        )
+        if can_start_generation and st.button("Run demo scenario", type="secondary"):
+            try:
+                demo_result = DemoPipelineService(
+                    settings=service.settings,
+                    artifact_store=service.artifact_store,
+                ).run_demo_scenario(
+                    result.metadata.job_id,
+                    mode=st.session_state.get("demo_mode", "demo"),
                 )
-            )
-        else:
-            if demo_result.status.value == "approved":
-                st.success(f"Demo scenario complete: {demo_result.status.value}")
+            except Exception as error:
+                render_controlled_error(
+                    build_controlled_error(
+                        error,
+                        action="Recreate the job from a stable demo input and run the demo again.",
+                    )
+                )
             else:
-                st.warning(f"Demo scenario complete: {demo_result.status.value}")
-            st.caption(f"Decision artifact: {demo_result.decision_artifact_path}")
-            if demo_result.final_package_path:
-                st.caption(f"Final package: {demo_result.final_package_path}")
+                if demo_result.status.value == "approved":
+                    st.success(f"Demo scenario complete: {demo_result.status.value}")
+                else:
+                    st.warning(f"Demo scenario complete: {demo_result.status.value}")
+                st.caption(f"Decision artifact: {demo_result.decision_artifact_path}")
+                if demo_result.final_package_path:
+                    st.caption(f"Final package: {demo_result.final_package_path}")
+                can_start_generation = False
+        live_service = LiveBriefService(
+            settings=service.settings,
+            artifact_store=service.artifact_store,
+        )
+        if can_start_generation and render_live_brief_action(
+            configured=live_service.is_configured,
+            model=service.settings.openai_model,
+        ):
+            try:
+                live_result = live_service.generate_live_brief(result.metadata.job_id)
+            except Exception as error:
+                render_controlled_error(
+                    build_controlled_error(
+                        error,
+                        action="Check OPENAI_API_KEY and OPENAI_MODEL locally, then try again.",
+                    )
+                )
+            else:
+                if live_result.status is WorkflowStatus.WAITING_FOR_HUMAN:
+                    st.success(f"Live SEO brief complete: {live_result.status.value}")
+                else:
+                    st.warning(f"Live SEO brief stopped: {live_result.status.value}")
+                st.caption("Live action scope: SEO brief generation and deterministic brief QA only.")
+    except Exception as error:
+        render_controlled_error(
+            build_controlled_error(
+                error,
+                action="Refresh the job or recreate it from a stable demo input.",
+            )
+        )
     try:
         state = PipelineState.model_validate(
             service.artifact_store.read_json(result.metadata.job_id, ArtifactKey.STATE)

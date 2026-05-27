@@ -18,6 +18,7 @@ EXPECTED_ENV_KEYS = {
     "MAX_REVISION_ATTEMPTS",
     "UNIQUENESS_PROVIDER",
     "OPENAI_API_KEY",
+    "OPENAI_MODEL",
     "COPYLEAKS_EMAIL",
     "COPYLEAKS_API_KEY",
 }
@@ -25,6 +26,7 @@ EXPECTED_ENV_KEYS = {
 
 def test_default_settings_do_not_require_external_credentials(monkeypatch) -> None:
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("OPENAI_MODEL", raising=False)
     monkeypatch.delenv("COPYLEAKS_EMAIL", raising=False)
     monkeypatch.delenv("COPYLEAKS_API_KEY", raising=False)
 
@@ -35,6 +37,7 @@ def test_default_settings_do_not_require_external_credentials(monkeypatch) -> No
     assert settings.max_revision_attempts == 2
     assert settings.uniqueness_provider == "manual"
     assert settings.openai_api_key is None
+    assert settings.openai_model == "gpt-5.4-mini"
     assert settings.copyleaks_email is None
     assert settings.copyleaks_api_key is None
 
@@ -46,6 +49,7 @@ def test_settings_read_environment_overrides(monkeypatch, tmp_path) -> None:
     monkeypatch.setenv("MAX_REVISION_ATTEMPTS", "5")
     monkeypatch.setenv("UNIQUENESS_PROVIDER", "mock")
     monkeypatch.setenv("OPENAI_API_KEY", "test-openai")
+    monkeypatch.setenv("OPENAI_MODEL", "gpt-5.4-mini-test")
 
     settings = get_settings(load_env_file=False)
 
@@ -56,6 +60,7 @@ def test_settings_read_environment_overrides(monkeypatch, tmp_path) -> None:
         max_revision_attempts=5,
         uniqueness_provider="mock",
         openai_api_key="test-openai",
+        openai_model="gpt-5.4-mini-test",
     )
 
 

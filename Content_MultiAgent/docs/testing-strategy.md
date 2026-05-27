@@ -30,6 +30,7 @@ make ci
 - LP correction lifecycle: preserved failed QA evidence, targeted correction and approval of the same job.
 - LP version comparison: rejected draft snapshot and approved read-only comparison presentation.
 - LP operator correction: accepted replacement evidence and rejected unsafe wording without mutation.
+- Optional OpenAI live brief: Responses adapter, provider failures and brief QA/manual-gate orchestration with mocked responses only.
 - Demo inputs and offline demo pipeline: BP/LP/GP inputs, Streamlit demo path and `seo-demo` terminal smoke path.
 - UI helpers: decision QA scorecard, status timeline, artifact previews, controlled error messages and download actions.
 - Documentation and repository health: README, Docker docs, interview docs, sample outputs, roadmap, root README and scaffold-cleanliness.
@@ -42,7 +43,7 @@ The project is a portfolio MVP, so the tests prioritize reliability of the demo 
 ## What Is Not Covered Yet
 
 - Browser-level regression automation for every Streamlit interaction.
-- Real OpenAI provider calls.
+- Real billed OpenAI API requests.
 - Real Copyleaks provider calls.
 - Hosted deployment behavior.
 - Multi-user concurrency.

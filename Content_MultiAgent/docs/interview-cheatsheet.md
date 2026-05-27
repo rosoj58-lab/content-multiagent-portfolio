@@ -72,6 +72,7 @@ then click `Apply correction`. The same job ends `approved`, while
 - Failed checks route to a target stage instead of becoming vague errors.
 - Manual/offline uniqueness keeps the demo reliable without paid credentials.
 - Optional Copyleaks support is isolated behind a provider boundary.
+- Optional `Generate live SEO brief` proves one real OpenAI-backed stage without making the complete demo dependent on a paid service.
 - CI runs `ruff` and `pytest`, so quality is not only manual.
 
 ## Architecture Talking Points
@@ -86,7 +87,7 @@ then click `Apply correction`. The same job ends `approved`, while
 ## Honest Tradeoffs
 
 - This is a local MVP, not a hosted production system.
-- The repeatable demo uses deterministic offline content rather than live LLM calls.
+- The repeatable complete demo uses deterministic offline content; the optional live OpenAI action stops after brief QA.
 - Manual uniqueness is included so the project is demoable without external plagiarism credentials.
 - ADR `docs/decisions/0001-offline-first-demo-and-provider-boundaries.md` explains why external services are optional provider implementations instead of requirements for the demo.
 - CMS publishing, live SERP research and production auth are intentionally out of scope.
@@ -104,7 +105,7 @@ Quality is controlled through deterministic validators, structured QA reports, m
 
 **How would this become production-ready?**
 
-Add auth, durable database storage, queue-based execution, real LLM provider configuration, real plagiarism provider calls, observability logs/metrics and deployment infrastructure. The current boundaries are designed so those can be added without rewriting the whole app.
+Add auth, durable database storage, queue-based execution, live model-backed writing and QA after manual approval, real plagiarism provider calls, observability logs/metrics and deployment infrastructure. The current boundaries are designed so those can be added without rewriting the whole app.
 
 **What are you most proud of technically?**
 
@@ -112,4 +113,4 @@ The project is testable and inspectable. The same workflow can be run from Strea
 
 **What would you improve next?**
 
-The next useful improvement would be async stage execution and a full revision workspace with whole-article edits, broader source-grounded validation and repeated version history, because the current demo deliberately supports one controlled claim correction.
+The next useful improvement would extend the explicit live path from brief QA into approval-controlled writing with spend and failure handling, while retaining the repeatable offline demo.

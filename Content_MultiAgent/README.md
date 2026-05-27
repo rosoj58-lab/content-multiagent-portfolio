@@ -12,6 +12,7 @@ The project is built to be demonstrated in interviews. It does not require hoste
 - File-based artifacts under `artifacts/jobs/<job_id>/` for inspection.
 - Streamlit observability: decision QA scorecard, status timeline, artifact previews, download actions and controlled errors.
 - An LP correction action that preserves failed QA evidence and demonstrates revision through approval.
+- An optional OpenAI-backed live SEO brief action with deterministic QA and manual approval routing.
 - Optional provider boundary for Copyleaks without making it mandatory for the local demo.
 
 ## Quick Demo
@@ -81,6 +82,23 @@ stored in `revision_history.json`, while the rejected text is preserved in
 package and shows rejected and approved versions side by side. This focused input
 blocks common numerical or promotional-result patterns; it is not general fact
 verification.
+
+## Optional Live SEO Brief
+
+The complete interview demo above remains offline and does not need credentials. To
+demonstrate one real model-backed stage, create a local `.env` file with:
+
+```bash
+OPENAI_API_KEY=your-local-key
+OPENAI_MODEL=gpt-5.4-mini
+```
+
+Create a new job in Streamlit and click `Generate live SEO brief`. This is an
+explicit paid action through the OpenAI Responses API: it generates only
+`brief.json`, runs deterministic Brief QA into `brief_qa.json`, and stops at the
+persisted manual approval state. Invalid structured output may cause one repair
+request. It does not produce an article or final package and does not verify facts
+or keyword demand.
 
 ## Demo Inputs
 
