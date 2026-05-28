@@ -15,6 +15,19 @@ The project is built to be demonstrated in interviews. It does not require hoste
 - An optional OpenAI-backed live SEO brief action with deterministic QA and manual approval routing.
 - Optional provider boundary for Copyleaks without making it mandatory for the local demo.
 
+## Screenshots
+
+The screenshots below are captured from the repeatable offline demo paths and
+are committed for quick portfolio review on GitHub.
+
+![Recent jobs and job intake](docs/assets/screenshots/01-home-recent-jobs.png)
+
+![Approved BP scorecard and pipeline timeline](docs/assets/screenshots/02-bp-scorecard-timeline.png)
+
+![Debug snapshot artifact preview](docs/assets/screenshots/03-debug-snapshot-artifact.png)
+
+![LP revision path with correction action](docs/assets/screenshots/04-lp-revision-path.png)
+
 ## Quick Demo
 
 Run the app:
@@ -85,6 +98,15 @@ For an interview-ready manifest of all generated jobs:
 ```bash
 uv run seo-demo --demo all --mode demo --summary-file artifacts/demo/demo-summary.json
 ```
+
+To regenerate the README screenshots from a running Streamlit app:
+
+```bash
+uv run --with playwright python -m playwright install chromium
+uv run --with playwright python scripts/capture_demo_screenshots.py
+```
+
+If the app is running on another port, set `APP_URL` before the command.
 
 Static sample outputs are available in `examples/outputs/` for quick GitHub review.
 
