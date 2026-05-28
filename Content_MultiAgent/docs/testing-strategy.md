@@ -32,7 +32,7 @@ make ci
 - LP operator correction: accepted replacement evidence and rejected unsafe wording without mutation.
 - Optional OpenAI live brief: Responses adapter, provider failures and brief QA/manual-gate orchestration with mocked responses only.
 - Demo inputs and offline demo pipeline: BP/LP/GP inputs, Streamlit demo path and `seo-demo` terminal smoke path.
-- UI helpers: decision QA scorecard, status timeline, derived duration labels, artifact previews, controlled error messages and download actions.
+- UI helpers: decision QA scorecard, status timeline, derived duration labels, debug snapshot previews, controlled error messages and download actions.
 - Documentation and repository health: README, Docker docs, interview docs, sample outputs, roadmap, root README and scaffold-cleanliness.
 - CI configuration: GitHub Actions uses Python 3.12 and `uv sync --frozen`.
 

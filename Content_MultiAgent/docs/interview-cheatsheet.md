@@ -63,6 +63,9 @@ navigation aid rather than a second workflow state store.
 Stage duration labels in the timeline and `stage_durations` in `run_summary.json`
 show where the local workflow spent time; present them as derived demo
 observability, not production performance metrics.
+Open `debug_snapshot.json` when you want to explain how the workflow is debugged:
+it collects status, manual gate, errors, revision counters and present/missing
+artifacts without adding a database or telemetry service.
 
 For the strongest workflow demonstration, run LP in Streamlit, show its
 `needs_revision` scorecard, replace the routed claim using `Replacement statement`,
@@ -78,6 +81,7 @@ then click `Apply correction`. The same job ends `approved`, while
 - `run_summary.json` gives each job an exportable interview card.
 - Recent jobs make it easy to jump between prepared BP, LP and GP evidence.
 - Stage durations make the workflow easier to explain without adding telemetry infrastructure.
+- `debug_snapshot.json` shows the local diagnostic view for one job.
 - Human approval remains explicit at sensitive gates.
 - Failed checks route to a target stage instead of becoming vague errors.
 - Manual/offline uniqueness keeps the demo reliable without paid credentials.

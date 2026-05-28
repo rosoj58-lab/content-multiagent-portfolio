@@ -20,6 +20,7 @@ This roadmap explains the current portfolio MVP and the most useful next steps. 
 - Markdown and JSON final package exports.
 - Exportable per-job `run_summary.json` artifacts for interview navigation.
 - Derived stage duration observability in `run_summary.json` and the Streamlit timeline.
+- Derived per-job `debug_snapshot.json` artifacts for local diagnostic inspection.
 - GitHub Actions quality gate with `uv sync --frozen`, `ruff` and `pytest`.
 
 ## Next Technical Steps
@@ -46,7 +47,7 @@ This roadmap explains the current portfolio MVP and the most useful next steps. 
 
 6. Observability
 
-   Add structured logs, retry counters and richer debugging views. Current stage durations are local derived evidence, not production telemetry.
+   Add structured logs, retry counters and richer debugging views. Current stage durations and debug snapshots are local derived evidence, not production telemetry.
 
 ## Deferred On Purpose
 

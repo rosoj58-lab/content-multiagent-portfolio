@@ -76,6 +76,12 @@ def test_live_brief_generation_persists_brief_qa_and_stops_for_human_approval(tm
     assert run_summary["manual_gate_required"] is True
     assert run_summary["decision_artifact"].endswith("brief_qa.json")
     assert run_summary["final_package_path"] is None
+    snapshot = store.read_json(job_id, ArtifactKey.DEBUG_SNAPSHOT)
+    assert snapshot["status"] == "waiting_for_human"
+    assert snapshot["manual_gate_required"] is True
+    assert "brief" in snapshot["present_artifacts"]
+    assert "brief_qa" in snapshot["present_artifacts"]
+    assert "english_original" in snapshot["missing_artifacts"]
     assert len(client.prompts) == 1
 
 

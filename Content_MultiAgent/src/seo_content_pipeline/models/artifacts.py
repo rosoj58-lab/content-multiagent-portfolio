@@ -27,6 +27,7 @@ class ArtifactKey(str, Enum):
     FINAL_PACKAGE_JSON = "final_package_json"
     FINAL_QA_REPORT = "final_qa_report"
     RUN_SUMMARY = "run_summary"
+    DEBUG_SNAPSHOT = "debug_snapshot"
 
 
 class ArtifactSpec(BaseModel):
@@ -172,6 +173,13 @@ ARTIFACT_REGISTRY: dict[ArtifactKey, ArtifactSpec] = {
         content_type="application/json",
         ui_label="Run Summary",
         description="Derived job-level summary for interview navigation and debugging.",
+    ),
+    ArtifactKey.DEBUG_SNAPSHOT: ArtifactSpec(
+        key=ArtifactKey.DEBUG_SNAPSHOT,
+        filename="debug_snapshot.json",
+        content_type="application/json",
+        ui_label="Debug Snapshot",
+        description="Derived diagnostic snapshot for local job debugging.",
     ),
 }
 
