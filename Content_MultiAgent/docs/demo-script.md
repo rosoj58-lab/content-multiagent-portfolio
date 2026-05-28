@@ -8,6 +8,8 @@ This is a local SEO Content Multi-Agent Pipeline. It turns dry source notes into
 
 Use `examples/inputs/bp-demo.txt` with article type `BP`. Click `Run demo scenario` and explain that this path demonstrates the clean flow: dry input -> brief -> English original -> editorial QA -> SEO QA -> uniqueness gate -> localization -> final package -> final QA. In the UI, start with the Decision QA Scorecard: it exposes final approval, uniqueness threshold evidence and localization readiness. Then point to the progress timeline, artifact previews and download actions. In the filesystem, open `artifacts/jobs/<job_id>/` and show `run_summary.json` first as the compact run card, then `state.json`, `brief.json`, `english_original.md`, QA JSON files, localizations and final package files.
 
+If BP, LP and GP were prepared before the call, use `Recent jobs` in Streamlit to jump between them. Explain that it is read-only navigation over local artifact folders, not a database or hidden rerun.
+
 ## Revision Path: LP
 
 Use `examples/inputs/lp-demo.txt` with article type `LP`. This scenario writes a draft

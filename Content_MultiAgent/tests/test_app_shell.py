@@ -6,11 +6,30 @@ from pathlib import Path
 
 from streamlit.testing.v1 import AppTest
 
+from seo_content_pipeline.config import AppSettings
+from seo_content_pipeline.models import ArticleType
+from seo_content_pipeline.services.artifact_store import ArtifactStore
+from seo_content_pipeline.services.demo_pipeline_service import DemoPipelineService
+from seo_content_pipeline.services.job_service import JobService
 from seo_content_pipeline.services import live_brief_service
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SAFE_LP_CORRECTION = "The landing page presents only supplied evidence."
+
+
+def _persist_demo_job(tmp_path, article_type: ArticleType) -> str:
+    settings = AppSettings(artifact_root=tmp_path)
+    store = ArtifactStore(settings.artifact_root)
+    job = JobService(settings=settings, artifact_store=store).create_job(
+        "Stable source notes for recent jobs.",
+        article_type,
+    )
+    DemoPipelineService(settings=settings, artifact_store=store).run_demo_scenario(
+        job.metadata.job_id,
+        mode="demo",
+    )
+    return job.metadata.job_id
 
 
 def test_app_uses_controlled_error_for_empty_intake_input() -> None:
@@ -31,6 +50,29 @@ def test_app_uses_controlled_error_for_empty_intake_input() -> None:
         for call in ast.walk(handler)
         if isinstance(call, ast.Call)
     )
+
+
+def test_app_shows_quiet_recent_jobs_empty_state(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("ARTIFACT_ROOT", str(tmp_path))
+
+    app = AppTest.from_file(PROJECT_ROOT / "app.py").run()
+
+    assert any("No recent jobs yet" in caption.value for caption in app.caption)
+    assert any(button.label == "Create job" for button in app.button)
+
+
+def test_app_can_load_recent_job_without_rerunning_workflow(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("ARTIFACT_ROOT", str(tmp_path))
+    job_id = _persist_demo_job(tmp_path, ArticleType.BP)
+
+    app = AppTest.from_file(PROJECT_ROOT / "app.py").run()
+    recent_select = next(selectbox for selectbox in app.selectbox if selectbox.label == "Recent jobs")
+    recent_select.select(next(option for option in recent_select.options if job_id in option))
+    next(button for button in app.button if button.label == "Load selected job").click().run()
+
+    assert any(f"Job created: {job_id}" in success.value for success in app.success)
+    assert any(subheader.value == "Decision QA Scorecard" for subheader in app.subheader)
+    assert any("run_summary.json" in code.value for code in app.code)
 
 
 def _run_demo_scenario_in_app(tmp_path, monkeypatch, *, article_type: str, input_file: str) -> AppTest:
