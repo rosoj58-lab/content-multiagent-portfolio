@@ -18,6 +18,14 @@ class RunSummaryArtifactEntry(BaseModel):
     exists: bool
 
 
+class StageDurationSummary(BaseModel):
+    """Derived elapsed time for a workflow stage."""
+
+    stage: WorkflowStage
+    elapsed_seconds: float
+    transition_count: int
+
+
 class RunSummaryArtifact(BaseModel):
     """Derived, exportable summary of one content job run."""
 
@@ -30,6 +38,8 @@ class RunSummaryArtifact(BaseModel):
     generated_artifacts: list[RunSummaryArtifactEntry]
     generated_artifact_count: int
     artifact_counts: dict[str, int]
+    stage_durations: list[StageDurationSummary] = Field(default_factory=list)
+    total_duration_seconds: float = 0
     final_package_path: str | None = None
     final_qa_report_path: str | None = None
     manual_gate_required: bool

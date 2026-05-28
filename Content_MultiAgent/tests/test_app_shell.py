@@ -73,6 +73,7 @@ def test_app_can_load_recent_job_without_rerunning_workflow(tmp_path, monkeypatc
     assert any(f"Job created: {job_id}" in success.value for success in app.success)
     assert any(subheader.value == "Decision QA Scorecard" for subheader in app.subheader)
     assert any("run_summary.json" in code.value for code in app.code)
+    assert any("Duration:" in caption.value for caption in app.caption)
 
 
 def _run_demo_scenario_in_app(tmp_path, monkeypatch, *, article_type: str, input_file: str) -> AppTest:

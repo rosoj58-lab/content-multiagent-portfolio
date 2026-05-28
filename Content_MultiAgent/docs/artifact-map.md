@@ -34,7 +34,11 @@ intended for interview navigation.
 | `metadata.json` | Job identity, current stage, terminal status and status history for UI display. |
 | `input.json` | Original dry input and selected article type. |
 | `state.json` | Lightweight workflow state: artifact paths, QA flags, revision attempts, routing notes, uniqueness details and localization geos. |
-| `run_summary.json` | Derived per-job summary with status, decision artifact, generated artifacts and final package presence. |
+| `run_summary.json` | Derived per-job summary with status, decision artifact, generated artifacts, stage durations and final package presence. |
+
+`run_summary.json` includes `stage_durations[]` and `total_duration_seconds`
+derived from persisted status history. These fields are local demo observability
+evidence and do not replace production tracing or performance telemetry.
 
 ## Content And QA
 

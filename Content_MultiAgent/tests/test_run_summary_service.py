@@ -1,7 +1,15 @@
 """Run summary artifact tests."""
 
+from datetime import UTC, datetime, timedelta
+
 from seo_content_pipeline.config import AppSettings
-from seo_content_pipeline.models import ArtifactKey, ArticleType, WorkflowStatus
+from seo_content_pipeline.models import (
+    ArtifactKey,
+    ArticleType,
+    StatusHistoryEntry,
+    WorkflowStage,
+    WorkflowStatus,
+)
 from seo_content_pipeline.services.artifact_store import ArtifactStore
 from seo_content_pipeline.services.demo_pipeline_service import DemoPipelineService
 from seo_content_pipeline.services.job_service import JobService
@@ -33,6 +41,8 @@ def test_run_summary_can_describe_fresh_job_without_decision_artifact(tmp_path) 
     assert payload["final_package_path"] is None
     assert payload["generated_artifact_count"] == 3
     assert payload["manual_gate_required"] is False
+    assert payload["stage_durations"] == []
+    assert payload["total_duration_seconds"] == 0
     assert {artifact["key"] for artifact in payload["generated_artifacts"]} >= {
         "metadata",
         "input",
@@ -57,6 +67,13 @@ def test_run_summary_describes_approved_demo_decision_and_final_package(tmp_path
     assert payload["generated_artifact_count"] >= 15
     assert payload["artifact_counts"]["json"] >= 8
     assert payload["artifact_counts"]["markdown"] >= 4
+    assert payload["stage_durations"]
+    assert payload["total_duration_seconds"] >= 0
+    assert {duration["stage"] for duration in payload["stage_durations"]} >= {
+        "input_received",
+        "brief_drafted",
+        "writing",
+    }
 
 
 def test_run_summary_describes_routed_demo_without_final_package(tmp_path) -> None:
@@ -76,6 +93,8 @@ def test_run_summary_describes_routed_demo_without_final_package(tmp_path) -> No
     assert payload["revision_notes"]["editorial_review"] == [
         "Confirm that the contextual project link is acceptable to the host publication."
     ]
+    assert payload["stage_durations"]
+    assert payload["total_duration_seconds"] >= 0
 
 
 def test_run_summary_does_not_point_to_missing_decision_artifact(tmp_path) -> None:
@@ -90,3 +109,55 @@ def test_run_summary_does_not_point_to_missing_decision_artifact(tmp_path) -> No
     payload = store.read_json(job_id, ArtifactKey.RUN_SUMMARY)
     assert payload["decision_artifact"] is None
     assert payload["decision_artifact_key"] is None
+
+
+def test_run_summary_aggregates_duplicate_stage_duration_transitions(tmp_path) -> None:
+    settings, store, job_id = _new_job(tmp_path)
+    base = datetime(2026, 5, 28, 12, 0, tzinfo=UTC)
+    history = [
+        StatusHistoryEntry(
+            stage=WorkflowStage.INPUT_RECEIVED,
+            status=WorkflowStatus.RUNNING,
+            message="Input saved.",
+            created_at=base,
+        ),
+        StatusHistoryEntry(
+            stage=WorkflowStage.BRIEF_DRAFTED,
+            status=WorkflowStatus.RUNNING,
+            message="Brief started.",
+            created_at=base + timedelta(seconds=3),
+        ),
+        StatusHistoryEntry(
+            stage=WorkflowStage.WRITING,
+            status=WorkflowStatus.NEEDS_REVISION,
+            message="Writing revision.",
+            created_at=base + timedelta(seconds=8),
+        ),
+        StatusHistoryEntry(
+            stage=WorkflowStage.BRIEF_DRAFTED,
+            status=WorkflowStatus.RUNNING,
+            message="Brief adjusted.",
+            created_at=base + timedelta(seconds=10),
+        ),
+        StatusHistoryEntry(
+            stage=WorkflowStage.WRITING,
+            status=WorkflowStatus.RUNNING,
+            message="Writing restarted.",
+            created_at=base + timedelta(seconds=17),
+        ),
+    ]
+    state = store.read_json(job_id, ArtifactKey.STATE)
+    metadata = store.read_json(job_id, ArtifactKey.METADATA)
+    state["status_history"] = [entry.model_dump(mode="json") for entry in history]
+    metadata["status_history"] = [entry.model_dump(mode="json") for entry in history]
+    store.write_json(job_id, ArtifactKey.STATE, state)
+    store.write_json(job_id, ArtifactKey.METADATA, metadata)
+
+    RunSummaryService(settings=settings, artifact_store=store).write_summary(job_id)
+
+    payload = store.read_json(job_id, ArtifactKey.RUN_SUMMARY)
+    durations = {entry["stage"]: entry for entry in payload["stage_durations"]}
+    assert durations["brief_drafted"]["elapsed_seconds"] == 12
+    assert durations["brief_drafted"]["transition_count"] == 2
+    assert durations["input_received"]["elapsed_seconds"] == 3
+    assert payload["total_duration_seconds"] == 17

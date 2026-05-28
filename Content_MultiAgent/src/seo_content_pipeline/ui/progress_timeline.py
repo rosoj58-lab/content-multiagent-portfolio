@@ -27,6 +27,8 @@ def render_progress_timeline(stage_views: list[StageView]) -> None:
         with st.container(border=True):
             st.markdown(f"**{icon} {view.label}**")
             st.caption(view.status.value.replace("_", " "))
+            if view.duration_label:
+                st.caption(f"Duration: {view.duration_label}")
             st.write(view.description)
             if view.blocking_reason:
                 st.warning(view.blocking_reason)

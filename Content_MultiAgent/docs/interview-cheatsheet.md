@@ -60,6 +60,9 @@ artifact list. In Streamlit, begin each scenario with the Decision QA Scorecard:
 it makes the evidence and next action visible before opening the raw artifacts.
 The recent jobs picker reads those local artifact folders only, so it is a
 navigation aid rather than a second workflow state store.
+Stage duration labels in the timeline and `stage_durations` in `run_summary.json`
+show where the local workflow spent time; present them as derived demo
+observability, not production performance metrics.
 
 For the strongest workflow demonstration, run LP in Streamlit, show its
 `needs_revision` scorecard, replace the routed claim using `Replacement statement`,
@@ -74,6 +77,7 @@ then click `Apply correction`. The same job ends `approved`, while
 - Artifacts make the workflow inspectable and debuggable.
 - `run_summary.json` gives each job an exportable interview card.
 - Recent jobs make it easy to jump between prepared BP, LP and GP evidence.
+- Stage durations make the workflow easier to explain without adding telemetry infrastructure.
 - Human approval remains explicit at sensitive gates.
 - Failed checks route to a target stage instead of becoming vague errors.
 - Manual/offline uniqueness keeps the demo reliable without paid credentials.

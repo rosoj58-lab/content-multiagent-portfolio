@@ -1,10 +1,14 @@
 """StageView builder tests."""
 
+from datetime import UTC, datetime, timedelta
+
 from seo_content_pipeline.models import (
     ArtifactKey,
     JobMetadata,
+    PipelineState,
     QAReport,
     StageView,
+    StatusHistoryEntry,
     ValidationCheck,
     WorkflowStage,
     WorkflowStatus,
@@ -13,6 +17,7 @@ from seo_content_pipeline.services.stage_view_builder import (
     build_brief_manual_gate_stage_view,
     build_brief_qa_stage_view,
     build_initial_stage_views,
+    build_pipeline_stage_views,
     build_uniqueness_gate_stage_view,
     build_uniqueness_provider_stage_view,
 )
@@ -172,3 +177,45 @@ def test_build_uniqueness_gate_stage_view_shows_revision_details() -> None:
     assert view.status is WorkflowStatus.NEEDS_REVISION
     assert view.available_actions == ["Revise English Original"]
     assert view.blocking_reason == "Uniqueness score is below 90; revise the English Original."
+
+
+def test_build_pipeline_stage_views_exposes_stage_duration_labels() -> None:
+    base = datetime(2026, 5, 28, 12, 0, tzinfo=UTC)
+    state = PipelineState(
+        job_id="job-123",
+        current_stage=WorkflowStage.WRITING,
+        status=WorkflowStatus.RUNNING,
+        artifact_paths={
+            ArtifactKey.METADATA: "metadata.json",
+            ArtifactKey.INPUT: "input.json",
+            ArtifactKey.STATE: "state.json",
+            ArtifactKey.BRIEF: "brief.json",
+        },
+        status_history=[
+            StatusHistoryEntry(
+                stage=WorkflowStage.INPUT_RECEIVED,
+                status=WorkflowStatus.RUNNING,
+                message="Input saved.",
+                created_at=base,
+            ),
+            StatusHistoryEntry(
+                stage=WorkflowStage.BRIEF_DRAFTED,
+                status=WorkflowStatus.RUNNING,
+                message="Brief started.",
+                created_at=base + timedelta(seconds=3),
+            ),
+            StatusHistoryEntry(
+                stage=WorkflowStage.WRITING,
+                status=WorkflowStatus.RUNNING,
+                message="Writing started.",
+                created_at=base + timedelta(seconds=65),
+            ),
+        ],
+    )
+
+    views = build_pipeline_stage_views(state)
+
+    durations = {view.stage: view.duration_label for view in views}
+    assert durations[WorkflowStage.INPUT_RECEIVED] == "3s"
+    assert durations[WorkflowStage.BRIEF_DRAFTED] == "1m 2s"
+    assert durations[WorkflowStage.WRITING] is None
