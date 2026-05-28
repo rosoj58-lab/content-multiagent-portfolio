@@ -12,6 +12,10 @@ from seo_content_pipeline.models import (
     WorkflowStatus,
 )
 from seo_content_pipeline.services.artifact_store import ArtifactStore
+from seo_content_pipeline.services.stage_duration_service import (
+    build_stage_duration_summary,
+    total_duration_seconds,
+)
 
 
 class RunSummaryService:
@@ -50,6 +54,9 @@ class RunSummaryService:
         generated_artifacts = self._generated_artifacts(job_id)
         artifact_counts = self._artifact_counts(generated_artifacts)
         decision_key = self._decision_artifact_key(job_id, state)
+        stage_durations = build_stage_duration_summary(
+            state.status_history or metadata.status_history
+        )
 
         return RunSummaryArtifact(
             job_id=job_id,
@@ -67,6 +74,8 @@ class RunSummaryService:
             generated_artifacts=generated_artifacts,
             generated_artifact_count=len(generated_artifacts),
             artifact_counts=artifact_counts,
+            stage_durations=stage_durations,
+            total_duration_seconds=total_duration_seconds(stage_durations),
             final_package_path=self._existing_path(job_id, ArtifactKey.FINAL_PACKAGE_MD),
             final_qa_report_path=self._existing_path(job_id, ArtifactKey.FINAL_QA_REPORT),
             manual_gate_required=state.manual_gate_required,

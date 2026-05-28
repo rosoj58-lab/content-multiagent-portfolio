@@ -22,7 +22,11 @@ from seo_content_pipeline.models.job import (
 )
 from seo_content_pipeline.models.qa_result import QAReport
 from seo_content_pipeline.models.revision import RevisionHistoryArtifact, RevisionHistoryEntry
-from seo_content_pipeline.models.run_summary import RunSummaryArtifact, RunSummaryArtifactEntry
+from seo_content_pipeline.models.run_summary import (
+    RunSummaryArtifact,
+    RunSummaryArtifactEntry,
+    StageDurationSummary,
+)
 from seo_content_pipeline.models.stage import StageView, WorkflowStage, WorkflowStatus
 from seo_content_pipeline.models.uniqueness import UniquenessProviderOption, UniquenessResult
 from seo_content_pipeline.models.validation import ValidationCheck, ValidationSeverity
@@ -48,6 +52,7 @@ __all__ = [
     "SEOBrief",
     "SEOBriefArtifact",
     "StageView",
+    "StageDurationSummary",
     "StatusHistoryEntry",
     "UniquenessProviderOption",
     "UniquenessResult",

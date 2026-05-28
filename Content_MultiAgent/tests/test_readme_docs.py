@@ -22,6 +22,8 @@ def test_readme_documents_interview_demo_flow() -> None:
     assert "final_package.md" in readme
     assert "final_qa_report.json" in readme
     assert "run_summary.json" in readme
+    assert "stage_durations" in readme
+    assert "total_duration_seconds" in readme
     assert "Recent jobs" in readme
     assert "examples/inputs/bp-demo.txt" in readme
     assert "uv run seo-demo --demo bp --mode demo" in readme

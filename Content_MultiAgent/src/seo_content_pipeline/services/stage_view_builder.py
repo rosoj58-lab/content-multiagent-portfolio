@@ -8,6 +8,10 @@ from seo_content_pipeline.models import (
     WorkflowStage,
     WorkflowStatus,
 )
+from seo_content_pipeline.services.stage_duration_service import (
+    build_stage_duration_summary,
+    format_duration_label,
+)
 
 
 def build_initial_stage_views(metadata: JobMetadata) -> list[StageView]:
@@ -111,6 +115,10 @@ def build_pipeline_stage_views(
     ]
     stage_order = {stage: index for index, stage in enumerate(WorkflowStage)}
     current_index = stage_order[state.current_stage]
+    duration_labels = {
+        duration.stage: format_duration_label(duration.elapsed_seconds)
+        for duration in build_stage_duration_summary(state.status_history)
+    }
     views: list[StageView] = []
 
     for stage, label, description, artifact_keys, actions in stage_specs:
@@ -148,6 +156,7 @@ def build_pipeline_stage_views(
                 blocking_reason=blocking_reason,
                 revision_attempt=revision_attempt,
                 max_revision_attempts=max_revision_attempts,
+                duration_label=duration_labels.get(stage),
             )
         )
 

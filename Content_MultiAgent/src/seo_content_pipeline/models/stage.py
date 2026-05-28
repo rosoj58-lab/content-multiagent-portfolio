@@ -45,3 +45,4 @@ class StageView(BaseModel):
     recoverable: bool = True
     revision_attempt: int | None = None
     max_revision_attempts: int | None = None
+    duration_label: str | None = None
