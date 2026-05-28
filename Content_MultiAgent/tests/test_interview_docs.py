@@ -55,6 +55,7 @@ def test_interview_cheatsheet_covers_pitch_tradeoffs_and_questions() -> None:
     assert "needs_revision" in cheatsheet
     assert "needs_human_review" in cheatsheet
     assert "decision qa scorecard" in cheatsheet
+    assert "recent jobs" in cheatsheet
     assert "replacement statement" in cheatsheet
     assert "apply correction" in cheatsheet
     assert "revision_history.json" in cheatsheet

@@ -8,6 +8,7 @@ from seo_content_pipeline.services.demo_pipeline_service import (
     DemoPipelineService,
 )
 from seo_content_pipeline.services.job_service import JobService
+from seo_content_pipeline.services.job_history_service import JobHistoryService
 from seo_content_pipeline.services.live_brief_service import LiveBriefService
 from seo_content_pipeline.ui.artifact_panel import render_artifact_panel
 from seo_content_pipeline.ui.components import (
@@ -18,6 +19,7 @@ from seo_content_pipeline.ui.components import (
 )
 from seo_content_pipeline.ui.empty_states import render_no_job_empty_state
 from seo_content_pipeline.ui.error_presenter import build_controlled_error, render_controlled_error
+from seo_content_pipeline.ui.job_history import render_recent_job_picker
 from seo_content_pipeline.ui.progress_timeline import render_pipeline_progress_timeline
 from seo_content_pipeline.ui.qa_scorecard import (
     build_decision_scorecard,
@@ -36,6 +38,20 @@ def main() -> None:
     st.title("SEO Content Pipeline")
 
     service = JobService()
+    history_service = JobHistoryService(
+        settings=service.settings,
+        artifact_store=service.artifact_store,
+    )
+    try:
+        selected_job_id = render_recent_job_picker(history_service.list_recent_jobs())
+        if selected_job_id is not None:
+            st.session_state["current_job_result"] = history_service.load_job(selected_job_id)
+            st.session_state["demo_mode"] = "loaded"
+    except Exception as error:
+        render_controlled_error(
+            build_controlled_error(error, action="Refresh recent jobs or create a new job.")
+        )
+
     submission = render_job_creation_form()
 
     if submission is not None:

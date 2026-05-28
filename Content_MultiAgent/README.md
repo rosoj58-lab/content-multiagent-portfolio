@@ -10,7 +10,7 @@ The project is built to be demonstrated in interviews. It does not require hoste
 - Human-in-the-loop approval and revision routing.
 - Deterministic QA gates for article structure, SEO coverage and uniqueness thresholding.
 - File-based artifacts under `artifacts/jobs/<job_id>/` for inspection.
-- Streamlit observability: decision QA scorecard, status timeline, artifact previews, download actions and controlled errors.
+- Streamlit observability: Recent jobs picker, decision QA scorecard, status timeline, artifact previews, download actions and controlled errors.
 - An LP correction action that preserves failed QA evidence and demonstrates revision through approval.
 - An optional OpenAI-backed live SEO brief action with deterministic QA and manual approval routing.
 - Optional provider boundary for Copyleaks without making it mandatory for the local demo.
@@ -32,6 +32,7 @@ Open `http://localhost:8501`, then:
 4. Click `Create job`.
 5. Click `Run demo scenario`.
 6. Review the `Decision QA Scorecard`, then open the generated folder under `artifacts/jobs/<job_id>/`.
+7. Use `Recent jobs` to reload existing BP, LP or GP runs without rerunning the workflow.
 
 The offline BP happy-path runner creates the full approved artifact set without external APIs:
 

@@ -9,6 +9,7 @@ This roadmap explains the current portfolio MVP and the most useful next steps. 
 - Terminal smoke demo through `uv run seo-demo --demo bp --mode demo`.
 - Typed Pydantic models for workflow state, artifacts, QA reports, uniqueness and final QA.
 - File-based artifact persistence under `artifacts/jobs/<job_id>/`.
+- Read-only recent jobs picker over local artifact folders.
 - Deterministic QA gates for article structure, SEO signals, uniqueness thresholding and final package readiness.
 - Distinct offline outcomes: BP approval, LP revision routing for unsupported claims and GP human review for sensitive link placement.
 - Explicit LP correction-to-approval action with persisted revision history evidence.
