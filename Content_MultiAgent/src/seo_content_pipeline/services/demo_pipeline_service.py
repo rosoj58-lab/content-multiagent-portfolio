@@ -25,6 +25,7 @@ from seo_content_pipeline.services.artifact_store import ArtifactStore
 from seo_content_pipeline.services.brief_approval_service import BriefApprovalService
 from seo_content_pipeline.services.brief_qa_service import BriefQAService
 from seo_content_pipeline.services.brief_service import BriefService
+from seo_content_pipeline.services.debug_snapshot_service import DebugSnapshotService
 from seo_content_pipeline.services.editorial_qa_service import EditorialQAService
 from seo_content_pipeline.services.exporters import FinalPackageExporter
 from seo_content_pipeline.services.final_qa_service import FinalQAService
@@ -330,6 +331,7 @@ class DemoPipelineService:
 
     def _write_run_summary(self, job_id: str) -> None:
         RunSummaryService(settings=self.settings, artifact_store=self.artifact_store).write_summary(job_id)
+        DebugSnapshotService(settings=self.settings, artifact_store=self.artifact_store).write_snapshot(job_id)
 
 
 def _brief_payload(article_type: ArticleType) -> dict:

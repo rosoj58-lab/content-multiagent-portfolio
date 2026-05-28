@@ -35,10 +35,15 @@ intended for interview navigation.
 | `input.json` | Original dry input and selected article type. |
 | `state.json` | Lightweight workflow state: artifact paths, QA flags, revision attempts, routing notes, uniqueness details and localization geos. |
 | `run_summary.json` | Derived per-job summary with status, decision artifact, generated artifacts, stage durations and final package presence. |
+| `debug_snapshot.json` | Derived diagnostic snapshot with job status, manual gate, errors, revision counters, present/missing artifacts and key paths. |
 
 `run_summary.json` includes `stage_durations[]` and `total_duration_seconds`
 derived from persisted status history. These fields are local demo observability
 evidence and do not replace production tracing or performance telemetry.
+
+`debug_snapshot.json` is local diagnostic evidence for quickly explaining where
+a job stopped and what to inspect next. It is not workflow state, telemetry, or a
+repair mechanism.
 
 ## Content And QA
 

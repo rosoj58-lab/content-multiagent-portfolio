@@ -58,6 +58,8 @@ def test_interview_cheatsheet_covers_pitch_tradeoffs_and_questions() -> None:
     assert "recent jobs" in cheatsheet
     assert "stage duration" in cheatsheet
     assert "stage_durations" in cheatsheet
+    assert "debug_snapshot.json" in cheatsheet
+    assert "present/missing" in cheatsheet
     assert "replacement statement" in cheatsheet
     assert "apply correction" in cheatsheet
     assert "revision_history.json" in cheatsheet
@@ -88,6 +90,7 @@ def test_roadmap_documents_mvp_next_steps_and_deferred_scope() -> None:
     assert "read-only lp comparison" in roadmap
     assert "operator-authored lp claim correction" in roadmap
     assert "stage duration observability" in roadmap
+    assert "debug_snapshot.json" in roadmap
 
 
 def test_artifact_map_identifies_storage_and_qa_decisions() -> None:
@@ -100,6 +103,7 @@ def test_artifact_map_identifies_storage_and_qa_decisions() -> None:
     assert "final_package.json" in artifact_map
     assert "final_qa_report.json" in artifact_map
     assert "run_summary.json" in artifact_map
+    assert "debug_snapshot.json" in artifact_map
     assert "stage_durations" in artifact_map
     assert "total_duration_seconds" in artifact_map
     assert "qa decision" in artifact_map

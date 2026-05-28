@@ -10,7 +10,7 @@ The project is built to be demonstrated in interviews. It does not require hoste
 - Human-in-the-loop approval and revision routing.
 - Deterministic QA gates for article structure, SEO coverage and uniqueness thresholding.
 - File-based artifacts under `artifacts/jobs/<job_id>/` for inspection.
-- Streamlit observability: Recent jobs picker, decision QA scorecard, status timeline, derived stage duration labels, artifact previews, download actions and controlled errors.
+- Streamlit observability: Recent jobs picker, decision QA scorecard, status timeline, derived stage duration labels, debug snapshot, artifact previews, download actions and controlled errors.
 - An LP correction action that preserves failed QA evidence and demonstrates revision through approval.
 - An optional OpenAI-backed live SEO brief action with deterministic QA and manual approval routing.
 - Optional provider boundary for Copyleaks without making it mandatory for the local demo.
@@ -49,12 +49,18 @@ The offline BP happy-path runner creates the full approved artifact set without 
 - `final_package.json`
 - `final_qa_report.json`
 - `run_summary.json`
+- `debug_snapshot.json`
 
 `run_summary.json` is a compact per-job card for interviews: it records the
 current/terminal status, decision artifact, generated artifact list and final
 package presence without recalculating any QA verdict. It also includes derived
 `stage_durations` and `total_duration_seconds` from persisted status history as
 local observability evidence, not production telemetry.
+
+`debug_snapshot.json` is a compact local diagnostic artifact for interviews: it
+shows the job status, manual gate, workflow errors, revision counters, present
+and missing artifacts, and key paths without becoming workflow state. In short,
+it makes present and missing artifacts visible in one place.
 
 The same offline path can be smoke-tested from the terminal:
 

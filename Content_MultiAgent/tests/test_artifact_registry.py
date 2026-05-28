@@ -49,6 +49,11 @@ def test_artifact_registry_includes_revision_history_report() -> None:
 
 def test_artifact_registry_includes_job_run_summary() -> None:
     assert ARTIFACT_REGISTRY[ArtifactKey.RUN_SUMMARY].filename == "run_summary.json"
+
+
+def test_artifact_registry_includes_debug_snapshot() -> None:
+    assert ARTIFACT_REGISTRY[ArtifactKey.DEBUG_SNAPSHOT].filename == "debug_snapshot.json"
+    assert ARTIFACT_REGISTRY[ArtifactKey.DEBUG_SNAPSHOT].content_type == "application/json"
     assert ARTIFACT_REGISTRY[ArtifactKey.RUN_SUMMARY].content_type == "application/json"
     assert ARTIFACT_REGISTRY[ArtifactKey.RUN_SUMMARY].ui_label == "Run Summary"
 

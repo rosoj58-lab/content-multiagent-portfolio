@@ -138,6 +138,30 @@ def test_artifact_previews_include_run_summary_when_present(tmp_path) -> None:
     assert '"status": "approved"' in previews[0].preview
 
 
+def test_artifact_previews_include_debug_snapshot_when_present(tmp_path) -> None:
+    settings = AppSettings(artifact_root=tmp_path)
+    store = ArtifactStore(settings.artifact_root)
+    job = JobService(settings=settings, artifact_store=store).create_job(
+        "Demo input",
+        ArticleType.BP,
+    )
+    DemoPipelineService(settings=settings, artifact_store=store).run_demo_scenario(
+        job.metadata.job_id,
+        mode="demo",
+    )
+
+    previews = build_artifact_previews(
+        job.metadata.job_id,
+        store,
+        artifact_keys=[ArtifactKey.DEBUG_SNAPSHOT],
+    )
+
+    assert len(previews) == 1
+    assert previews[0].label == "Debug Snapshot"
+    assert previews[0].path.endswith("debug_snapshot.json")
+    assert '"workflow_error_count": 0' in previews[0].preview
+
+
 def test_artifact_panel_render_exposes_download_action() -> None:
     tree = ast.parse((PROJECT_ROOT / "src/seo_content_pipeline/ui/artifact_panel.py").read_text(encoding="utf-8"))
 

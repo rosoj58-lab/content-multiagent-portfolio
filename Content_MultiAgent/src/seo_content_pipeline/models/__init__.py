@@ -7,6 +7,7 @@ from seo_content_pipeline.models.artifacts import (
     get_artifact_spec,
 )
 from seo_content_pipeline.models.content import BriefOutline, BriefOutlineSection, SEOBrief, SEOBriefArtifact
+from seo_content_pipeline.models.debug_snapshot import DebugSnapshotArtifact
 from seo_content_pipeline.models.errors import WorkflowError
 from seo_content_pipeline.models.final_qa import (
     FinalQAFailedCheck,
@@ -38,6 +39,7 @@ __all__ = [
     "ArtifactSpec",
     "BriefOutline",
     "BriefOutlineSection",
+    "DebugSnapshotArtifact",
     "FinalQAFailedCheck",
     "FinalQALocalizationStatus",
     "FinalQAReport",
