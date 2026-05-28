@@ -22,6 +22,12 @@ uv run streamlit run app.py
 
 Then open `http://localhost:8501`, create a job from `examples/inputs/bp-demo.txt`, and click `Run demo scenario`.
 
+## Screenshots
+
+![Approved BP scorecard and pipeline timeline](Content_MultiAgent/docs/assets/screenshots/02-bp-scorecard-timeline.png)
+
+![LP revision path with correction action](Content_MultiAgent/docs/assets/screenshots/04-lp-revision-path.png)
+
 Terminal smoke demo:
 
 ```bash
