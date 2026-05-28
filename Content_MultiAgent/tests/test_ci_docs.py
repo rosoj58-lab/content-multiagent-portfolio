@@ -11,6 +11,9 @@ def test_github_actions_ci_runs_project_quality_gate() -> None:
     workflow = REPO_ROOT / ".github" / "workflows" / "content-multiagent-ci.yml"
     text = workflow.read_text(encoding="utf-8")
 
+    assert "branches:" in text
+    assert "- main" in text
+    assert "pull_request:" in text
     assert "working-directory: Content_MultiAgent" in text
     assert "workflow_dispatch:" in text
     assert "contents: read" in text
