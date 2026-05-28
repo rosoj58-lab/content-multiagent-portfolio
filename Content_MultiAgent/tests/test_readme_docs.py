@@ -24,6 +24,12 @@ def test_readme_documents_interview_demo_flow() -> None:
     assert "run_summary.json" in readme
     assert "debug_snapshot.json" in readme
     assert "present and missing artifacts" in readme
+    assert "docs/assets/screenshots/01-home-recent-jobs.png" in readme
+    assert "docs/assets/screenshots/02-bp-scorecard-timeline.png" in readme
+    assert "docs/assets/screenshots/03-debug-snapshot-artifact.png" in readme
+    assert "docs/assets/screenshots/04-lp-revision-path.png" in readme
+    assert "uv run --with playwright python -m playwright install chromium" in readme
+    assert "scripts/capture_demo_screenshots.py" in readme
     assert "stage_durations" in readme
     assert "total_duration_seconds" in readme
     assert "Recent jobs" in readme
@@ -52,6 +58,20 @@ def test_docker_docs_match_current_streamlit_app() -> None:
     assert "make docker-down" in docker_docs
     assert "make docker-logs" in docker_docs
     assert "make docker-shell" in docker_docs
+
+
+def test_readme_screenshot_assets_exist() -> None:
+    screenshot_paths = [
+        "docs/assets/screenshots/01-home-recent-jobs.png",
+        "docs/assets/screenshots/02-bp-scorecard-timeline.png",
+        "docs/assets/screenshots/03-debug-snapshot-artifact.png",
+        "docs/assets/screenshots/04-lp-revision-path.png",
+    ]
+
+    for screenshot_path in screenshot_paths:
+        path = PROJECT_ROOT / screenshot_path
+        assert path.exists()
+        assert path.stat().st_size > 0
 
 
 def test_contributing_docs_cover_local_and_docker_quality_gates() -> None:
