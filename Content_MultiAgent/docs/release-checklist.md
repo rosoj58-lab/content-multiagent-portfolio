@@ -49,6 +49,12 @@ Inspect generated `artifacts/jobs/<job_id>/` folders and confirm:
   link placement.
 - `artifacts/demo/demo-summary.json` lists BP as `approved`, LP as
   `needs_revision` and GP as `needs_human_review`.
+- Each generated job exposes `run_summary.json` for interview navigation and
+  `debug_snapshot.json` for quick local diagnostics.
+- Streamlit `Recent jobs` can reload a prepared BP, LP or GP job without
+  rerunning the workflow.
+- The pipeline timeline shows derived stage duration labels where status history
+  has enough transitions.
 
 In Streamlit, run LP, edit `Replacement statement` and click `Apply correction`;
 confirm the same job contains `revision_history.json`, an approved
@@ -100,6 +106,8 @@ Before sharing a release publicly:
   content are committed.
 - Review generated artifacts for customer data, unpublished business details and
   secrets.
+- Confirm `debug_snapshot.json` contains diagnostic state only and no provider
+  secrets or environment values.
 - Keep the default demo path offline-first unless the ADR has been revisited.
 
 ## 6. Git Review
