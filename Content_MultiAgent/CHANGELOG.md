@@ -17,6 +17,9 @@ Initial local portfolio release of the multi-agent SEO content pipeline.
 - Read-only LP version comparison with a persisted `english_original_rejected.md` snapshot.
 - Targeted operator-authored LP correction with pre-mutation claim-pattern validation.
 - Optional OpenAI Responses API action for generating one live SEO brief before deterministic QA and manual approval.
+- Read-only Recent jobs picker for reloading local BP, LP, GP and live-brief artifacts without rerunning workflow stages.
+- Exportable `run_summary.json` cards with decision artifact, generated artifact list and derived `stage_durations`.
+- Derived `debug_snapshot.json` diagnostics with status, manual gate, workflow errors, revision counters and present/missing artifacts.
 - Docker development environment with app, test and diagnostic shortcuts.
 - GitHub Actions quality gate using `uv sync --frozen`, Ruff and pytest.
 - Tracked example outputs for GitHub review, including a sample final package, final QA report and demo summary manifest.
@@ -26,4 +29,5 @@ Initial local portfolio release of the multi-agent SEO content pipeline.
 - The repeatable full demo uses deterministic offline content; the optional live OpenAI path currently stops after SEO brief QA.
 - Manual uniqueness keeps the demo reliable; real Copyleaks submission remains an optional integration boundary.
 - File-based persistence is optimized for local inspection, not concurrent hosted production usage.
+- `stage_durations` and `debug_snapshot.json` are local diagnostic evidence, not production telemetry.
 - Auth, database storage, queue workers, CMS publishing and hosted deployment are intentionally deferred.

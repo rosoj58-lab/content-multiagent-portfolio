@@ -107,6 +107,10 @@ def test_release_checklist_covers_quality_demo_docker_docs_and_security() -> Non
     assert "final_qa_report.json" in checklist
     assert "needs_revision" in checklist
     assert "needs_human_review" in checklist
+    assert "run_summary.json" in checklist
+    assert "debug_snapshot.json" in checklist
+    assert "Recent jobs" in checklist
+    assert "stage duration labels" in checklist
     assert "Replacement statement" in checklist
     assert "Apply correction" in checklist
     assert "revision_history.json" in checklist
@@ -118,5 +122,6 @@ def test_release_checklist_covers_quality_demo_docker_docs_and_security() -> Non
     assert "docker compose run --rm app uv run pytest" in checklist
     assert "CHANGELOG.md" in checklist
     assert "SECURITY.md" in checklist
+    assert "no provider" in checklist
     assert "docs/decisions/" in checklist
     assert "git status --short" in checklist

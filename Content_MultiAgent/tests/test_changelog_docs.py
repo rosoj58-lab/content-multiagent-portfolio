@@ -21,6 +21,11 @@ def test_changelog_documents_current_portfolio_release() -> None:
     assert "english_original_rejected.md" in changelog
     assert "operator-authored LP correction" in changelog
     assert "OpenAI Responses API" in changelog
+    assert "Recent jobs" in changelog
+    assert "run_summary.json" in changelog
+    assert "stage_durations" in changelog
+    assert "debug_snapshot.json" in changelog
+    assert "present/missing artifacts" in changelog
     assert "optional live OpenAI path currently stops after SEO brief QA" in changelog
     assert "Docker development environment" in changelog
     assert "GitHub Actions quality gate" in changelog
@@ -28,6 +33,7 @@ def test_changelog_documents_current_portfolio_release() -> None:
     assert "Known Limits" in changelog
     assert "deterministic offline content" in changelog
     assert "File-based persistence" in changelog
+    assert "not production telemetry" in changelog
 
 
 def test_readme_links_changelog() -> None:
