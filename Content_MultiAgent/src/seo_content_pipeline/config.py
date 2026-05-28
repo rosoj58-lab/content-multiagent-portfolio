@@ -31,6 +31,7 @@ class AppSettings(BaseModel):
     max_revision_attempts: int = Field(default=2, ge=0)
     uniqueness_provider: UniquenessProviderName = "manual"
     openai_api_key: str | None = None
+    openai_model: str = "gpt-5.4-mini"
     copyleaks_email: str | None = None
     copyleaks_api_key: str | None = None
 
@@ -47,6 +48,7 @@ def get_settings(*, load_env_file: bool = True) -> AppSettings:
         max_revision_attempts=os.getenv("MAX_REVISION_ATTEMPTS", "2"),
         uniqueness_provider=os.getenv("UNIQUENESS_PROVIDER", "manual"),
         openai_api_key=_optional_env("OPENAI_API_KEY"),
+        openai_model=_optional_env("OPENAI_MODEL") or "gpt-5.4-mini",
         copyleaks_email=_optional_env("COPYLEAKS_EMAIL"),
         copyleaks_api_key=_optional_env("COPYLEAKS_API_KEY"),
     )

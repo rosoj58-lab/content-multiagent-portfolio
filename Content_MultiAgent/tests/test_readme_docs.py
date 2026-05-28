@@ -26,6 +26,9 @@ def test_readme_documents_interview_demo_flow() -> None:
     assert "uv run seo-demo --list-demos" in readme
     assert "uv run seo-demo --demo all --mode demo" in readme
     assert "--summary-file artifacts/demo/demo-summary.json" in readme
+    assert "Generate live SEO brief" in readme
+    assert "OPENAI_MODEL=gpt-5.4-mini" in readme
+    assert "explicit paid action" in readme
     assert "docker compose run --rm app uv run pytest" in readme
 
 
@@ -34,6 +37,7 @@ def test_docker_docs_match_current_streamlit_app() -> None:
 
     assert "http://localhost:8501" in docker_docs
     assert "Run demo scenario" in docker_docs
+    assert "OPENAI_MODEL=gpt-5.4-mini" in docker_docs
     assert "Project scaffold is ready" not in docker_docs
     assert "artifacts/jobs/<job_id>/" in docker_docs
     assert "make docker-build" in docker_docs
@@ -68,6 +72,8 @@ def test_security_docs_cover_secrets_artifacts_and_provider_boundaries() -> None
     assert "make interview-check" in security
     assert ".env.example" in security
     assert "OPENAI_API_KEY" in security
+    assert "OPENAI_MODEL" in security
+    assert "Generate live SEO brief" in security
     assert "COPYLEAKS_EMAIL" in security
     assert "COPYLEAKS_API_KEY" in security
     assert "artifacts/jobs/*" in security
@@ -100,6 +106,8 @@ def test_release_checklist_covers_quality_demo_docker_docs_and_security() -> Non
     assert "revision_history.json" in checklist
     assert "english_original_rejected.md" in checklist
     assert "Revision Comparison" in checklist
+    assert "Generate live SEO brief" in checklist
+    assert "waiting_for_human" in checklist
     assert "docker compose build" in checklist
     assert "docker compose run --rm app uv run pytest" in checklist
     assert "CHANGELOG.md" in checklist

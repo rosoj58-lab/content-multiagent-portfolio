@@ -1,9 +1,12 @@
 """App shell structure tests."""
 
 import ast
+import json
 from pathlib import Path
 
 from streamlit.testing.v1 import AppTest
+
+from seo_content_pipeline.services import live_brief_service
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -144,3 +147,106 @@ def test_app_hides_scorecard_before_scenario_execution(tmp_path, monkeypatch) ->
     app.button[0].click().run()
 
     assert not any(subheader.value == "Decision QA Scorecard" for subheader in app.subheader)
+
+
+def test_app_disables_live_brief_action_without_api_key(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("ARTIFACT_ROOT", str(tmp_path))
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    app = AppTest.from_file(PROJECT_ROOT / "app.py").run()
+    app.text_area[0].input("Source notes for an SEO brief.")
+    app.button[0].click().run()
+
+    live_button = next(button for button in app.button if button.label == "Generate live SEO brief")
+    assert live_button.disabled is True
+    assert any("Set OPENAI_API_KEY locally" in info.value for info in app.info)
+    assert any("Optional live SEO brief only" in caption.value for caption in app.caption)
+
+
+class FakeOpenAILLMClient:
+    def __init__(self, *, api_key: str, model: str) -> None:
+        assert api_key == "test-key"
+        assert model == "gpt-5.4-mini"
+
+    def generate(self, prompt: str) -> str:
+        assert "SEO brief agent" in prompt
+        return json.dumps(
+            {
+                "topic": "Live SEO brief",
+                "goal": "Demonstrate explicit live generation.",
+                "audience": "Technical interviewers",
+                "main_keyword": "live SEO brief",
+                "secondary_keywords": ["OpenAI workflow"],
+                "lsi_keywords": ["quality gate"],
+                "outline": {
+                    "h1": "Live SEO Brief",
+                    "sections": [{"h2": "Generation", "h3": ["Review"]}],
+                },
+                "tone_of_voice": "Clear",
+                "constraints": ["Do not invent facts"],
+            }
+        )
+
+
+def test_app_runs_configured_live_brief_only_to_manual_gate(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("ARTIFACT_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    monkeypatch.delenv("OPENAI_MODEL", raising=False)
+    monkeypatch.setattr(live_brief_service, "OpenAILLMClient", FakeOpenAILLMClient)
+    app = AppTest.from_file(PROJECT_ROOT / "app.py").run()
+    app.text_area[0].input("Source notes for a real SEO brief.")
+    app.button[0].click().run()
+
+    live_button = next(button for button in app.button if button.label == "Generate live SEO brief")
+    live_button.click().run()
+
+    assert any("Live SEO brief complete: waiting_for_human" in success.value for success in app.success)
+    assert any("SEO brief generation and deterministic brief QA only" in caption.value for caption in app.caption)
+    assert any("live SEO brief" in code.value for code in app.code)
+
+    rerendered_app = app.run()
+    assert not any(button.label == "Generate live SEO brief" for button in rerendered_app.button)
+    assert not any(button.label == "Run demo scenario" for button in rerendered_app.button)
+
+
+class FailingOpenAILLMClient:
+    def __init__(self, *, api_key: str, model: str) -> None:
+        pass
+
+    def generate(self, prompt: str) -> str:
+        raise RuntimeError("OpenAI live generation failed.")
+
+
+def test_app_presents_controlled_error_for_live_provider_failure(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("ARTIFACT_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    monkeypatch.setattr(live_brief_service, "OpenAILLMClient", FailingOpenAILLMClient)
+    app = AppTest.from_file(PROJECT_ROOT / "app.py").run()
+    app.text_area[0].input("Source notes for an SEO brief.")
+    app.button[0].click().run()
+    next(button for button in app.button if button.label == "Generate live SEO brief").click().run()
+
+    assert any(error.value == "Something needs attention" for error in app.error)
+    assert any("Check OPENAI_API_KEY and OPENAI_MODEL" in info.value for info in app.info)
+    assert not any("brief.json" in code.value for code in app.code)
+
+
+class UnparseableOpenAILLMClient:
+    def __init__(self, *, api_key: str, model: str) -> None:
+        pass
+
+    def generate(self, prompt: str) -> str:
+        return "not structured JSON"
+
+
+def test_app_warns_when_live_brief_needs_human_review(tmp_path, monkeypatch) -> None:
+    monkeypatch.setenv("ARTIFACT_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    monkeypatch.setattr(live_brief_service, "OpenAILLMClient", UnparseableOpenAILLMClient)
+    app = AppTest.from_file(PROJECT_ROOT / "app.py").run()
+    app.text_area[0].input("Source notes for an SEO brief.")
+    app.button[0].click().run()
+    next(button for button in app.button if button.label == "Generate live SEO brief").click().run()
+
+    assert any("Live SEO brief stopped: needs_human_review" in warning.value for warning in app.warning)
+    assert not any("Live SEO brief complete" in success.value for success in app.success)
+    assert not any("brief.json" in code.value for code in app.code)

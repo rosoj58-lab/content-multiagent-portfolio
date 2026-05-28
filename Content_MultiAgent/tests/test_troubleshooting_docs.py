@@ -18,6 +18,8 @@ def test_troubleshooting_docs_cover_demo_recovery_paths() -> None:
     assert "artifacts/jobs/<job_id>/" in text
     assert "docker compose up --build" in text
     assert "OPENAI_API_KEY=" in text
+    assert "OPENAI_MODEL=gpt-5.4-mini" in text
+    assert "Generate live SEO brief" in text
     assert "make ci" in text
 
 

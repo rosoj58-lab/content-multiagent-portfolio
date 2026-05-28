@@ -32,6 +32,14 @@ posts can require editorial judgment even when a link is contextually relevant.
 Use the scorecard's next action to show why the decision belongs with an editor.
 Human review is a feature, not a failure: the workflow preserves control where publication fit matters.
 
+## Optional Live Model Proof
+
+Only when a local OpenAI key is configured, create a fresh job and click
+`Generate live SEO brief`. Show the generated `brief.json`, deterministic
+`brief_qa.json` and `waiting_for_human` state. Explain that this explicit paid
+action proves the `LLMRunner` provider boundary with a real model, while the
+complete BP/LP/GP demonstration deliberately remains offline and repeatable.
+
 ## Closing Points
 
 Mention FR17 workflow status tracking, FR18 revision routing, and UX-DR6 reproducible demo flows. The project is portfolio-ready because the same inputs can be run repeatedly and every important decision is visible in artifacts rather than only in console logs.

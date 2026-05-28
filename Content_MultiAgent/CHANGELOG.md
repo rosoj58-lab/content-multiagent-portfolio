@@ -16,13 +16,14 @@ Initial local portfolio release of the multi-agent SEO content pipeline.
 - LP correction-to-approval action with persisted `revision_history.json` evidence.
 - Read-only LP version comparison with a persisted `english_original_rejected.md` snapshot.
 - Targeted operator-authored LP correction with pre-mutation claim-pattern validation.
+- Optional OpenAI Responses API action for generating one live SEO brief before deterministic QA and manual approval.
 - Docker development environment with app, test and diagnostic shortcuts.
 - GitHub Actions quality gate using `uv sync --frozen`, Ruff and pytest.
 - Tracked example outputs for GitHub review, including a sample final package, final QA report and demo summary manifest.
 
 ### Known Limits
 
-- The repeatable demo uses deterministic offline content rather than live model calls.
+- The repeatable full demo uses deterministic offline content; the optional live OpenAI path currently stops after SEO brief QA.
 - Manual uniqueness keeps the demo reliable; real Copyleaks submission remains an optional integration boundary.
 - File-based persistence is optimized for local inspection, not concurrent hosted production usage.
 - Auth, database storage, queue workers, CMS publishing and hosted deployment are intentionally deferred.
