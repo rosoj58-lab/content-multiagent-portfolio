@@ -34,6 +34,7 @@ def test_demo_pipeline_service_builds_approved_final_package(tmp_path) -> None:
     assert result.decision_artifact_path.endswith("final_qa_report.json")
     assert result.final_package_path.endswith("final_package.md")
     assert result.final_qa_report_path.endswith("final_qa_report.json")
+    assert store.artifact_path(job.metadata.job_id, ArtifactKey.RUN_SUMMARY).exists()
     assert state["status"] == WorkflowStatus.APPROVED.value
     assert state["qa_flags"]["final_qa_passed"] is True
     assert state["uniqueness_score"] == 94.0
@@ -87,6 +88,7 @@ def test_landing_page_demo_stops_on_editorial_revision_for_unsupported_claim(tmp
     assert result.status is WorkflowStatus.NEEDS_REVISION
     assert result.decision_artifact_path.endswith("editorial_qa.json")
     assert result.final_package_path is None
+    assert store.artifact_path(job.metadata.job_id, ArtifactKey.RUN_SUMMARY).exists()
     assert "70 percent" in article
     assert editorial["passed"] is False
     assert editorial["routing_target"] == "writing"
@@ -116,6 +118,7 @@ def test_guest_post_demo_stops_for_human_link_placement_review(tmp_path) -> None
     assert result.status is WorkflowStatus.NEEDS_HUMAN_REVIEW
     assert result.decision_artifact_path.endswith("editorial_qa.json")
     assert result.final_package_path is None
+    assert store.artifact_path(job.metadata.job_id, ArtifactKey.RUN_SUMMARY).exists()
     assert "https://example.com/seo-content-pipeline" in article
     assert editorial["requires_human_review"] is True
     assert editorial["routing_target"] is None
@@ -154,6 +157,7 @@ def test_landing_page_revision_preserves_failed_decision_and_reaches_approval(
     assert result.job_id == job.metadata.job_id
     assert result.status is WorkflowStatus.APPROVED
     assert result.final_package_path.endswith("final_package.md")
+    assert store.artifact_path(job.metadata.job_id, ArtifactKey.RUN_SUMMARY).exists()
     assert "70 percent" not in article
     assert SAFE_LP_CORRECTION in article
     assert "70 percent" in rejected_article

@@ -24,6 +24,8 @@ def test_demo_cli_creates_approved_job(tmp_path, capsys) -> None:
     assert f"artifact_dir={job_dir}" in output
     assert (job_dir / "final_package.md").exists()
     assert (job_dir / "final_qa_report.json").exists()
+    assert (job_dir / "run_summary.json").exists()
+    assert f"run_summary={job_dir / 'run_summary.json'}" in output
 
 
 def test_demo_cli_supports_full_mode(tmp_path, capsys) -> None:
@@ -114,11 +116,14 @@ def test_demo_cli_can_write_summary_manifest(tmp_path, capsys) -> None:
     for run in summary["runs"]:
         assert Path(run["artifact_dir"]).exists()
         assert Path(run["decision_artifact"]).exists()
+        assert Path(run["run_summary"]).exists()
     assert Path(summary["runs"][0]["final_package"]).exists()
     assert Path(summary["runs"][0]["final_qa_report"]).exists()
+    assert summary["runs"][0]["run_summary"].endswith("run_summary.json")
     for run in summary["runs"][1:]:
         assert run["final_package"] is None
         assert run["final_qa_report"] is None
+        assert run["run_summary"].endswith("run_summary.json")
 
 
 def test_demo_cli_can_list_stable_demo_catalog(tmp_path, capsys) -> None:

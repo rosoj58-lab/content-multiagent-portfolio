@@ -64,12 +64,18 @@ def test_live_brief_generation_persists_brief_qa_and_stops_for_human_approval(tm
     assert result.status is WorkflowStatus.WAITING_FOR_HUMAN
     assert result.brief_path.endswith("brief.json")
     assert result.brief_qa_path.endswith("brief_qa.json")
+    assert store.artifact_path(job_id, ArtifactKey.RUN_SUMMARY).exists()
     assert state["status"] == "waiting_for_human"
     assert state["manual_gate_required"] is True
     assert store.read_json(job_id, ArtifactKey.BRIEF)["brief"]["main_keyword"] == (
         "live SEO brief generation"
     )
     assert store.read_json(job_id, ArtifactKey.BRIEF_QA)["passed"] is True
+    run_summary = store.read_json(job_id, ArtifactKey.RUN_SUMMARY)
+    assert run_summary["status"] == "waiting_for_human"
+    assert run_summary["manual_gate_required"] is True
+    assert run_summary["decision_artifact"].endswith("brief_qa.json")
+    assert run_summary["final_package_path"] is None
     assert len(client.prompts) == 1
 
 
@@ -100,6 +106,7 @@ def test_live_brief_generation_routes_unparseable_model_output_to_human_review(t
     assert result.status is WorkflowStatus.NEEDS_HUMAN_REVIEW
     assert store.read_json(job_id, ArtifactKey.STATE)["status"] == "needs_human_review"
     assert not store.artifact_path(job_id, ArtifactKey.BRIEF).exists()
+    assert store.artifact_path(job_id, ArtifactKey.RUN_SUMMARY).exists()
 
 
 def test_live_brief_generation_rejects_second_path_on_started_job(tmp_path) -> None:

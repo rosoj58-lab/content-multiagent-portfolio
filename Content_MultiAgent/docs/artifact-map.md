@@ -23,6 +23,7 @@ intended for interview navigation.
 | `runs[].artifact_dir` | Generated job folder to open during a demo. |
 | `runs[].status` | Observed outcome: `approved`, `needs_revision`, or `needs_human_review`. |
 | `runs[].decision_artifact` | Path to the report that proves the scenario outcome. |
+| `runs[].run_summary` | Path to the per-job `run_summary.json` card for interview navigation. |
 | `runs[].final_package` | Path to the human-readable final package for approved runs; otherwise `null`. |
 | `runs[].final_qa_report` | Path to final QA for approved runs; otherwise `null`. |
 
@@ -33,6 +34,7 @@ intended for interview navigation.
 | `metadata.json` | Job identity, current stage, terminal status and status history for UI display. |
 | `input.json` | Original dry input and selected article type. |
 | `state.json` | Lightweight workflow state: artifact paths, QA flags, revision attempts, routing notes, uniqueness details and localization geos. |
+| `run_summary.json` | Derived per-job summary with status, decision artifact, generated artifacts and final package presence. |
 
 ## Content And QA
 

@@ -21,6 +21,7 @@ def test_readme_documents_interview_demo_flow() -> None:
     assert "artifacts/jobs/<job_id>/" in readme
     assert "final_package.md" in readme
     assert "final_qa_report.json" in readme
+    assert "run_summary.json" in readme
     assert "examples/inputs/bp-demo.txt" in readme
     assert "uv run seo-demo --demo bp --mode demo" in readme
     assert "uv run seo-demo --list-demos" in readme
