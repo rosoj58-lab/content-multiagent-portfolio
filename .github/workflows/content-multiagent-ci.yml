@@ -2,6 +2,8 @@ name: Content MultiAgent CI
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "Content_MultiAgent/**"
       - ".github/workflows/content-multiagent-ci.yml"
