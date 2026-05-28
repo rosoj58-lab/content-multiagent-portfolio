@@ -47,6 +47,12 @@ def test_artifact_registry_includes_revision_history_report() -> None:
     assert ARTIFACT_REGISTRY[ArtifactKey.REVISION_HISTORY].content_type == "application/json"
 
 
+def test_artifact_registry_includes_job_run_summary() -> None:
+    assert ARTIFACT_REGISTRY[ArtifactKey.RUN_SUMMARY].filename == "run_summary.json"
+    assert ARTIFACT_REGISTRY[ArtifactKey.RUN_SUMMARY].content_type == "application/json"
+    assert ARTIFACT_REGISTRY[ArtifactKey.RUN_SUMMARY].ui_label == "Run Summary"
+
+
 def test_artifact_registry_includes_rejected_english_original_snapshot() -> None:
     assert (
         ARTIFACT_REGISTRY[ArtifactKey.REJECTED_ENGLISH_ORIGINAL].filename

@@ -9,6 +9,7 @@ from seo_content_pipeline.services.brief_qa_service import BriefQAService
 from seo_content_pipeline.services.brief_service import BriefService
 from seo_content_pipeline.services.llm_client import LLMClientProtocol, OpenAILLMClient
 from seo_content_pipeline.services.llm_runner import LLMRunner
+from seo_content_pipeline.services.run_summary_service import RunSummaryService
 
 
 class LiveBriefResult(BaseModel):
@@ -58,12 +59,14 @@ class LiveBriefService:
             llm_runner=LLMRunner(client),
         ).generate_brief(job_id)
         if brief_result.status is not WorkflowStatus.RUNNING:
+            self._write_run_summary(job_id)
             return LiveBriefResult(job_id=job_id, status=brief_result.status)
 
         qa_result = BriefQAService(
             settings=self.settings,
             artifact_store=self.artifact_store,
         ).validate_brief(job_id)
+        self._write_run_summary(job_id)
         return LiveBriefResult(
             job_id=job_id,
             status=qa_result.status,
@@ -78,3 +81,6 @@ class LiveBriefService:
             or state.status is not WorkflowStatus.RUNNING
         ):
             raise ValueError("Live SEO brief generation requires a newly created job.")
+
+    def _write_run_summary(self, job_id: str) -> None:
+        RunSummaryService(settings=self.settings, artifact_store=self.artifact_store).write_summary(job_id)

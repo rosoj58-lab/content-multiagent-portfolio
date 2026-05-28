@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Sequence
 
 from seo_content_pipeline.config import AppSettings
-from seo_content_pipeline.models import ArticleType
+from seo_content_pipeline.models import ArtifactKey, ArticleType
 from seo_content_pipeline.services.artifact_store import ArtifactStore
 from seo_content_pipeline.services.demo_pipeline_service import DemoPipelineService
 from seo_content_pipeline.services.job_service import JobService
@@ -134,6 +134,8 @@ def _run_demo(demo_name: str, *, mode: str, artifact_root: Path) -> dict[str, st
     print(f"decision_artifact={result.decision_artifact_path}")
     print(f"final_package={result.final_package_path or 'not_generated'}")
     print(f"final_qa_report={result.final_qa_report_path or 'not_generated'}")
+    run_summary_path = str(store.artifact_path(result.job_id, ArtifactKey.RUN_SUMMARY))
+    print(f"run_summary={run_summary_path}")
     return {
         "demo": demo_name,
         "article_type": article_type.value,
@@ -144,6 +146,7 @@ def _run_demo(demo_name: str, *, mode: str, artifact_root: Path) -> dict[str, st
         "status": result.status.value,
         "artifact_dir": str(store.job_dir(result.job_id)),
         "decision_artifact": result.decision_artifact_path,
+        "run_summary": run_summary_path,
         "final_package": result.final_package_path,
         "final_qa_report": result.final_qa_report_path,
     }

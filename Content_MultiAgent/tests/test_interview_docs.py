@@ -95,6 +95,7 @@ def test_artifact_map_identifies_storage_and_qa_decisions() -> None:
     assert "final_package.md" in artifact_map
     assert "final_package.json" in artifact_map
     assert "final_qa_report.json" in artifact_map
+    assert "run_summary.json" in artifact_map
     assert "qa decision" in artifact_map
     assert "revision routing" in artifact_map
     assert "revision_history.json" in artifact_map
@@ -118,6 +119,7 @@ def test_artifact_map_documents_demo_summary_manifest_contract() -> None:
         "`runs[].artifact_dir`",
         "`runs[].status`",
         "`runs[].decision_artifact`",
+        "`runs[].run_summary`",
         "`runs[].final_package`",
         "`runs[].final_qa_report`",
     ]

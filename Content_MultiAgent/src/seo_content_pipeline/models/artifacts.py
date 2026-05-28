@@ -26,6 +26,7 @@ class ArtifactKey(str, Enum):
     FINAL_PACKAGE_MD = "final_package_md"
     FINAL_PACKAGE_JSON = "final_package_json"
     FINAL_QA_REPORT = "final_qa_report"
+    RUN_SUMMARY = "run_summary"
 
 
 class ArtifactSpec(BaseModel):
@@ -164,6 +165,13 @@ ARTIFACT_REGISTRY: dict[ArtifactKey, ArtifactSpec] = {
         content_type="application/json",
         ui_label="Final QA Report",
         description="Final readiness report and approved or revision status.",
+    ),
+    ArtifactKey.RUN_SUMMARY: ArtifactSpec(
+        key=ArtifactKey.RUN_SUMMARY,
+        filename="run_summary.json",
+        content_type="application/json",
+        ui_label="Run Summary",
+        description="Derived job-level summary for interview navigation and debugging.",
     ),
 }
 

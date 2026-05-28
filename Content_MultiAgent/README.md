@@ -47,6 +47,11 @@ The offline BP happy-path runner creates the full approved artifact set without 
 - `final_package.md`
 - `final_package.json`
 - `final_qa_report.json`
+- `run_summary.json`
+
+`run_summary.json` is a compact per-job card for interviews: it records the
+current/terminal status, decision artifact, generated artifact list and final
+package presence without recalculating any QA verdict.
 
 The same offline path can be smoke-tested from the terminal:
 
@@ -147,7 +152,8 @@ make docker-shell
 ```
 
 `make demo-all` writes `artifacts/demo/demo-summary.json` with the input file,
-article type, scenario purpose, outcome status and decision artifact for the BP, LP and GP jobs.
+article type, scenario purpose, outcome status, decision artifact and per-job
+`run_summary.json` path for the BP, LP and GP jobs.
 BP reaches final package approval, LP stops with editorial revision guidance, and GP stops
 for human review of link placement. The manifest includes a `version` and `run_count`
 field so it can be treated as a stable demo index.

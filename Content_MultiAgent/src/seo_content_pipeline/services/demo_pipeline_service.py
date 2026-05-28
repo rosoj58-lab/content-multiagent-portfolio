@@ -30,6 +30,7 @@ from seo_content_pipeline.services.exporters import FinalPackageExporter
 from seo_content_pipeline.services.final_qa_service import FinalQAService
 from seo_content_pipeline.services.llm_runner import LLMRunner
 from seo_content_pipeline.services.localization_service import LocalizationService
+from seo_content_pipeline.services.run_summary_service import RunSummaryService
 from seo_content_pipeline.services.seo_qa_service import SEOQAService
 from seo_content_pipeline.services.uniqueness_gate_service import UniquenessGateService
 from seo_content_pipeline.services.uniqueness_provider_service import UniquenessProviderService
@@ -125,14 +126,18 @@ class DemoPipelineService:
             llm_runner=llm_runner,
         ).run_editorial_qa(job_id)
         if editorial_result.status is not WorkflowStatus.RUNNING:
-            return DemoPipelineResult(
+            result = DemoPipelineResult(
                 job_id=job_id,
                 status=editorial_result.status,
                 decision_artifact_path=str(
                     self.artifact_store.artifact_path(job_id, ArtifactKey.EDITORIAL_QA)
                 ),
             )
-        return self._complete_after_editorial_pass(job_id, llm_runner)
+            self._write_run_summary(job_id)
+            return result
+        result = self._complete_after_editorial_pass(job_id, llm_runner)
+        self._write_run_summary(job_id)
+        return result
 
     def apply_lp_editorial_revision(
         self,
@@ -194,6 +199,7 @@ class DemoPipelineService:
             raise ValueError("corrected LP article did not pass editorial QA")
         result = self._complete_after_editorial_pass(job_id, llm_runner)
         self._resolve_revision_decision(job_id, result.status)
+        self._write_run_summary(job_id)
         return result
 
     @staticmethod
@@ -321,6 +327,9 @@ class DemoPipelineService:
             final_package_path=package.markdown_path,
             final_qa_report_path=str(self.artifact_store.artifact_path(job_id, ArtifactKey.FINAL_QA_REPORT)),
         )
+
+    def _write_run_summary(self, job_id: str) -> None:
+        RunSummaryService(settings=self.settings, artifact_store=self.artifact_store).write_summary(job_id)
 
 
 def _brief_payload(article_type: ArticleType) -> dict:

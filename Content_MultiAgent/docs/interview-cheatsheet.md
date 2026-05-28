@@ -53,9 +53,10 @@ make release-check
 The generated manifest proves three distinct outcomes: BP is `approved`, LP is
 `needs_revision`, and GP is `needs_human_review`. Open BP to show `final_package.md`
 and `final_qa_report.json`; open LP and GP to show their `english_original.md`,
-`editorial_qa.json` and routed status in `state.json`. In Streamlit, begin each
-scenario with the Decision QA Scorecard: it makes the evidence and next action
-visible before opening the raw artifacts.
+`editorial_qa.json` and routed status in `state.json`. Each generated job also has
+`run_summary.json`, a compact card with status, decision artifact and generated
+artifact list. In Streamlit, begin each scenario with the Decision QA Scorecard:
+it makes the evidence and next action visible before opening the raw artifacts.
 
 For the strongest workflow demonstration, run LP in Streamlit, show its
 `needs_revision` scorecard, replace the routed claim using `Replacement statement`,
@@ -68,6 +69,7 @@ then click `Apply correction`. The same job ends `approved`, while
 
 - It is staged orchestration, not a single prompt.
 - Artifacts make the workflow inspectable and debuggable.
+- `run_summary.json` gives each job an exportable interview card.
 - Human approval remains explicit at sensitive gates.
 - Failed checks route to a target stage instead of becoming vague errors.
 - Manual/offline uniqueness keeps the demo reliable without paid credentials.

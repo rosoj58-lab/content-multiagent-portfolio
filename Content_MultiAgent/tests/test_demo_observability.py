@@ -93,7 +93,10 @@ def test_resolved_revision_note_is_not_shown_as_an_active_blocker() -> None:
 def test_artifact_previews_handle_json_and_markdown(tmp_path) -> None:
     settings = AppSettings(artifact_root=tmp_path)
     store = ArtifactStore(settings.artifact_root)
-    job = JobService(settings=settings, artifact_store=store).create_job("Demo input")
+    job = JobService(settings=settings, artifact_store=store).create_job(
+        "Demo input",
+        ArticleType.BP,
+    )
     store.write_text(job.metadata.job_id, ArtifactKey.ENGLISH_ORIGINAL, "# Demo Article\n\nBody.")
 
     previews = build_artifact_previews(
@@ -109,6 +112,30 @@ def test_artifact_previews_handle_json_and_markdown(tmp_path) -> None:
     assert previews[1].preview.startswith("# Demo Article")
     assert previews[1].content.strip() == "# Demo Article\n\nBody."
     assert all(preview.download_label.startswith("Download") for preview in previews)
+
+
+def test_artifact_previews_include_run_summary_when_present(tmp_path) -> None:
+    settings = AppSettings(artifact_root=tmp_path)
+    store = ArtifactStore(settings.artifact_root)
+    job = JobService(settings=settings, artifact_store=store).create_job(
+        "Demo input",
+        ArticleType.BP,
+    )
+    DemoPipelineService(settings=settings, artifact_store=store).run_demo_scenario(
+        job.metadata.job_id,
+        mode="demo",
+    )
+
+    previews = build_artifact_previews(
+        job.metadata.job_id,
+        store,
+        artifact_keys=[ArtifactKey.RUN_SUMMARY],
+    )
+
+    assert len(previews) == 1
+    assert previews[0].label == "Run Summary"
+    assert previews[0].path.endswith("run_summary.json")
+    assert '"status": "approved"' in previews[0].preview
 
 
 def test_artifact_panel_render_exposes_download_action() -> None:

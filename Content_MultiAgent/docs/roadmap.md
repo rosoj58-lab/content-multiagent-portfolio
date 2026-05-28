@@ -17,6 +17,7 @@ This roadmap explains the current portfolio MVP and the most useful next steps. 
 - Optional OpenAI-backed live SEO brief generation followed by deterministic QA and a manual gate.
 - Spanish, Italian and French localization artifacts.
 - Markdown and JSON final package exports.
+- Exportable per-job `run_summary.json` artifacts for interview navigation.
 - GitHub Actions quality gate with `uv sync --frozen`, `ruff` and `pytest`.
 
 ## Next Technical Steps
@@ -43,7 +44,7 @@ This roadmap explains the current portfolio MVP and the most useful next steps. 
 
 6. Observability
 
-   Add structured logs, stage durations, retry counters and exportable run summaries for debugging.
+   Add structured logs, stage durations and retry counters for debugging.
 
 ## Deferred On Purpose
 
